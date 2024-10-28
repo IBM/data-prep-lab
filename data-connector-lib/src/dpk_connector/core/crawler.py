@@ -91,7 +91,7 @@ def async_crawl(
     randomize_download_delay: bool = True,
     download_timeout: float = 180,
     autothrottle_enabled: bool = True,
-    autothrottle_max_delay: float = 300,
+    autothrottle_max_delay: float = 60,
     autothrottle_target_concurrency: float = 8,
     robots_max_crawl_delay: float = 60,
 ) -> Deferred[None]:
@@ -118,7 +118,7 @@ def async_crawl(
         randomize_download_delay (bool): If specified, the download delay will be randomized between 0.5 * `download_delay and 1.5 * `download_delay`. Default is True.
         download_timeout (float): The timeout for each request. Default is 180 seconds.
         autothrottle_enabled (bool): If specified, autothrottling will be enabled. Default is True.
-        autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 300 seconds.
+        autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 60 seconds.
         autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 8.
         robots_max_crawl_delay (float): The maximum crawl delay allowed by the robots.txt file. Default is 60 seconds.
 
@@ -230,7 +230,7 @@ def crawl(
     randomize_download_delay: bool = True,
     download_timeout: float = 180,
     autothrottle_enabled: bool = True,
-    autothrottle_max_delay: float = 300,
+    autothrottle_max_delay: float = 60,
     autothrottle_target_concurrency: float = 8,
     robots_max_crawl_delay: float = 60,
 ) -> None:
@@ -257,7 +257,7 @@ def crawl(
         randomize_download_delay (bool): If specified, the download delay will be randomized between 0.5 * `download_delay and 1.5 * `download_delay`. Default is True.
         download_timeout (float): The timeout for each request. Default is 180 seconds.
         autothrottle_enabled (bool): If specified, autothrottling will be enabled. Default is True.
-        autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 300 seconds.
+        autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 60 seconds.
         autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 8.
         robots_max_crawl_delay (float): The maximum crawl delay allowed by the robots.txt file. Default is 60 seconds.
 

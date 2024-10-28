@@ -85,14 +85,14 @@ def async_crawl(
     disallow_mime_types: Collection[str] = (),
     depth_limit: int = -1,
     download_limit: int = -1,
-    concurrent_requests: int = 20,
-    concurrent_requests_per_domain: int = 10,
+    concurrent_requests: int = 16,
+    concurrent_requests_per_domain: int = 8,
     download_delay: float = 0,
     randomize_download_delay: bool = True,
     download_timeout: float = 180,
     autothrottle_enabled: bool = True,
     autothrottle_max_delay: float = 300,
-    autothrottle_target_concurrency: float = 10,
+    autothrottle_target_concurrency: float = 8,
     robots_max_crawl_delay: float = 60,
 ) -> Deferred[None]:
     # Assisted by WCA@IBM
@@ -112,14 +112,14 @@ def async_crawl(
         disallow_mime_types (Collection[str]): A collection of MIME types to disallow during the crawl. Default is an empty collection.
         depth_limit (int): The maximum depth of the crawl. Default is -1, which means no limit.
         download_limit (int): The maximum number of pages to download. Default is -1, which means no limit. This is a soft limit, meaning that a crawler may download more pages than the specified limit.
-        concurrent_requests (int): The maximum number of concurrent requests to make. Default is 20.
-        concurrent_requests_per_domain (int): The maximum number of concurrent requests to make per domain. Default is 10.
+        concurrent_requests (int): The maximum number of concurrent requests to make. Default is 16.
+        concurrent_requests_per_domain (int): The maximum number of concurrent requests to make per domain. Default is 8.
         download_delay (float): The delay between consecutive requests. Default is 0.
         randomize_download_delay (bool): If specified, the download delay will be randomized between 0.5 * `download_delay and 1.5 * `download_delay`. Default is True.
         download_timeout (float): The timeout for each request. Default is 180 seconds.
         autothrottle_enabled (bool): If specified, autothrottling will be enabled. Default is True.
         autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 300 seconds.
-        autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 10.
+        autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 8.
         robots_max_crawl_delay (float): The maximum crawl delay allowed by the robots.txt file. Default is 60 seconds.
 
     Returns:
@@ -224,14 +224,14 @@ def crawl(
     disallow_mime_types: Collection[str] = (),
     depth_limit: int = -1,
     download_limit: int = -1,
-    concurrent_requests: int = 20,
-    concurrent_requests_per_domain: int = 10,
+    concurrent_requests: int = 16,
+    concurrent_requests_per_domain: int = 8,
     download_delay: float = 0,
     randomize_download_delay: bool = True,
     download_timeout: float = 180,
     autothrottle_enabled: bool = True,
     autothrottle_max_delay: float = 300,
-    autothrottle_target_concurrency: float = 10,
+    autothrottle_target_concurrency: float = 8,
     robots_max_crawl_delay: float = 60,
 ) -> None:
     # Assisted by WCA@IBM
@@ -251,14 +251,14 @@ def crawl(
         disallow_mime_types (Collection[str]): A collection of MIME types to disallow during the crawl. Default is an empty collection.
         depth_limit (int): The maximum depth of the crawl. Default is -1, which means no limit.
         download_limit (int): The maximum number of pages to download. Default is -1, which means no limit. This is a soft limit, meaning that a crawler may download more pages than the specified limit.
-        concurrent_requests (int): The maximum number of concurrent requests to make. Default is 20.
-        concurrent_requests_per_domain (int): The maximum number of concurrent requests to make per domain. Default is 10.
+        concurrent_requests (int): The maximum number of concurrent requests to make. Default is 16.
+        concurrent_requests_per_domain (int): The maximum number of concurrent requests to make per domain. Default is 8.
         download_delay (float): The delay between consecutive requests. Default is 0.
         randomize_download_delay (bool): If specified, the download delay will be randomized between 0.5 * `download_delay and 1.5 * `download_delay`. Default is True.
         download_timeout (float): The timeout for each request. Default is 180 seconds.
         autothrottle_enabled (bool): If specified, autothrottling will be enabled. Default is True.
         autothrottle_max_delay (float): The maximum delay between consecutive requests when autothrottling is enabled. Default is 300 seconds.
-        autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 10.
+        autothrottle_target_concurrency (float): The target concurrency for autothrottling. Default is 8.
         robots_max_crawl_delay (float): The maximum crawl delay allowed by the robots.txt file. Default is 60 seconds.
 
     Returns:

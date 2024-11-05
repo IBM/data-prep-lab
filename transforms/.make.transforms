@@ -343,15 +343,11 @@ minio-stop:
 	$(call check_defined, TRANSFORM_PYTHON_VERSION)
 	$(MAKE) .defaults.update-toml
 	if [ -e pyproject.toml ]; then	\
-	    cat pyproject.toml | sed 	\
-	    -e 's/\("dpk[_-].*transform[_-]python[=<>~][=]\).*"/\1$(TRANSFORM_PYTHON_VERSION)"/'	\
-	    > tt.toml;			\
+	    cat pyproject.toml | sed  -e 's/\("dpk[_-].*transform[_-]python[=<>~][=]\).*"/\1$(TRANSFORM_PYTHON_VERSION)"/'> tt.toml;	\
 	    mv tt.toml pyproject.toml;	\
 	fi
 	if [ -e requirements.txt ]; then					\
-	    cat requirements.txt | sed 									\
-	    -e 's/\(dpk[_-].*transform[_-]python[=<>~][=]\).*/\1$(TRANSFORM_PYTHON_VERSION)/'	\
-	    > tt.txt;			\
+	    cat requirements.txt | sed -e 's/\(dpk[_-].*transform[_-]python[=<>~][=]\).*/\1$(TRANSFORM_PYTHON_VERSION)/' > tt.txt;	\
 	    mv tt.txt requirements.txt; \
 	fi
 

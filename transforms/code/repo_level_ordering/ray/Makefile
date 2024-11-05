@@ -31,7 +31,8 @@ test-src:: .transforms.test-src
 
 setup:: .transforms.setup
 
-test-image:: .transforms.ray-test-image
+#test-image:: .transforms.ray-test-image
+test-image:: .transforms.ray-image .transforms.test-image-help .transforms.clean
 
 build:: build-dist image
 

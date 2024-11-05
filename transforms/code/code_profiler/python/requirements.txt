@@ -83,7 +83,7 @@ streamlit==1.37.0
 tenacity==8.4.2
 toml==0.10.2
 toolz==0.12.1
-tornado==6.4
+tornado==6.4.1
 traitlets==5.14.3
 tree-sitter==0.21.3
 tree-sitter-cpp==0.22.1

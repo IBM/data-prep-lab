@@ -1,0 +1,89 @@
+# Define the root of the local git clone for the common rules to be able 
+# know where they are running from.
+
+# Include a library of common .transform.* targets which most
+# transforms should be able to reuse.  However, feel free
+# to override/redefine the rules below. 
+include $(REPOROOT)/transforms/.make.transforms
+
+######################################################################
+## Default setting for TRANSFORM_RUNTIME uses folder name-- Old layout
+TRANSFORM_PYTHON_RUNTIME_SRC_FILE=-m dpk_$(TRANSFORM_NAME).transform
+TRANSFORM_RAY_RUNTIME_SRC_FILE=-m dpk_$(TRANSFORM_NAME).ray.transform
+TRANSFORM_PYTHON_RUNTIME_SRC_FILE=-m dpk_$(TRANSFORM_NAME).spark.transform
+
+venv::	.defaults.create-venv
+	source venv/bin/activate && $(PIP) install -e $(REPOROOT)/data-processing-lib[ray,spark]
+	source venv/bin/activate && $(PIP) install -e $(REPOROOT)/data-connector-lib
+	if [ -e requirements.txt ]; then \
+		source venv/bin/activate && $(PIP) install -r  requirements.txt; \
+	fi; 
+
+
+test:: .transforms.test-src test-image
+
+clean:: .transforms.clean
+
+## We need to think how we want to do this going forward
+set-versions::
+
+## We need to think how we want to do this going forward
+build::
+
+image::
+	@if [ -e Dockerfile ]; then \
+		$(MAKE) image-default ; \
+	else \
+		echo "Skipping image for $(shell pwd) since no Dockerfile is present"; \
+	fi
+
+publish::
+	@if [ -e Dockerfile ]; then \
+		$(MAKE) publish-default ; \
+	else \
+		echo "Skipping publish for $(shell pwd) since no Dockerfile is present"; \
+	fi
+
+publish-image::
+	@if [ -e Dockerfile ]; then \
+		$(MAKE) publish-image-default ; \
+	else \
+		echo "Skipping publish-image for $(shell pwd) since no Dockerfile is present"; \
+	fi
+
+test-image::
+	@if [ -e Dockerfile ]; then \
+		$(MAKE) test-image-default ; \
+	else \
+		echo "Skipping test-image for $(shell pwd) since no Dockerfile is present"; \
+	fi
+
+test-src:: .transforms.test-src
+
+setup:: .transforms.setup
+
+publish-default:: publish-image
+
+publish-image-default:: .defaults.publish-image
+        
+test-image-default:: image .transforms.test-image-help .defaults.test-image-pytest .transforms.clean
+
+build-lib-wheel:
+	make -C $(REPOROOT)/data-processing-lib build-pkg-dist
+
+image-default:: build-lib-wheel
+	@$(eval LIB_WHEEL_FILE := $(shell find $(REPOROOT)/data-processing-lib/dist/*.whl))
+	rm -fr dist && mv $(REPOROOT)/data-processing-lib/dist .
+	$(eval WHEEL_FILE_NAME := $(shell basename $(LIB_WHEEL_FILE)))
+	$(DOCKER) build -t $(DOCKER_IMAGE_NAME) $(DOCKER_BUILD_EXTRA_ARGS)	\
+		--platform $(DOCKER_PLATFORM)  			\
+		--build-arg EXTRA_INDEX_URL=$(EXTRA_INDEX_URL)	\
+		--build-arg BASE_IMAGE=$(RAY_BASE_IMAGE)  		\
+		--build-arg BUILD_DATE=$(shell date -u +'%Y-%m-%dT%H:%M:%SZ')  	\
+		--build-arg WHEEL_FILE_NAME=$(WHEEL_FILE_NAME) \
+		--build-arg TRANSFORM_NAME=$(TRANSFORM_NAME) \
+		--build-arg GIT_COMMIT=$(shell git log -1 --format=%h) .
+	$(DOCKER) tag $(DOCKER_LOCAL_IMAGE)  $(DOCKER_REMOTE_IMAGE)
+	rm -fr dist
+
+

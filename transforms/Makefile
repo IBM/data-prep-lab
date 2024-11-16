@@ -114,6 +114,7 @@ build-pkg-dist:
 		fi \
 	done
 	# Only needs to build the whl
+	git show --no-patch > src/data/gitshow.txt
 	$(MAKE) BUILD_WHEEL_EXTRA_ARG=-w .defaults.build-dist
 	-rm -fr src
 
@@ -130,4 +131,10 @@ test-pkg-dist:
 	@# Help: Setup environment and run unit tests for all transforms
 
 publish-dist :: .defaults.publish-dist
+
+publish-testpypi:
+	## when installing from testpypi, make sure you install the dependecies first (pip install data-prep-toolkit)
+	## and then use extra-url-index to install this package:
+	## pip install --extra-index-url https://test.pypi.org/simple/ 'data-prep-toolkit-transforms[all]==x.x.x.devx'
+	twine upload --repository testpypi dist/*
 

@@ -475,7 +475,7 @@ endif
 .defaults.test-src:: venv
 	@# Help: Run pytest on the test directory inside the venv 
 	source venv/bin/activate;       \
-	export PYTHONPATH=../src;       \
+	export PYTHONPATH=../src:../: ;  \
 	cd test; $(PYTEST) .
 
 # This is small convenience and the image itself must already be created.

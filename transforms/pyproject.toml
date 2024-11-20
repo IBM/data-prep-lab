@@ -1,6 +1,6 @@
 [project]
 name = "data_prep_toolkit_transforms"
-version = "0.2.2.dev1"
+version = "0.2.2.dev3"
 requires-python = ">=3.10,<3.13"
 keywords = ["transforms", "data preprocessing", "data preparation", "llm", "generative", "ai", "fine-tuning", "llmapps" ]
 description = "Data Preparation Toolkit Transforms using Ray"
@@ -47,7 +47,8 @@ all = { file = [
 "universal/profiler/python/requirements.txt",
 "universal/doc_id/python/requirements.txt",
 "universal/filter/python/requirements.txt",
-"universal/resize/python/requirements.txt"
+"universal/resize/python/requirements.txt",
+"universal/web2parquet/requirements.txt"
 ]}
 
 # pyproject.toml must be in a parent and cannot be in sibling
@@ -74,9 +75,19 @@ profiler = { file = ["universal/profiler/python/requirements.txt"]}
 doc_id = { file = ["universal/doc_id/python/requirements.txt"]} 
 filter = { file = ["universal/filter/python/requirements.txt"]} 
 resize = { file = ["universal/resize/python/requirements.txt"]} 
+web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 
 # Does not seem to work for our custom layout
 # copy all files to a single src and let automatic discovery find them
+
+[tool.setuptools.package-data]
+"*" = ["*.txt"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+#[tool.setuptools.package-dir]
+#dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
 
 [options]
 package_dir = ["src","test"]

@@ -103,7 +103,7 @@ class ComponentUtils:
     def set_s3_env_vars_to_component(
         task: dsl.PipelineTask,
         secret: str = "",
-        env2key: Dict[str, str] = {"s3-key": "S3_KEY", "s3-secret": "S3_SECRET", "s3-endpoint": "ENDPOINT"},
+        env2key: Dict[str, str] = None,
         prefix: str = None,
     ) -> None:
         """
@@ -113,6 +113,8 @@ class ComponentUtils:
         :param env2key: dict with mapping each env variable to a key in the secret
         :param prefix: prefix to add to env name
         """
+        if env2key is None:
+            env2key = {"s3-key": "S3_KEY", "s3-secret": "S3_SECRET", "s3-endpoint": "ENDPOINT"}
 
         if prefix is not None:
             for secret_key, _ in env2key.items():

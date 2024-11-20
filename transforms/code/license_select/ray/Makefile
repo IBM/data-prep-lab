@@ -19,8 +19,6 @@ include ../transform.config
 
 BASE_IMAGE=$(RAY_BASE_IMAGE)
 
-DOCKER_IMAGE_VERSION=${LICENSE_SELECT_RAY_VERSION}
-
 # Use default rule inherited from makefile.common
 clean:: .transforms.clean
 

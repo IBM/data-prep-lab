@@ -23,8 +23,10 @@ MY_CONFIG.EMBEDDING_MODEL = 'sentence-transformers/all-MiniLM-L6-v2'
 MY_CONFIG.EMBEDDING_LENGTH = 384
 
 ## LLM Model
-MY_CONFIG.LLM_MODEL = "meta/meta-llama-3-8b-instruct"
-
+# MY_CONFIG.LLM_MODEL = "meta/meta-llama-3-8b-instruct"
+# MY_CONFIG.LLM_MODEL = "meta/meta-llama-3-70b-instruct"
+# MY_CONFIG.LLM_MODEL = "ibm-granite/granite-3.0-2b-instruct"
+MY_CONFIG.LLM_MODEL = "ibm-granite/granite-3.0-8b-instruct"
 
 
 ## RAY CONFIGURATION

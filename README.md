@@ -122,7 +122,14 @@ Explore more examples [here](examples/notebooks).
 
 ### Run your first data prep pipeline
 
-Now that you have run a single transform, the next step is to explore how to put these transforms together to run a data prep pipeline for an end to end use case like fine tuning model or building a RAG application. This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of how to build an end to end data prep pipeline for fine tuning for code LLMs. You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
+Now that you have run a single transform, the next step is to explore how to put these transforms 
+together to run a data prep pipeline for an end to end use case like fine tuning a model or building 
+a RAG application. 
+This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of 
+how to build an end to end data prep pipeline for fine tuning for code LLMs. Similarly, this 
+[notebook](examples/notebooks/fine%20tuning/language/demo_with_launcher.ipynb) is a fine tuning 
+example of an end-to-end sample data pipeline designed for processing language datasets. 
+You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
 
 ### Current list of transforms 
 The matrix below shows the the combination of modules and supported runtimes. All the modules can be accessed [here](transforms) and can be combined to form data processing pipelines, as shown in the [examples](examples) folder. 
@@ -133,7 +140,8 @@ The matrix below shows the the combination of modules and supported runtimes. Al
 | **Data Ingestion**                                                                   |                    |                    |                    |                    |
 | [Code (from zip) to Parquet](transforms/code/code2parquet/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [PDF to Parquet](transforms/language/pdf2parquet/python/README.md)                   | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [HTML to Parquet](transforms/language/html2parquet/python/README.md)                 | :white_check_mark: | :white_check_mark: |                    |                    |
+| [HTML to Parquet](transforms/language/html2parquet/python/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Web to Parquet](transforms/universal/web2parquet/README.md)                         | :white_check_mark: |                    |                    |                    |         
 | **Universal (Code & Language)**                                                      |                    |                    |                    |                    | 
 | [Exact dedup filter](transforms/universal/ededup/ray/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      |                    | :white_check_mark: |                    | :white_check_mark: |
@@ -223,11 +231,11 @@ If you use Data Prep Kit in your research, please cite our paper:
 @misc{wood2024dataprepkitgettingdataready,
       title={Data-Prep-Kit: getting your data ready for LLM application development}, 
       author={David Wood and Boris Lublinsky and Alexy Roytman and Shivdeep Singh 
-      and Abdulhamid Adebayo and Revital Eres and Mohammad Nassar and Hima Patel 
-      and Yousaf Shah and Constantin Adam and Petros Zerfos and Nirmit Desai 
-      and Daiki Tsuzuku and Takuya Goto and Michele Dolfi and Saptha Surendran 
-      and Paramesvaran Selvam and Sungeun An and Yuan Chi Chang and Dhiraj Joshi 
-      and Hajar Emami-Gohari and Xuan-Hong Dang and Yan Koyfman and Shahrokh Daijavad},
+      and Constantin Adam and Abdulhamid Adebayo and Sungeun An and Yuan Chi Chang 
+      and Xuan-Hong Dang and Nirmit Desai and Michele Dolfi and Hajar Emami-Gohari 
+      and Revital Eres and Takuya Goto and Dhiraj Joshi and Yan Koyfman 
+      and Mohammad Nassar and Hima Patel and Paramesvaran Selvam and Yousaf Shah  
+      and Saptha Surendran and Daiki Tsuzuku and Petros Zerfos and Shahrokh Daijavad},
       year={2024},
       eprint={2409.18164},
       archivePrefix={arXiv},

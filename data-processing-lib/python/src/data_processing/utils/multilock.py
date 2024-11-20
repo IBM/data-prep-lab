@@ -71,9 +71,10 @@ class MultiLock(abc.ABC):
 
         start = time.time()
         if block:
-            locked = self.thread_lock.acquire(block, timeout)
+            thread_timeout = timeout if timeout is not None and timeout >= 0 else -1
+            locked = self.thread_lock.acquire(blocking=True, timeout=thread_timeout)
         else:
-            locked = self.thread_lock.acquire(block)
+            locked = self.thread_lock.acquire(blocking=False)
         if not locked:
             return False
         end = time.time()
@@ -121,8 +122,9 @@ class MultiLock(abc.ABC):
         """
         if self.fd is not None:
             self.thread_lock.acquire()
-            os.close(self.fd)
-            self.fd = None
+            if self.fd is not None: # Retest now that we have the thread lock.
+                os.close(self.fd)
+                self.fd = None
             self.thread_lock.release()
 
     def is_locked(self):

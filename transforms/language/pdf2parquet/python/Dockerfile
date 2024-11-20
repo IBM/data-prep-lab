@@ -17,11 +17,12 @@ USER dpk
 WORKDIR /home/dpk
 
 ARG PIP_INSTALL_EXTRA_ARGS
+ARG DPK_WHEEL_FILE_NAME
 
 # Copy and install data processing libraries 
 # These are expected to be placed in the docker context before this is run (see the make image).
-COPY --chown=dpk:root data-processing-lib-python/ data-processing-lib-python/
-RUN cd data-processing-lib-python && pip install --no-cache-dir -e .
+COPY --chown=dpk:root data-processing-dist/ data-processing-dist/
+RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}
 
 # END OF STEPS destined for a data-prep-kit base image 
 
@@ -31,7 +32,7 @@ RUN pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -e .
 
 # Download models
 RUN python -c 'from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models; load_pretrained_nlp_models(verbose=True);'
-RUN python -c 'from docling.document_converter import DocumentConverter; s=DocumentConverter.download_models_hf(); print(f"Models cached in {s}")'
+RUN python -c 'from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline; s=StandardPdfPipeline.download_models_hf(); print(f"Models cached in {s}")'
 
 # copy the main() entry point to the image
 COPY --chown=dpk:root src/pdf2parquet_transform.py ./

@@ -13,12 +13,11 @@
 import kfp.compiler as compiler
 import kfp.components as comp
 import kfp.dsl as dsl
-from kfp_support.workflow_support.runtime_utils import ONE_WEEK_SEC
-
+from workflow_support.compile_utils import ONE_WEEK_SEC
 
 # Components
 # path to kfp component specifications files
-component_spec_path = "../../../kfp_ray_components/"
+component_spec_path = "../../../../../kfp/kfp_ray_components/"
 # For every sub workflow we need a separate components, that knows about this subworkflow.
 run_doc_id_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_exact_dedup_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
@@ -39,16 +38,16 @@ def sample_ray_orchestrator(
     p1_orch_exact_dedup_name: str = "ededup_wf",
     p1_orch_fuzzy_dedup_name: str = "fdedup_wf",
     p2_pipeline_runtime_pipeline_id: str = "pipeline_id",
-    p2_pipeline_ray_head_options: str = '{"cpu": 1, "memory": 4, "image_pull_secret": ""}',
-    p2_pipeline_ray_worker_options: str = '{"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""}',
+    p2_pipeline_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": ""},
+    p2_pipeline_ray_worker_options: dict = {"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""},
     p2_pipeline_server_url: str = "http://kuberay-apiserver-service.kuberay.svc.cluster.local:8888",
     p2_pipeline_input_parent_path: str = "test/doc_id/input/",
     p2_pipeline_output_parent_path: str = "test/super/output/",
     p2_pipeline_parent_path_suffix: str = "",
     p2_pipeline_additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
     p2_pipeline_data_s3_access_secret: str = "s3-secret",
-    p2_pipeline_runtime_code_location: str = '{"github": "github", "commit_hash": "12345", "path": "path"}',
-    p2_pipeline_runtime_actor_options: str = '{"num_cpus": 0.8}',
+    p2_pipeline_runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
+    p2_pipeline_runtime_actor_options: dict = {'num_cpus': 0.7},
     # data access.
     p2_pipeline_data_max_files: int = -1,
     p2_pipeline_data_num_samples: int = -1,

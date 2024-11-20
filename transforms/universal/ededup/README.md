@@ -1,4 +1,4 @@
-# Exect Deduplification Transform 
+# Exact Deduplication Transform 
 
 ## Summary
 

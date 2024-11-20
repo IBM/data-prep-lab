@@ -1,6 +1,6 @@
-data-prep-toolkit==0.2.2.dev1
-docling-core==1.7.2
-docling-ibm-models==2.0.0
-deepsearch-glm==0.22.0
-docling==1.20.0
+data-prep-toolkit==0.2.2.dev2
+docling-core==2.3.0
+docling-ibm-models==2.0.3
+deepsearch-glm==0.26.1
+docling==2.3.1
 filetype >=1.2.0, <2.0.0

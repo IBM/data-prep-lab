@@ -13,11 +13,11 @@
 from abc import ABCMeta, abstractmethod
 from typing import Iterator, Optional, Dict, List
 
-from docling_core.types import Document as DLDocument
+from docling_core.types.doc import DoclingDocument
 from llama_index.core.node_parser.text.token import TokenTextSplitter
 from llama_index.core import Document as LIDocument
 from llama_index.core.node_parser import MarkdownNodeParser
-from docling_core.transforms.chunker import HierarchicalChunker
+from docling_core.transforms.chunker import HierarchicalChunker, DocMeta
 
 
 class ChunkingExecutor(metaclass=ABCMeta):
@@ -29,7 +29,6 @@ class ChunkingExecutor(metaclass=ABCMeta):
 class DLJsonChunker(ChunkingExecutor):
     def __init__(
         self,
-        min_chunk_len: Optional[int],
         output_chunk_column_name: str,
         output_jsonpath_column_name: str,
         output_pageno_column_name_key: str,
@@ -40,19 +39,19 @@ class DLJsonChunker(ChunkingExecutor):
         self.output_pageno_column_name_key = output_pageno_column_name_key
         self.output_bbox_column_name_key = output_bbox_column_name_key
 
-        chunker_kwargs = dict(include_metadata=True)
-        if min_chunk_len is not None:
-            chunker_kwargs["min_chunk_len"] = min_chunk_len
-        self._chunker = HierarchicalChunker(**chunker_kwargs)
+        self._chunker = HierarchicalChunker()
 
     def chunk(self, content: str) -> Iterator[dict]:
-        doc = DLDocument.model_validate_json(content)
+        doc = DoclingDocument.model_validate_json(content)
         for chunk in self._chunker.chunk(doc):
+            meta = DocMeta.model_validate(chunk.meta)
+            doc_item = meta.doc_items[0]
+            prov = doc_item.prov[0]
             yield {
                 self.output_chunk_column_name: chunk.text,
-                self.output_jsonpath_column_name: chunk.path,
-                self.output_pageno_column_name_key: chunk.page,
-                self.output_bbox_column_name_key: chunk.bbox,
+                self.output_jsonpath_column_name: doc_item.self_ref,
+                self.output_pageno_column_name_key: prov.page_no,
+                self.output_bbox_column_name_key: prov.bbox.as_tuple(),
             }
 
 

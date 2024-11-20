@@ -1,4 +1,4 @@
-REPOROOT=../../
+REPOROOT=../../../
 # Use make help, to see the available rules
 include ${REPOROOT}/.make.defaults
 
@@ -16,11 +16,11 @@ else
 endif
 
 .PHONY: workflow-build
-setup:
+workflow-build:
 ifeq ($(KFPv2), 1)
 	echo "Skipping build as KFPv2 is defined"
 else
-	$(MAKE) -C ray/kfp_v1 setup
+	$(MAKE) -C ray/kfp_v1 workflow-build
 endif
 
 .PHONY: workflow-test

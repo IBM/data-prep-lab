@@ -38,6 +38,7 @@ params = {
     "runtime_job_id": "job_id",
     "runtime_code_location": ParamsUtils.convert_to_ast(code_location),
     # doc_chunk params
+    # "doc_chunk_dl_min_chunk_len": 10,  # for testing the usage of the deprecated argument
     # "doc_chunk_chunking_type": "li_markdown",
     "doc_chunk_chunking_type": "dl_json",
     # "doc_chunk_chunking_type": chunking_types.LI_TOKEN_TEXT, 

@@ -19,11 +19,11 @@ from workflow_support.compile_utils import ONE_WEEK_SEC
 # empty comment to triigger pre-commit
 # Components
 # For every sub workflow we need a separate components, that knows about this subworkflow.
-component_spec_path = "../../../kfp_ray_components/"
+component_spec_path = "../../../../../kfp/kfp_ray_components/"
 run_code_to_parquet_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_code_quality_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_malware_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
-run_license_check_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
+run_license_select_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_header_cleanser_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_proglang_select_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
 run_doc_id_op = comp.load_component_from_file(component_spec_path + "executeSubWorkflowComponent.yaml")
@@ -35,7 +35,7 @@ code_to_parquet_image = "quay.io/dataprep1/data-prep-kit/code2parquet-ray:latest
 proglang_select_image = "quay.io/dataprep1/data-prep-kit/proglang_select-ray:latest"
 code_quality_image = "quay.io/dataprep1/data-prep-kit/code_quality-ray:latest"
 malware_image = "quay.io/dataprep1/data-prep-kit/malware-ray:latest"
-license_check_image = "quay.io/dataprep1/data-prep-kit/license_check-ray:latest"
+license_select_image = "quay.io/dataprep1/data-prep-kit/license_select-ray:latest"
 header_cleanser_image = "quay.io/dataprep1/data-prep-kit/header-cleanser-ray:latest"
 doc_id_image = "quay.io/dataprep1/data-prep-kit/doc_id-ray:latest"
 ededup_image = "quay.io/dataprep1/data-prep-kit/ededup-ray:latest"
@@ -50,10 +50,10 @@ tokenizer_image = "quay.io/dataprep1/data-prep-kit/tokenization-ray:latest"
 )
 def sample_code_ray_orchestrator(
     # the super pipeline parameters
-    p1_orch_code_to_parquet_name: str = "code_2_parquet_wf",
+    p1_orch_code_to_parquet_name: str = "code2parquet_wf",
     p1_orch_code_quality_name: str = "code_quality_wf",
     p1_orch_malware_name: str = "malware_wf",
-    p1_orch_license_check_name: str = "license_check_wf",
+    p1_orch_license_select_name: str = "license_select_wf",
     p1_orch_header_cleanser_name: str = "header_cleanser_wf",
     p1_orch_proglang_select_name: str = "proglang_select_wf",
     p1_orch_doc_id_name: str = "doc_id_wf",
@@ -61,16 +61,16 @@ def sample_code_ray_orchestrator(
     p1_orch_fuzzy_dedup_name: str = "fdedup_wf",
     p1_orch_tokenization_wf_name: str = "tokenization_wf",
     p2_pipeline_runtime_pipeline_id: str = "pipeline_id",
-    p2_pipeline_ray_head_options: str = '{"cpu": 1, "memory": 4, "image_pull_secret": ""}',
-    p2_pipeline_ray_worker_options: str = '{"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""}',
+    p2_pipeline_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": ""},
+    p2_pipeline_ray_worker_options: dict = {"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""},
     p2_pipeline_server_url: str = "http://kuberay-apiserver-service.kuberay.svc.cluster.local:8888",
-    p2_pipeline_input_parent_path: str = "test/code2parquet/output/",
+    p2_pipeline_input_parent_path: str = "test/code2parquet/input/",
     p2_pipeline_output_parent_path: str = "test/super/output/",
     p2_pipeline_parent_path_suffix: str = "",
     p2_pipeline_additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
     p2_pipeline_data_s3_access_secret: str = "s3-secret",
-    p2_pipeline_runtime_code_location: str = '{"github": "github", "commit_hash": "12345", "path": "path"}',
-    p2_pipeline_runtime_actor_options: str = '{"num_cpus": 0.8}',
+    p2_pipeline_runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
+    p2_pipeline_runtime_actor_options: dict = {'num_cpus': 0.7},
     p2_pipeline_data_max_files: int = -1,
     p2_pipeline_data_num_samples: int = -1,
     # code to parquet step parameters
@@ -186,16 +186,16 @@ def sample_code_ray_orchestrator(
     + malware_image
     + '"}}',
     # license check step parameters
-    p10_name: str = "license_check",
+    p10_name: str = "license_select",
     p10_skip: bool = False,
     p10_lc_license_column_name: str = "license",
-    p10_lc_licenses_file: str = "test/license_check/sample_approved_licenses.json",
+    p10_lc_licenses_file: str = "test/license_select/sample_approved_licenses.json",
     # orchestrator
     # overriding parameters
     p10_overriding_params: str = '{"ray_worker_options": {"image": "'
-    + license_check_image
+    + license_select_image
     + '"}, "ray_head_options": {"image": "'
-    + license_check_image
+    + license_select_image
     + '"}}',
     # header cleanser step parameters
     p11_name: str = "header_cleanser",
@@ -246,7 +246,7 @@ def sample_code_ray_orchestrator(
             op.after(prev_op)
 
     # code to parquet deduplication
-    code_to_parquet = run_exact_dedup_op(
+    code_to_parquet = run_code_to_parquet_op(
         name=p1_orch_code_to_parquet_name,
         prefix="p3_",
         params=args,
@@ -298,10 +298,10 @@ def sample_code_ray_orchestrator(
     _set_component(malware, "malware", code_quality)
 
     # license check
-    license_check = run_license_check_op(
-        name=p1_orch_license_check_name, prefix="p10_", params=args, host=orch_host, input_folder=malware.output
+    license_select = run_license_select_op(
+        name=p1_orch_license_select_name, prefix="p10_", params=args, host=orch_host, input_folder=malware.output
     )
-    _set_component(license_check, "license_check", malware)
+    _set_component(license_select, "license_select", malware)
 
     # header cleanser
     header_cleanser = run_header_cleanser_op(
@@ -309,14 +309,14 @@ def sample_code_ray_orchestrator(
         prefix="p11_",
         params=args,
         host=orch_host,
-        input_folder=license_check.output,
+        input_folder=license_select.output,
     )
-    _set_component(header_cleanser, "header_cleanser", license_check)
+    _set_component(header_cleanser, "header_cleanser", license_select)
 
     # tokenization
     tokenization = run_tokenization_op(
         name=p1_orch_tokenization_wf_name,
-        prefix="p10_",
+        prefix="p12_",
         params=args,
         host=orch_host,
         input_folder=header_cleanser.output,

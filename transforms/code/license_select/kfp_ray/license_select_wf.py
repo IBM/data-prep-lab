@@ -40,7 +40,7 @@ def compute_exec_params_func(
     data_num_samples: int,
     runtime_pipeline_id: str,
     runtime_job_id: str,
-    runtime_code_location: str,
+    runtime_code_location: dict,
     lc_license_column_name: str,
     lc_licenses_file: str,
 ) -> dict:
@@ -117,9 +117,9 @@ def license_select(
     data_max_files: int = -1,
     data_num_samples: int = -1,
     # orchestrator
-    runtime_actor_options: dict = {"num_cpus": 0.8},
+    runtime_actor_options: dict = {"num_cpus": 0.7},
     runtime_pipeline_id: str = "runtime_pipeline_id",
-    runtime_code_location: str = "{'github': 'github', 'commit_hash': '12345', 'path': 'path'}",
+    runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
     # license select parameters
     lc_license_column_name: str = "license",
     lc_licenses_file: str = "test/license_select/sample_approved_licenses.json",

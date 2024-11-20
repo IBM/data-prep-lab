@@ -14,6 +14,9 @@ from UAST import UAST
 import json
 from tree_sitter import Tree
 import os
+import sys
+sys.setrecursionlimit(10000)
+
 """
 Initialize the parser with a path for rules and grammar.
 """
@@ -251,7 +254,10 @@ class UASTParser():
             parent = node
 
         for child in AST_node.children:
-            self._dfs(AST_node= child, parent = parent)
+            try:
+                self._dfs(AST_node= child, parent = parent)
+            except RecursionError as e:
+                print(f"RecursionError caught: {str(e)}")
 
     def _extract(self, ast_snippet, node_type, exec_string):
         code_snippet = ast_snippet

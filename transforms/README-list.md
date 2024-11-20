@@ -23,20 +23,26 @@ Note: This list includes the transforms that were part of the release starting w
     * [code_quality](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/code_quality/python/README.md)
     * [proglang_select](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/proglang_select/python/README.md)
 * language
-    * [doc_chunk](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/doc_chunk/python/README.md)
-	* [doc_quality](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/doc_quality/python/README.md)
-	* [lang_id](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/lang_id/python/README.md)
-	* [pdf2parquet](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/pdf2parquet/python/README.md)
-	* [text_encoder](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/text_encoder/python/README.md)
-	* [pii_redactor](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/pii_redactor/python/README.md)
+    * [doc_chunk](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/doc_chunk/python/README.md)
+	* [doc_quality](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/doc_quality/python/README.md)
+	* [lang_id](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/lang_id/python/README.md)
+	* [pdf2parquet](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/pdf2parquet/python/README.md)
+	* [text_encoder](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/text_encoder/python/README.md)
+	* [pii_redactor](https://github.com/IBM/data-prep-kit/blob/dev/transforms/language/pii_redactor/python/README.md)
 * universal
-    * [ededup](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/ededup/python/README.md)
-	* [filter](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/filter/python/README.md)
-	* [resize](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/resize/python/README.md)
-	* [tokenization](https://github.com/IBM/data-prep-kit/blob/dev/transforms/tokenization/doc_chunk/python/README.md)
-	* [doc_id](https://github.com/IBM/data-prep-kit/blob/dev/transforms/code/doc_id/python/README.md)
+    * [ededup](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/ededup/python/README.md)
+	* [filter](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/filter/python/README.md)
+	* [resize](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/resize/python/README.md)
+	* [tokenization](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/tokenization/python/README.md)
+	* [doc_id](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/doc_id/python/README.md)
+	* [web2parquet](https://github.com/IBM/data-prep-kit/blob/dev/transforms/universal/web2parquet/README.md)
+   
+## Release notes:
 
-	
+### 0.2.2.dev3 
+* web2parquet
+### 0.2.2.dev2
+* pdf2parquet now supports HTML,DOCX,PPTX, ... in addition to PDF
 
 
 

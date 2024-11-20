@@ -8,6 +8,7 @@ RUN pip install --upgrade --no-cache-dir pip
 RUN pip install --no-cache-dir pytest
 
 ARG PIP_INSTALL_EXTRA_ARGS
+ARG DPK_WHEEL_FILE_NAME
 
 RUN \
     sudo apt-get update \
@@ -15,13 +16,12 @@ RUN \
     && sudo apt-get install -y libgl1 libglib2.0-0 curl wget \
     && sudo apt-get clean
 
-
 # Copy and install data processing libraries 
 # These are expected to be placed in the docker context before this is run (see the make image).
-COPY --chown=ray:users data-processing-lib-python/ data-processing-lib-python/
-RUN cd data-processing-lib-python && pip install --no-cache-dir -e .
-COPY --chown=ray:users data-processing-lib-ray/ data-processing-lib-ray/ 
-RUN cd data-processing-lib-ray    && pip install --no-cache-dir -e .
+COPY --chown=ray:users data-processing-dist data-processing-dist
+RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
+    
+## Copy the python version of the tansform    
 COPY --chown=ray:users python-transform/  python-transform/
 RUN cd python-transform && pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -e .
 
@@ -33,7 +33,8 @@ RUN pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -e .
 # Download models
 RUN python -c 'from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models; load_pretrained_nlp_models(verbose=True);'
 # RUN python -c 'from docling.document_converter import DocumentConverter; from pathlib import Path; DocumentConverter.download_models_hf(local_dir=Path("./artifacts/"));'
-RUN python -c 'from docling.document_converter import DocumentConverter; s=DocumentConverter.download_models_hf(); print(f"Models cached in {s}")'
+RUN python -c 'from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline; s=StandardPdfPipeline.download_models_hf(); print(f"Models cached in {s}")'
+
 
 # copy the main() entry point to the image
 COPY --chown=ray:users src/pdf2parquet_transform_ray.py ./

@@ -48,41 +48,24 @@ load-image::
 
 .PHONY: workflow-venv
 workflow-venv:
-	@is_blacklisted=$$(cd $(REPOROOT); bash scripts/check-workflows.sh -show-kfp-black-list | grep $(TRANSFORM_NAME)); \
-	if [ -z "$$is_blacklisted"  ]; \
-		then \
-			echo $(MAKE) -C kfp_ray $@ ; \
-		else \
-			echo "Skipping KFP workflow: Transform is blacklisted " ; \
+	if [ -e kfp_ray ]; then                 \
+		$(MAKE) -C kfp_ray workflow-venv;   \
 	fi
 
 .PHONY: workflow-test
 workflow-test:
-	@is_blacklisted=$$(cd $(REPOROOT); bash scripts/check-workflows.sh -show-kfp-black-list | grep $(TRANSFORM_NAME)); \
-	if [ -z "$$is_blacklisted"  ]; \
-		then \
-			echo $(MAKE) -C kfp_ray $@ ; \
-		else \
-			echo "Skipping KFP workflow: Transform is blacklisted " ; \
+	if [ -e kfp_ray ]; then                 \
+		$(MAKE) -C kfp_ray workflow-test;   \
 	fi
-	
+
 .PHONY: workflow-upload
 workflow-upload:
-	@is_blacklisted=$$(cd $(REPOROOT); bash scripts/check-workflows.sh -show-kfp-black-list | grep $(TRANSFORM_NAME)); \
-	if [ -z "$$is_blacklisted"  ]; \
-		then \
-			echo $(MAKE) -C kfp_ray $@ ; \
-		else \
-			echo "Skipping KFP workflow: Transform is blacklisted " ; \
+	if [ -e kfp_ray ]; then               	\
+		$(MAKE) -C kfp_ray workflow-upload; \
 	fi
 
 .PHONY: workflow-build
 workflow-build:
-	is_blacklisted=$$(cd $(REPOROOT); bash scripts/check-workflows.sh -show-kfp-black-list | grep $(TRANSFORM_NAME)); \
-	if [ -z "$$is_blacklisted"  ]; \
-		then \
-			echo $(MAKE) -C kfp_ray $@ ; \
-		else \
-			echo "Skipping KFP workflow: Transform is blacklisted " ; \
+	if [ -e kfp_ray ]; then                 \
+		$(MAKE) -C  kfp_ray workflow-build; \
 	fi
-

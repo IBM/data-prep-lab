@@ -17,8 +17,6 @@ include $(REPOROOT)/transforms/.make.transforms
 # Include the common configuration for this transform
 include ../transform.config
 
-DOCKER_IMAGE_VERSION=${LICENSE_SELECT_PYTHON_VERSION}
-
 # Use default rule inherited from makefile.common
 clean:: .transforms.clean
 

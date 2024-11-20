@@ -139,7 +139,7 @@ def invoke_sub_workflow(
     input_folder = input_folder.replace('"', "'")
     output_folder = output_folder.replace('"', "'")
     data_s3_config = {"input_folder": input_folder, "output_folder": output_folder}
-    prm["data_s3_config"] = data_s3_config
+    prm["data_s3_config"] = ParamsUtils.convert_to_ast(data_s3_config)
     # Check if to skip preprocessing
     if _skip_task(prm):
         print("skipped preprocess step")
@@ -149,10 +149,6 @@ def invoke_sub_workflow(
         return output_folder
 
     _remove_unused_params(prm)
-
-    for key, value in prm.items():
-        if isinstance(value, dict):
-            prm[key] = ParamsUtils.convert_to_ast(value)
 
     print(f"start pipeline {name} with parameters {prm}")
 

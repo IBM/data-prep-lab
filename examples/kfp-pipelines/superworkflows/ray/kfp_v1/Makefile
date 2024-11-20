@@ -1,4 +1,4 @@
-REPOROOT=${CURDIR}/../../../..
+REPOROOT=${CURDIR}/../../../../../
 WORKFLOW_VENV_ACTIVATE=${REPOROOT}/transforms/venv/bin/activate
 include $(REPOROOT)/transforms/.make.workflows
 

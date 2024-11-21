@@ -147,6 +147,9 @@ class TransformUtils:
         except Exception as e:
             logger.warning(f"Could not convert bytes to pyarrow: {e}")
 
+        # We have seen this exception before when using pyarrow, but polars does not throw it.
+        # "Nested data conversions not implemented for chunked array outputs"
+        # See issue 816 https://github.com/IBM/data-prep-kit/issues/816.
         logger.info(f"Attempting read of pyarrow Table using polars")
         try:
             import polars

@@ -19,7 +19,7 @@ DPK_MINOR_VERSION=2
 DPK_MICRO_VERSION=2
 # The suffix is generally always set in the main/development branch and only nulled out when creating release branches.
 # It can be manually incremented, for example, to allow publishing a new intermediate version wheel to pypi. 
-DPK_VERSION_SUFFIX=.dev2
+DPK_VERSION_SUFFIX=
 
 DPK_VERSION=$(DPK_MAJOR_VERSION).$(DPK_MINOR_VERSION).$(DPK_MICRO_VERSION)$(DPK_VERSION_SUFFIX)
 
@@ -39,7 +39,7 @@ DPK_LIB_KFP_SHARED=$(DPK_VERSION)
 KFP_DOCKER_VERSION=$(DOCKER_IMAGE_VERSION)
 KFP_DOCKER_VERSION_v2=$(DOCKER_IMAGE_VERSION)
 
-DPK_CONNECTOR_VERSION=0.2.3.dev0
+DPK_CONNECTOR_VERSION=0.2.3
 
 ################## ################## ################## ################## ################## ##################
 # Begin versions that the repo depends on. 
@@ -59,3 +59,11 @@ else
         WORKFLOW_SUPPORT_LIB=kfp_v1_workflow_support
 endif
 
+################################################################################
+# This defines the transforms' package version number as would be used
+# when publishing the wheel.  In general, only the micro version
+# number should be advanced relative to the DPK_VERSION. 
+#
+# If you change the versions numbers, be sure to run "make set-versions" to 
+# update version numbers across the transform (e.g., pyproject.toml).
+TRANSFORMS_PKG_VERSION=0.2.2

@@ -1,5 +1,42 @@
 # Data Prep Kit Release notes
 
+## Release 0.2.2 - 11/25/2024
+
+### General 
+1. Update RAG example to use granite model 
+1. Updated transforms with Docling 2
+1. Added single package for dpk with extra for \[spark\] and \[ray\]
+1. Added single package for transforms with extra for \[all\] or \[individual-transform-name\]
+
+
+### data-prep-toolkit libraries (python, ray, spark) 
+
+1. Fix metadata logging even when actors crash 
+1. Add multilock for ray workers downloads/cleanup
+1. Multiple updates to spark runtime
+1. Added support for python 3.12
+1. refactoring of data access code
+
+
+### KFP Workloads 
+
+1. Modify superpipeline params type Str/json
+1. Set kuberay apiserver version 
+1. Add Super pipeline for code transforms
+
+
+### Transforms
+
+1. Enhance pdf2parquet with docling2 support for extracting HTML, DOCS, etc.
+1. Added web2parquet transform
+1. Added HAP transform
+
+### HTTP Connector 0.2.3
+
+1. Enhanced parameter/configuration allows the user to customize crawler settings 
+1. implement subdomain focus feature in data-prep-connector 
+
+
 ## Release 0.2.2- HTTP Connector Module - 10/23/2024
 
 ### General 

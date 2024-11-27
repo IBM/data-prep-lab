@@ -12,7 +12,7 @@
 
 from typing import Any
 
-from data_processing.data_access import DataAccessFactoryBase
+from data_processing.data_access import DataAccessFactoryBase, DataAccess
 from data_processing.transform import BaseTransformRuntime
 from ray.actor import ActorHandle
 

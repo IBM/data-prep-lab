@@ -13,8 +13,7 @@
 from typing import Any
 
 from data_processing.data_access import DataAccessFactoryBase, DataAccess
-from data_processing.transform import TransformStatistics
-from data_processing.runtime import BaseTransformRuntime
+from data_processing.transform import BaseTransformRuntime, TransformStatistics
 
 
 class DefaultSparkTransformRuntime(BaseTransformRuntime):

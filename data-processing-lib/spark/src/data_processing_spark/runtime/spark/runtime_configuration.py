@@ -13,8 +13,7 @@
 from typing import Any
 
 from data_processing.data_access import DataAccessFactoryBase
-from data_processing.runtime import TransformRuntimeConfiguration
-from data_processing.transform import TransformConfiguration
+from data_processing.transform import TransformConfiguration, TransformRuntimeConfiguration
 from data_processing_spark.runtime.spark import DefaultSparkTransformRuntime
 
 
@@ -29,7 +28,7 @@ class SparkTransformRuntimeConfiguration(TransformRuntimeConfiguration):
         :param transform_config - base configuration class
         :param runtime_class: implementation of the transform runtime
         """
-        super().__init__(transform_config=transform_config)
+        super().__init__(transform_config=transform_config, runtime_class=runtime_class)
         self.runtime_class = runtime_class
 
     def get_bcast_params(self, data_access_factory: DataAccessFactoryBase) -> dict[str, Any]:

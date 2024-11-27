@@ -48,6 +48,7 @@ class AbstractTransformFileProcessor:
         # Add data access and statistics to the processor parameters
         self.transform_params = transform_parameters
         self.transform_params["data_access"] = self.data_access
+        self.transform_params["data_access_factory"] = data_access_factory
         self.is_folder = is_folder
 
     def process_file(self, f_name: str) -> None:

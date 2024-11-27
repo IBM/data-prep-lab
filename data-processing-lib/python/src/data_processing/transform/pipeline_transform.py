@@ -34,7 +34,7 @@ class AbstractPipelineTransform(AbstractBinaryTransform):
             # Empty pipeline
             self.logger.error("Pipeline transform with empty list")
             raise UnrecoverableException("Pipeline transform with empty list")
-        self.data_access_factory = config.get("data_access", None)
+        self.data_access_factory = config.get("data_access_factory", None)
         if self.data_access_factory is None:
             self.logger.error("pipeline transform - Data access factory is not defined")
             raise UnrecoverableException("pipeline transform - Data access factory is not defined")

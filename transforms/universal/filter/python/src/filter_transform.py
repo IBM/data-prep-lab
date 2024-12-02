@@ -67,10 +67,6 @@ class FilterTransform(AbstractTableTransform):
         self.logical_operator = config.get(filter_logical_operator_key, filter_logical_operator_default)
         self.columns_to_drop = config.get(filter_columns_to_drop_key, filter_columns_to_drop_default)
 
-        # Temporarily here to test if this can allow use to process files that are required to be read by polars for mm
-        # If this works, we should add as a configurable or always enable (not sure of the downside of enabling this).
-        # duckdb.execute("SET arrow_large_buffer_size = true")
-
     def transform(self, table: pa.Table, file_name: str = None) -> tuple[list[pa.Table], dict]:
         """
         This implementation filters the input table using a SQL statement and

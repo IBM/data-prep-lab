@@ -4,4 +4,4 @@
   argparse
   mmh3
   psutil
-  polars
+  polars>=1.16.0

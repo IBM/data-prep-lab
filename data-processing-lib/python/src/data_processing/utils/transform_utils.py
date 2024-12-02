@@ -157,7 +157,7 @@ class TransformUtils:
             df = polars.read_parquet(io.BytesIO(data))
             table = df.to_arrow()
         except Exception as e:
-            logger.warning(f"Could not convert bytes to pyarrow using polars: {e}. Skipping.")
+            logger.error(f"Could not convert bytes to pyarrow using polars: {e}. Skipping.")
             table = None
         return table
 

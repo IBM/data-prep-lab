@@ -11,9 +11,14 @@ setup::
 
 set-versions: .check-env
 	$(MAKE) TOML_VERSION=$(DPK_LIB_VERSION) .defaults.update-toml
-	sed -e 's/"pyspark...*",/"pyspark>=${SPARK_VERSION}",/'				\
-	    pyproject.toml > tt.toml
-	mv tt.toml pyproject.toml
+	if [ -e pyproject.toml ]; then					\
+		cat pyproject.toml | sed -e 's/"spark[default]==.*",/"spark[default]==$(SPARK_VERSION)",/' > tt.toml; \
+		mv tt.toml pyproject.toml; \
+	fi
+	if [ -e requirements.txt ]; then					\
+		cat requirements.txt | sed -e 's/ray[default]==.*/ray[default]==$(SPARK_VERSION)/' > tt.txt; \
+		mv tt.txt requirements.txt; \
+	fi
 
 build:: build-dist 
 
@@ -26,7 +31,7 @@ publish-dist :: .check-env .defaults.publish-dist
 
 publish-image:: .defaults.publish-image
 
-venv::  pyproject.toml
+venv::
 	$(MAKE) .defaults.spark-lib-src-venv
 	pip install pytest pytest-cov 
 

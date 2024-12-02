@@ -43,7 +43,7 @@ setup:: .transforms.setup
 
 # TRANSFORM_PYTHON_VERSION has no effect since requirements do not specify a python transform implementation
 set-versions:
-	$(MAKE) TRANSFORM_PYTHON_VERSION=dummy TOML_VERSION=$(FDEDUP_RAY_VERSION) .transforms.set-versions 
+	$(MAKE) TRANSFORM_PYTHON_VERSION=$(FDEDUP_PYTHON_VERSION) TOML_VERSION=$(FDEDUP_RAY_VERSION) .transforms.set-versions 
 
 build-dist:: .defaults.build-dist
 

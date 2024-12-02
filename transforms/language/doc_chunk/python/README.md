@@ -1,5 +1,16 @@
 # Chunk documents Transform 
 
+Please see the set of
+[transform project conventions](../../../README.md#transform-project-conventions)
+for details on general project conventions, transform configuration,
+testing and IDE set up.
+
+## Contributors
+
+- Michele Dolfi (dol@zurich.ibm.com)
+
+## Description 
+
 This transform is chunking documents. It supports multiple _chunker modules_ (see the `chunking_type` parameter).
 
 When using documents converted to JSON, the transform leverages the [Docling Core](https://github.com/DS4SD/docling-core) `HierarchicalChunker`
@@ -9,20 +20,26 @@ which provides the required JSON structure.
 
 When using documents converted to Markdown, the transform leverages the [Llama Index](https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/modules/#markdownnodeparser) `MarkdownNodeParser`, which is relying on its internal Markdown splitting logic.
 
-## Output format
+
+### Input 
+
+| input column name | data type | description |
+|-|-|-|
+| the one specified in _content_column_name_ configuration | string | the content used in this transform |
+
+
+### Output format
 
 The output parquet file will contain all the original columns, but the content will be replaced with the individual chunks.
 
 
-### Tracing the origin of the chunks
+#### Tracing the origin of the chunks
 
 The transform allows to trace the origin of the chunk with the `source_doc_id` which is set to the value of the `document_id` column (if present) in the input table.
 The actual name of columns can be customized with the parameters described below.
 
 
-## Running
-
-### Parameters
+## Configuration
 
 The transform can be tuned with the following parameters.
 
@@ -39,6 +56,12 @@ The transform can be tuned with the following parameters.
 | `output_jsonpath_column_name`| `doc_jsonpath` | Column name to store the document path of the chunk in the output table. |
 | `output_pageno_column_name`  | `page_number` | Column name to store the page number of the chunk in the output table. |
 | `output_bbox_column_name`    | `bbox` | Column name to store the bbox of the chunk in the output table. |
+
+
+
+## Usage
+
+### Launched Command Line Options 
 
 When invoking the CLI, the parameters must be set as `--doc_chunk_<name>`, e.g. `--doc_chunk_column_name_key=myoutput`.
 
@@ -63,8 +86,32 @@ ls output
 ```
 To see results of the transform.
 
+### Code example
+
+TBD (link to the notebook will be provided)
+
+See the sample script [src/doc_chunk_local_python.py](src/doc_chunk_local_python.py).
+
+
 ### Transforming data using the transform image
 
 To use the transform image to transform your data, please refer to the 
 [running images quickstart](../../../../doc/quick-start/run-transform-image.md),
 substituting the name of this transform image and runtime as appropriate.
+
+## Testing
+
+Following [the testing strategy of data-processing-lib](../../../../data-processing-lib/doc/transform-testing.md)
+
+Currently we have:
+- [Unit test](test/test_doc_chunk_python.py)
+
+
+## Further Resource
+
+- For the [Docling Core](https://github.com/DS4SD/docling-core) `HierarchicalChunker`
+  - <https://ds4sd.github.io/docling/>
+- For the Markdown chunker in LlamaIndex
+  - [Markdown chunking](https://docs.llamaindex.ai/en/stable/module_guides/loading/node_parsers/modules/#markdownnodeparser)
+- For the Token Text Splitter in LlamaIndex
+  - [Token Text Splitter](https://docs.llamaindex.ai/en/stable/api_reference/node_parsers/token_text_splitter/)

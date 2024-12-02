@@ -1,6 +1,6 @@
 [project]
 name = "data_prep_toolkit"
-version = "0.2.2.dev2"
+version = "0.2.3.dev0"
 keywords = ["data", "data preprocessing", "data preparation", "llm", "generative", "ai", "fine-tuning", "llmapps" ]
 requires-python = ">=3.10,<3.13"
 description = "Data Preparation Toolkit Library for Ray and Python"
@@ -16,7 +16,6 @@ dynamic = ["dependencies", "optional-dependencies"]
 Repository = "https://github.com/IBM/data-prep-kit"
 Issues = "https://github.com/IBM/data-prep-kit/issues"
 Documentation = "https://ibm.github.io/data-prep-kit/doc"
-"Transform project" = "https://github.com/IBM/data-prep-kit/tree/dev/transforms/universal/noop"
 
 [build-system]
 requires = ["setuptools>=68.0.0", "wheel", "setuptools_scm[toml]>=7.1.0"]

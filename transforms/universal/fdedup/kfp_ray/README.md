@@ -1,8 +1,8 @@
-# Fuzzy Deduplication Ray-base KubeFlow Pipeline Transformation 
+# Fuzzy Deduplication Ray-based KubeFlow Pipeline Transformation 
 
 
 ## Summary 
-This project allows execution of the [noop Ray transform](../ray) as a 
+This project allows execution of the [fuzzy dedup Ray transform](../ray) as a 
 [KubeFlow Pipeline](https://www.kubeflow.org/docs/components/pipelines/overview/)
 
 The detail pipeline is presented in the [Simplest Transform pipeline tutorial](../../../../kfp/doc/simple_transform_pipeline.md) 
@@ -16,13 +16,9 @@ make workflow-build
 from the directory. It creates a virtual environment (make workflow-venv) and after that compiles the pipeline 
 definitions in the folder. The virtual environment is created once for all transformers. 
 
-Note: the pipelines definitions can be compiled and executed on KFPv1 and KFPv2. Meantime, KFPv1 is our default. If you
-prefer KFPv2, please do the following:
-```shell
-make clean
-export KFPv2=1
-make workflow-build
-```
+## Considerations
+Currently, fuzzy dedup KFP pipeline definitions can be compiled and executed on KFPv1. KFPv2 is not
+supported currently, because of this issue: https://github.com/kubeflow/pipelines/issues/10914
 
 The next steps are described in [Deploying a pipeline](../../../../kfp/doc/simple_transform_pipeline.md#deploying-a-pipeline-)
 and [Executing pipeline and watching execution results](../../../../kfp/doc/simple_transform_pipeline.md#executing-pipeline-and-watching-execution-results-)

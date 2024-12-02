@@ -1,10 +1,10 @@
-# PDF2PARQUET Transform 
+# Pdf2Parquet Transform 
 
 
-The PDF2PARQUET transforms iterate through PDF files or zip of PDF files and generates parquet files
-containing the converted document in Markdown format.
+The Pdf2Parquet transforms iterate through PDF, Docx, Pptx, Images files or zip of files and generates parquet files
+containing the converted document in Markdown or JSON format.
 
-The PDF conversion is using the [Docling package](https://github.com/DS4SD/docling).
+The conversion is using the [Docling package](https://github.com/DS4SD/docling).
 
 The following runtimes are available:
 

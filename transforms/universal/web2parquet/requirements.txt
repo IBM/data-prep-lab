@@ -1,2 +1,2 @@
-data-prep-toolkit>=0.2.2.dev2
-data_prep_connector>=0.2.3.dev0
+data-prep-toolkit>=0.2.3.dev0
+data_prep_connector>=0.2.3

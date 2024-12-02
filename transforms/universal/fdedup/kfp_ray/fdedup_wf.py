@@ -14,14 +14,24 @@ import os
 import kfp.compiler as compiler
 import kfp.components as comp
 import kfp.dsl as dsl
-from src.fdedup_compute_execution_params import fdedup_compute_execution_params
+from src.fdedup_compute_execution_params import (
+    cluster_analysis_compute_execution_params,
+    compute_common_params,
+    data_cleaning_compute_execution_params,
+    get_duplicate_list_compute_execution_params,
+    signature_calc_compute_execution_params,
+)
 from workflow_support.compile_utils import ONE_HOUR_SEC, ONE_WEEK_SEC, ComponentUtils
 
 
-task_image = "quay.io/dataprep1/data-prep-kit/fdedup-ray:latest"
+task_image = os.getenv("FDEDUP_IMAGE_LOCATION", "quay.io/dataprep1/data-prep-kit/fdedup-ray:latest")
+image_pull_secret = os.getenv("FDEDUP_IMAGE_PULL_SECRET", "my_secret")
 
 # the name of the job script
-EXEC_SCRIPT_NAME: str = "fdedup_transform_ray.py"
+SIGNATURE_CALC_EXEC_SCRIPT_NAME: str = "signature_calc_transform_ray.py"
+CLUSTER_ANALYSIS_EXEC_SCRIPT_NAME: str = "cluster_analysis_transform_ray.py"
+GET_DUPLICATE_LIST_EXEC_SCRIPT_NAME: str = "get_duplicate_list_transform_ray.py"
+DATA_CLEANING_EXEC_SCRIPT_NAME: str = "data_cleaning_transform_ray.py"
 
 # components
 base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:latest"
@@ -40,8 +50,18 @@ if os.getenv("KFPv2", "0") == "1":
     # compilation time.
     import uuid
 
-    compute_exec_params_op = dsl.component_decorator.component(
-        func=fdedup_compute_execution_params, base_image=base_kfp_image
+    compute_common_params_op = dsl.component_decorator.component(func=compute_common_params, base_image=base_kfp_image)
+    compute_signature_calc_exec_params_op = dsl.component_decorator.component(
+        func=signature_calc_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_cluster_analysis_exec_params_op = dsl.component_decorator.component(
+        func=cluster_analysis_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_get_duplicate_list_exec_params_op = dsl.component_decorator.component(
+        func=get_duplicate_list_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_data_cleaning_exec_params_op = dsl.component_decorator.component(
+        func=data_cleaning_compute_execution_params, base_image=base_kfp_image
     )
     print(
         "WARNING: the ray cluster name can be non-unique at runtime, please do not execute simultaneous Runs of the "
@@ -49,61 +69,92 @@ if os.getenv("KFPv2", "0") == "1":
     )
     run_id = uuid.uuid4().hex
 else:
-    compute_exec_params_op = comp.create_component_from_func(
-        func=fdedup_compute_execution_params, base_image=base_kfp_image
+    compute_common_params_op = comp.create_component_from_func(func=compute_common_params, base_image=base_kfp_image)
+    compute_signature_calc_exec_params_op = comp.create_component_from_func(
+        func=signature_calc_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_cluster_analysis_exec_params_op = comp.create_component_from_func(
+        func=cluster_analysis_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_get_duplicate_list_exec_params_op = comp.create_component_from_func(
+        func=get_duplicate_list_compute_execution_params, base_image=base_kfp_image
+    )
+    compute_data_cleaning_exec_params_op = comp.create_component_from_func(
+        func=data_cleaning_compute_execution_params, base_image=base_kfp_image
     )
     run_id = dsl.RUN_ID_PLACEHOLDER
 
 # create Ray cluster
 create_ray_op = comp.load_component_from_file(component_spec_path + "createRayClusterComponent.yaml")
-# execute job
-execute_ray_jobs_op = comp.load_component_from_file(component_spec_path + "executeRayJobComponent.yaml")
+# execute signature calculation job
+execute_signature_calc_job_op = comp.load_component_from_file(
+    component_spec_path + "executeRayJobComponent_multi_s3.yaml"
+)
+# execute cluster analysis job
+execute_cluster_analysis_job_op = comp.load_component_from_file(component_spec_path + "executeRayJobComponent.yaml")
+# execute get duplicate list job
+execute_get_duplicate_list_job_op = comp.load_component_from_file(component_spec_path + "executeRayJobComponent.yaml")
+# execute data cleaning job
+execute_data_cleaning_job_op = comp.load_component_from_file(
+    component_spec_path + "executeRayJobComponent_multi_s3.yaml"
+)
 # clean up Ray
 cleanup_ray_op = comp.load_component_from_file(component_spec_path + "deleteRayClusterComponent.yaml")
 
 # Task name is part of the pipeline name, the ray cluster name and the job name in DMF.
-TASK_NAME: str = "fdedup"
+TASK_NAME: str = "fuzzydedup"
 
 
 @dsl.pipeline(
     name=TASK_NAME + "-ray-pipeline",
-    description="Pipeline for fdedup",
+    description="Pipeline for fuzzy dedup",
 )
-def fdedup(
+def fuzzydedup(
+    # folders used
     # Ray cluster
-    ray_name: str = "fdedup-kfp-ray",  # name of Ray cluster
+    ray_name: str = "fuzzydedup-kfp-ray",  # name of Ray cluster
     # Add image_pull_secret and image_pull_policy to ray workers if needed
-    ray_head_options: dict = {"cpu": 1, "memory": 4, "image": task_image},
-    ray_worker_options: dict = {"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image": task_image},
+    ray_head_options: dict = {
+        "cpu": 8,
+        "memory": 64,
+        "image": task_image,
+        "image_pull_secret": image_pull_secret,
+        "imagePullPolicy": "Always",
+    },
+    ray_worker_options: dict = {
+        "replicas": 10,
+        "max_replicas": 10,
+        "min_replicas": 10,
+        "cpu": 16,
+        "memory": 128,
+        "image": task_image,
+        "image_pull_secret": image_pull_secret,
+        "imagePullPolicy": "Always",
+    },
+    runtime_actor_options: dict = {"num_cpus": 0.8, "memory": 16},
     server_url: str = "http://kuberay-apiserver-service.kuberay.svc.cluster.local:8888",
     # data access. checkpointing is not supported by dedup
-    data_s3_config: str = "{'input_folder': 'test/fdedup/input/', 'output_folder': 'test/fdedup/output/'}",
-    data_s3_access_secret: str = "s3-secret",
+    data_s3_config: str = "{'input_folder': 's3://cos-llm-pile-south/spark_test/fd_xs_dataset_test/', 'output_folder': 's3://cos-llm-pile-south/spark_test/fuzzy_dedup_test_output_data/kfp_test_1/'}",
+    data_s3_access_secret: str = "s3-south-secret",
+    scdata_s3_access_secret: str = "s3-south-secret",
+    dcdata_s3_access_secret: str = "s3-south-secret",
     data_max_files: int = -1,
     data_num_samples: int = -1,
     # orchestrator
-    runtime_actor_options: dict = {"num_cpus": 0.7},
     runtime_pipeline_id: str = "pipeline_id",
-    runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
+    runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
     # columns used
-    fdedup_doc_column: str = "contents",
-    fdedup_id_column: str = "int_id_column",
-    fdedup_cluster_column: str = "cluster",
-    # infrastructure
-    fdedup_bucket_cpu: float = 0.5,
-    fdedup_doc_cpu: float = 0.5,
-    fdedup_mhash_cpu: float = 0.5,
+    fdedup_contents_column: str = "contents",
+    fdedup_document_id_column: str = "int_id_column",
     # fuzzy parameters
-    fdedup_num_permutations: int = 64,
-    fdedup_threshold: float = 0.8,
-    fdedup_shingles_size: int = 5,
-    fdedup_delimiters: str = " ",
-    # Random delay between reads
-    fdedup_random_delay_limit: int = 5,
-    # snapshotting
-    fdedup_snapshot_delay: int = 1,
-    fdedup_use_doc_snapshot: bool = False,
-    fdedup_use_bucket_snapshot: bool = False,
+    fdedup_num_permutations: int = 112,
+    fdedup_num_bands: int = 14,
+    fdedup_num_minhashes_per_band: int = 8,
+    fdedup_word_shingle_size: int = 5,
+    fdedup_shingle_option: str = "word",
+    fdedup_jaccard_similarity_threshold: float = 0.75,
+    fdedup_seed: int = 42,
+    fdedup_operation_mode: str = "annotate",
     # data sampling
     fdedup_n_samples: int = 10,
     # additional parameters
@@ -136,63 +187,47 @@ def fdedup(
         wait_print_tmout - time between prints, sec
         http_retries - http retries for API server calls
     :param data_s3_access_secret - s3 access secret
+    :param scdata_s3_access_secret - signature calculation s3 access secret
+    :param dcdata_s3_access_secret - data cleaning s3 access secret
     :param data_s3_config - s3 configuration
     :param data_max_files - max files to process
     :param data_num_samples - num samples to process
-    :param runtime_actor_options - actor options
     :param runtime_pipeline_id - pipeline id
     :param runtime_code_location - code location
-    :param fdedup_doc_column - document column name
-    :param fdedup_id_column - integer document id column name
-    :param fdedup_cluster_column - cluster column name
-    :param fdedup_bucket_cpu - number of CPUs per bucket hash
-    :param fdedup_doc_cpu - number of CPUs per doc hash
-    :param fdedup_mhash_cpu - number of CPUs per minhash hash
+    :param fdedup_contents_column - document column name
+    :param fdedup_document_id_column - integer document id column name
     :param fdedup_num_permutations - number of permutations
-    :param fdedup_threshold - threshold
-    :param fdedup_shingles_size - number of words in shingle
-    :param fdedup_delimiters - delimiter for splitting document
-    :param fdedup_random_delay_limit - delay between reads to reduce S3 load.
-                                A random number between 0 and random_delay_limit is used
-    :param fdedup_snapshot_delay - delay between restoring individual actors
-    :param fdedup_use_bucket_snapshot - flag to skip buckets building and start from existing snapshots
-    :param fdedup_use_doc_snapshot - flag to skip documents building and start from existing snapshots
+    :param fdedup_num_bands - number of bands
+    :param fdedup_num_minhashes_per_band - length of a band
+    :param fdedup_word_shingle_size - length of word shingles
+    :param fdedup_shingle_option - type of shingle, one of 'word', or 'char'
+    :param fdedup_jaccard_similarity_threshold - similarity threshold
+    :param fdedup_seed - seed for the random number generator
+    :param fdedup_operation_mode - data cleaning mode, one of 'filter_duplicates', 'filter_non_duplicates', or 'annotate'
     :param fdedup_n_samples - number of samples for parameters computation
     :return: None
     """
     # create clean_up task
-    clean_up_task = cleanup_ray_op(ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params)
+    clean_up_task = cleanup_ray_op(
+        ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params
+    )
     ComponentUtils.add_settings_to_component(clean_up_task, ONE_HOUR_SEC * 2)
     # pipeline definition
     with dsl.ExitHandler(clean_up_task):
         # compute execution params
-        compute_exec_params = compute_exec_params_op(
+        compute_common_exec_params = compute_common_params_op(
             worker_options=ray_worker_options,
             actor_options=runtime_actor_options,
             data_s3_config=data_s3_config,
-            data_max_files=data_max_files,
-            data_num_samples=data_num_samples,
-            runtime_pipeline_id=runtime_pipeline_id,
-            runtime_job_id=run_id,
-            runtime_code_location=runtime_code_location,
-            doc_column=fdedup_doc_column,
-            id_column=fdedup_id_column,
-            cluster_column=fdedup_cluster_column,
-            bucket_cpu=fdedup_bucket_cpu,
-            doc_cpu=fdedup_doc_cpu,
-            mhash_cpu=fdedup_mhash_cpu,
             num_permutations=fdedup_num_permutations,
-            threshold=fdedup_threshold,
-            shingles_size=fdedup_shingles_size,
-            delimiters=fdedup_delimiters,
-            random_delay_limit=fdedup_random_delay_limit,
-            snapshot_delay=fdedup_snapshot_delay,
-            use_doc_snapshot=fdedup_use_doc_snapshot,
-            use_bucket_snapshot=fdedup_use_bucket_snapshot,
             n_samples=fdedup_n_samples,
         )
-        ComponentUtils.add_settings_to_component(compute_exec_params, ONE_HOUR_SEC * 2)
-        ComponentUtils.set_s3_env_vars_to_component(compute_exec_params, data_s3_access_secret)
+        ComponentUtils.add_settings_to_component(compute_common_exec_params, ONE_HOUR_SEC * 2)
+        ComponentUtils.set_s3_env_vars_to_component(compute_common_exec_params, data_s3_access_secret)
+        fdedup_num_segments = compute_common_exec_params.outputs["num_segments"]
+        runtime_num_actors = compute_common_exec_params.outputs["num_actors"]
+        runtime_actor_cpus = compute_common_exec_params.outputs["actor_cpu"]
+        runtime_actor_memory = compute_common_exec_params.outputs["actor_memory"]
 
         # start Ray cluster
         ray_cluster = create_ray_op(
@@ -204,21 +239,148 @@ def fdedup(
             additional_params=additional_params,
         )
         ComponentUtils.add_settings_to_component(ray_cluster, ONE_HOUR_SEC * 2)
-        ray_cluster.after(compute_exec_params)
-        # Execute job
-        execute_job = execute_ray_jobs_op(
+        ray_cluster.after(compute_common_exec_params)
+
+        # Get the parameters for the signature calculation job
+        compute_signature_calc_exec_params = compute_signature_calc_exec_params_op(
+            runtime_num_actors=runtime_num_actors,
+            runtime_actor_cpus=runtime_actor_cpus,
+            runtime_actor_memory=runtime_actor_memory,
+            data_s3_config=data_s3_config,
+            data_max_files=data_max_files,
+            data_num_samples=data_num_samples,
+            runtime_pipeline_id=runtime_pipeline_id,
+            runtime_job_id=run_id,
+            runtime_code_location=runtime_code_location,
+            doc_column=fdedup_contents_column,
+            id_column=fdedup_document_id_column,
+            num_permutations=fdedup_num_permutations,
+            num_bands=fdedup_num_bands,
+            num_minhashes_per_band=fdedup_num_minhashes_per_band,
+            word_shingle_size=fdedup_word_shingle_size,
+            shingle_option=fdedup_shingle_option,
+            threshold=fdedup_jaccard_similarity_threshold,
+            num_segments=fdedup_num_segments,
+            seed=fdedup_seed,
+        )
+        ComponentUtils.add_settings_to_component(compute_signature_calc_exec_params, ONE_HOUR_SEC * 2)
+        compute_signature_calc_exec_params.after(ray_cluster)
+
+        # Execute signature calculation job
+        execute_signature_calc_job = execute_signature_calc_job_op(
             ray_name=ray_name,
             run_id=run_id,
             additional_params=additional_params,
-            exec_params=compute_exec_params.output,
-            exec_script_name=EXEC_SCRIPT_NAME,
+            exec_params=compute_signature_calc_exec_params.output,
+            exec_script_name=SIGNATURE_CALC_EXEC_SCRIPT_NAME,
+            server_url=server_url,
+            prefix="scdata",
+        )
+        ComponentUtils.add_settings_to_component(execute_signature_calc_job, ONE_WEEK_SEC)
+        # FIXME: see https://github.com/kubeflow/pipelines/issues/10914
+        if os.getenv("KFPv2", "0") != "1":
+            ComponentUtils.set_s3_env_vars_to_component(execute_signature_calc_job, data_s3_access_secret)
+            ComponentUtils.set_s3_env_vars_to_component(
+                execute_signature_calc_job, scdata_s3_access_secret, prefix="scdata"
+            )
+        execute_signature_calc_job.after(compute_signature_calc_exec_params)
+
+        # Get the parameters for the cluster analysis job
+        compute_cluster_analysis_exec_params = compute_cluster_analysis_exec_params_op(
+            runtime_num_actors=runtime_num_actors,
+            runtime_actor_cpus=runtime_actor_cpus,
+            runtime_actor_memory=runtime_actor_memory,
+            data_s3_config=data_s3_config,
+            data_max_files=data_max_files,
+            data_num_samples=data_num_samples,
+            runtime_pipeline_id=runtime_pipeline_id,
+            runtime_job_id=run_id,
+            runtime_code_location=runtime_code_location,
+            num_bands=fdedup_num_bands,
+            threshold=fdedup_jaccard_similarity_threshold,
+            num_segments=fdedup_num_segments,
+        )
+        ComponentUtils.add_settings_to_component(compute_cluster_analysis_exec_params, ONE_HOUR_SEC * 2)
+        compute_cluster_analysis_exec_params.after(execute_signature_calc_job)
+        # Execute job
+        execute_cluster_analysis_job = execute_cluster_analysis_job_op(
+            ray_name=ray_name,
+            run_id=run_id,
+            additional_params=additional_params,
+            exec_params=compute_cluster_analysis_exec_params.output,
+            exec_script_name=CLUSTER_ANALYSIS_EXEC_SCRIPT_NAME,
             server_url=server_url,
         )
-        ComponentUtils.add_settings_to_component(execute_job, ONE_WEEK_SEC)
-        ComponentUtils.set_s3_env_vars_to_component(execute_job, data_s3_access_secret)
-        execute_job.after(ray_cluster)
+        ComponentUtils.add_settings_to_component(execute_cluster_analysis_job, ONE_WEEK_SEC)
+        # FIXME: see https://github.com/kubeflow/pipelines/issues/10914
+        if os.getenv("KFPv2", "0") != "1":
+            ComponentUtils.set_s3_env_vars_to_component(execute_cluster_analysis_job, data_s3_access_secret)
+        execute_cluster_analysis_job.after(compute_cluster_analysis_exec_params)
+
+        compute_get_duplicate_list_exec_params = compute_get_duplicate_list_exec_params_op(
+            runtime_num_actors=runtime_num_actors,
+            runtime_actor_cpus=runtime_actor_cpus,
+            runtime_actor_memory=runtime_actor_memory,
+            data_s3_config=data_s3_config,
+            data_max_files=data_max_files,
+            data_num_samples=data_num_samples,
+            runtime_pipeline_id=runtime_pipeline_id,
+            runtime_job_id=run_id,
+            runtime_code_location=runtime_code_location,
+        )
+        ComponentUtils.add_settings_to_component(compute_get_duplicate_list_exec_params, ONE_HOUR_SEC * 2)
+        compute_get_duplicate_list_exec_params.after(execute_cluster_analysis_job)
+        # Execute job
+        execute_get_duplicate_list_job = execute_get_duplicate_list_job_op(
+            ray_name=ray_name,
+            run_id=run_id,
+            additional_params=additional_params,
+            exec_params=compute_get_duplicate_list_exec_params.output,
+            exec_script_name=GET_DUPLICATE_LIST_EXEC_SCRIPT_NAME,
+            server_url=server_url,
+        )
+        ComponentUtils.add_settings_to_component(execute_get_duplicate_list_job, ONE_WEEK_SEC)
+        # FIXME: see https://github.com/kubeflow/pipelines/issues/10914
+        if os.getenv("KFPv2", "0") != "1":
+            ComponentUtils.set_s3_env_vars_to_component(execute_get_duplicate_list_job, data_s3_access_secret)
+        execute_get_duplicate_list_job.after(compute_get_duplicate_list_exec_params)
+
+        compute_data_cleaning_exec_params = compute_data_cleaning_exec_params_op(
+            runtime_num_actors=runtime_num_actors,
+            runtime_actor_cpus=runtime_actor_cpus,
+            runtime_actor_memory=runtime_actor_memory,
+            data_s3_config=data_s3_config,
+            data_max_files=data_max_files,
+            data_num_samples=data_num_samples,
+            runtime_pipeline_id=runtime_pipeline_id,
+            runtime_job_id=run_id,
+            runtime_code_location=runtime_code_location,
+            id_column=fdedup_document_id_column,
+            operation_mode=fdedup_operation_mode,
+        )
+        ComponentUtils.add_settings_to_component(compute_data_cleaning_exec_params, ONE_HOUR_SEC * 2)
+        compute_data_cleaning_exec_params.after(execute_get_duplicate_list_job)
+
+        # Execute job
+        execute_data_cleaning_job = execute_data_cleaning_job_op(
+            ray_name=ray_name,
+            run_id=run_id,
+            additional_params=additional_params,
+            exec_params=compute_data_cleaning_exec_params.output,
+            exec_script_name=DATA_CLEANING_EXEC_SCRIPT_NAME,
+            server_url=server_url,
+            prefix="dcdata",
+        )
+        ComponentUtils.add_settings_to_component(execute_data_cleaning_job, ONE_WEEK_SEC)
+        # FIXME: see https://github.com/kubeflow/pipelines/issues/10914
+        if os.getenv("KFPv2", "0") != "1":
+            ComponentUtils.set_s3_env_vars_to_component(execute_data_cleaning_job, data_s3_access_secret)
+            ComponentUtils.set_s3_env_vars_to_component(
+                execute_data_cleaning_job, dcdata_s3_access_secret, prefix="dcdata"
+            )
+        execute_data_cleaning_job.after(compute_data_cleaning_exec_params)
 
 
 if __name__ == "__main__":
     # Compiling the pipeline
-    compiler.Compiler().compile(fdedup, __file__.replace(".py", ".yaml"))
+    compiler.Compiler().compile(fuzzydedup, __file__.replace(".py", ".yaml"))

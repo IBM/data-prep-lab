@@ -86,8 +86,8 @@ web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 #[tool.setuptools.packages.find]
 #where = ["src"]
 
-#[tool.setuptools.package-dir]
-#dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
+[tool.setuptools.package-dir]
+dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
 
 [options]
 package_dir = ["src","test"]

@@ -1,5 +1,5 @@
 # Hate, Abuse, and Profanity (HAP) Annotation
-Please see the set of [transform project conventions](https://github.com/ian-cho/data-prep-kit/blob/dev/transforms/README.md) for details on general project conventions, transform configuration, testing and IDE set up.
+Please see the set of [transform project conventions](../../README.md#transform-project-conventions) for details on general project conventions, transform configuration, testing and IDE set up.
 
 ## Contributor
 - Yang Zhao (yangzhao@ibm.com)
@@ -34,7 +34,7 @@ The output is in .parquet format and includes an additional column, in addition 
 | 2  |    Here are only a few examples. And no, I'm not ... | 0.989713     |
 
 ## Configuration 
-The set of dictionary keys holding [HAPTransformConfiguration](src/hap_transform.py) 
+The set of dictionary keys holding [HAPTransformConfiguration](dpk_hap/transform.py) 
 configuration for values are as follows:
 
 
@@ -51,23 +51,23 @@ configuration for values are as follows:
 Place your input Parquet file in the `test-data/input/` directory. A sample file, `test1.parquet`, is available in this directory. Once done, run the script.
 
 ```python
-python hap_local_python.py
+python local_python.py
 ```
 
 You will obtain the output file `test1.parquet` in the output directory.
 
 ### Code example
-[notebook](./hap_python.ipynb)
+[notebook](hap_python.ipynb)
 
 ### Transforming data using the transform image
 To use the transform image to transform your data, please refer to the 
-[running images quickstart](../../../../doc/quick-start/run-transform-image.md),
+[running images quickstart](../../../doc/quick-start/run-transform-image.md),
 substituting the name of this transform image and runtime as appropriate.
 
 ## Testing
 
 Currently we have:
-- [hap test](transforms/universal/hap/python/test/test_hap.py)
+- [hap test](test/test_hap.py)
 
 
 ## Throughput 
@@ -88,3 +88,23 @@ We processed 6,000 documents (12 MB in Parquet file size) using the HAP transfor
 The HAP transform is jointly developed by IBM Research - Tokyo and Yorktown.
 
 
+# Hate, Abuse, and Profanity (HAP) Annotation
+# HAP Transform for Ray
+Please see the set of
+[transform project conventions](../../README.md#transform-project-conventions)
+for details on general project conventions, transform configuration,
+testing and IDE set up.
+
+## Summary 
+This project wraps the [hap transform](dpk_hap) with a Ray runtime.
+
+## Configuration and command line Options
+
+Configuration and command line options are the same as for the base python transform. 
+
+## Running
+
+### Launched Command Line Options 
+In addition to those available to the transform as defined here,
+the set of 
+[ray launcher](../../../data-processing-lib/doc/ray-launcher-options.md) are available.

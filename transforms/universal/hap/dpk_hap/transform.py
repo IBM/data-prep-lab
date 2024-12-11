@@ -9,16 +9,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-import torch, nltk
+from argparse import ArgumentParser, Namespace
+from typing import Any
+
+import nltk
 import pandas as pd
 import pyarrow as pa
-from typing import Any
+import torch
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import GB, TransformUtils, get_logger
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from argparse import ArgumentParser, Namespace
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
-nltk.download('punkt_tab')
+nltk.download("punkt_tab")
+
 
 class HAPTransform(AbstractTableTransform):
     """
@@ -42,12 +47,15 @@ class HAPTransform(AbstractTableTransform):
             print(f"Processing batch: {i}/{num_batches}")
             start_idx = i * batch_size
             end_idx = min((i + 1) * batch_size, len(data))
-            if start_idx >= end_idx: continue
-            inputs = self.tokenizer(data[start_idx:end_idx], max_length=self.max_length, padding=True, truncation=True, return_tensors="pt").to(device)
+            if start_idx >= end_idx:
+                continue
+            inputs = self.tokenizer(
+                data[start_idx:end_idx], max_length=self.max_length, padding=True, truncation=True, return_tensors="pt"
+            ).to(device)
             with torch.no_grad():
                 logits = self.model(**inputs).logits
                 data_sent_scores.extend(torch.softmax(logits, dim=1).cpu().numpy()[:, 1].tolist())
-        return data_sent_scores 
+        return data_sent_scores
 
     def _apply_sent_split(self, data: list) -> tuple[list[str], list[int]]:
         data_sents, data_sent_ids = [], []
@@ -56,14 +64,14 @@ class HAPTransform(AbstractTableTransform):
             data_sents.extend(s_list)
             data_sent_ids.extend([i] * len(s_list))
         return data_sents, data_sent_ids
-        
+
     def _apply_aggregate(self, nb_doc: int, sent_scores: list[float], sent_ids: list[int]) -> list[float]:
         doc_scores = []
         for i in range(nb_doc):
             temp = [score for idx, score in zip(sent_ids, sent_scores) if i == idx]
             doc_scores.append(max(temp))
         return doc_scores
-                 
+
     def transform(self, table: pa.Table, file_name: str = None) -> tuple[list[pa.Table], dict[str, Any]]:
         """
         Process a table of document text to generate a hap score for each document
@@ -78,22 +86,24 @@ class HAPTransform(AbstractTableTransform):
             text = self.df.iloc[i][self.doc_text_column]
             text = " ".join(text.strip().splitlines())
             df_doc_list.append(text)
-        
+
         data_sents, data_sent_ids = self._apply_sent_split(df_doc_list)
         data_sent_scores = self._apply_model(data_sents, self.batch_size)
-        
+
         df_doc_scores = self._apply_aggregate(len(df_doc_list), data_sent_scores, data_sent_ids)
         assert len(df_doc_list) == len(df_doc_scores)
-        
-        self.df['hap_score'] = df_doc_scores
+
+        self.df["hap_score"] = df_doc_scores
         print(self.df)
-        
+
         out_table = pa.Table.from_pandas(self.df)
         metadata = {}
         return [out_table], metadata
 
 
 logger = get_logger(__name__)
+
+
 class HAPTransformConfiguration(TransformConfiguration):
     """
     Provides support for configuring and using the associated Transform class include
@@ -135,7 +145,7 @@ class HAPTransformConfiguration(TransformConfiguration):
             default="contents",
             help="The column name that contains the document text",
         )
-        
+
         parser.add_argument(
             "--inference_engine",
             type=str,
@@ -143,7 +153,7 @@ class HAPTransformConfiguration(TransformConfiguration):
             default="CPU",
             help="inference engine used",
         )
-        
+
         parser.add_argument(
             "--max_length",
             type=int,
@@ -151,7 +161,7 @@ class HAPTransformConfiguration(TransformConfiguration):
             default=512,
             help="inference engine used",
         )
-        
+
         parser.add_argument(
             "--batch_size",
             type=int,

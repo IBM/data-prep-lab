@@ -9,9 +9,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+import ast
 import os
-from data_processing.data_access import DataAccessLocal
-from hap_transform import HAPTransform
+import sys
+
+from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.utils import ParamsUtils
+from dpk_hap.transform_python import HAPPythonTransformConfiguration
+
 
 # create parameters
 input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../test-data/input"))
@@ -20,9 +25,18 @@ local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,
 }
+code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
+
+params = {
+    "data_local_config": ParamsUtils.convert_to_ast(local_conf),
+    "runtime_pipeline_id": "pipeline_id",
+    "runtime_job_id": "job_id",
+    "runtime_code_location": ParamsUtils.convert_to_ast(code_location),
+}
+
 
 hap_params = {
-    "model_name_or_path": 'ibm-granite/granite-guardian-hap-38m',
+    "model_name_or_path": "ibm-granite/granite-guardian-hap-38m",
     "annotation_column": "hap_score",
     "doc_text_column": "contents",
     "inference_engine": "CPU",
@@ -30,20 +44,11 @@ hap_params = {
     "batch_size": 128,
 }
 
+
 if __name__ == "__main__":
-    data_access = DataAccessLocal(local_conf)
-    hap_params["data_access"] = data_access
-    
-    # Use the local data access to read a parquet table.
-    table, _ = data_access.get_table(os.path.join(input_folder, "test1.parquet"))
-    print(f"input table: {table}")
-
-    # Create and configure the transform.
-    transform = HAPTransform(hap_params)
-
-    # Transform the table
-    table_list, metadata = transform.transform(table)
-      
-    for tb in table_list:
-        print(f"\noutput table: {tb}")
-    print(f"output metadata : {metadata}")
+    # Set the simulated command line args
+    sys.argv = ParamsUtils.dict_to_req(d=params | hap_params)
+    # create launcher
+    launcher = PythonTransformLauncher(runtime_config=HAPPythonTransformConfiguration())
+    # Launch the ray actor(s) to process the input
+    launcher.launch()

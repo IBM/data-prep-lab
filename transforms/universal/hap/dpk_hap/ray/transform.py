@@ -12,8 +12,10 @@
 
 from data_processing.utils import get_logger
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from data_processing_ray.runtime.ray.runtime_configuration import RayTransformRuntimeConfiguration
-from hap_transform import HAPTransformConfiguration
+from data_processing_ray.runtime.ray.runtime_configuration import (
+    RayTransformRuntimeConfiguration,
+)
+from dpk_hap.transform import HAPTransformConfiguration
 
 
 logger = get_logger(__name__)
@@ -36,4 +38,3 @@ if __name__ == "__main__":
     launcher = RayTransformLauncher(HAPRayTransformConfiguration())
     logger.info("Launching hap transform")
     launcher.launch()
-

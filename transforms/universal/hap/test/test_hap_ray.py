@@ -10,15 +10,17 @@
 # limitations under the License.
 ################################################################################
 import os
-from data_processing_ray.runtime.ray import RayTransformLauncher
+
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from hap_transform_ray import HAPRayTransformConfiguration
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_hap.ray.transform import HAPRayTransformConfiguration
+
 
 hap_params = {
     "run_locally": True,
-    "model_name_or_path": 'ibm-granite/granite-guardian-hap-38m',
+    "model_name_or_path": "ibm-granite/granite-guardian-hap-38m",
     "annotation_column": "hap_score",
     "doc_text_column": "contents",
     "inference_engine": "CPU",
@@ -32,6 +34,7 @@ class TestRayHAPTransform(AbstractTransformLauncherTest):
     Extends the super-class to define the test data for the tests defined there.
     The name of this class MUST begin with the word Test so that pytest recognizes it as a test class.
     """
+
     def get_test_transform_fixtures(self) -> list[tuple]:
         basedir = "../test-data"
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))

@@ -13,9 +13,9 @@
 import os
 import sys
 
+from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
-from data_processing_ray.runtime.ray import RayTransformLauncher
-from text_encoder_transform_ray import TextEncoderRayTransformConfiguration
+from dpk_text_encoder.transform_python import TextEncoderPythonTransformConfiguration
 
 
 # create parameters
@@ -25,19 +25,13 @@ local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,
 }
-worker_options = {"num_cpus": 0.8}
 code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
 params = {
-    # where to run
-    "run_locally": True,
     # Data access. Only required parameters are specified
     "data_local_config": ParamsUtils.convert_to_ast(local_conf),
-    # orchestrator
-    "runtime_worker_options": ParamsUtils.convert_to_ast(worker_options),
-    "runtime_num_workers": 3,
+    # execution info
     "runtime_pipeline_id": "pipeline_id",
     "runtime_job_id": "job_id",
-    "runtime_creation_delay": 0,
     "runtime_code_location": ParamsUtils.convert_to_ast(code_location),
     # text_encoder params
 }
@@ -45,6 +39,6 @@ if __name__ == "__main__":
     # Set the simulated command line args
     sys.argv = ParamsUtils.dict_to_req(d=params)
     # create launcher
-    launcher = RayTransformLauncher(TextEncoderRayTransformConfiguration())
+    launcher = PythonTransformLauncher(runtime_config=TextEncoderPythonTransformConfiguration())
     # Launch the ray actor(s) to process the input
     launcher.launch()

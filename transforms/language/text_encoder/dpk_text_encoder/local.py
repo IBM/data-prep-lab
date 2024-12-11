@@ -13,7 +13,7 @@
 import os
 
 from data_processing.data_access import DataAccessLocal
-from text_encoder_transform import TextEncoderTransform
+from dpk_text_encoder.transform import TextEncoderTransform
 
 
 # create parameters

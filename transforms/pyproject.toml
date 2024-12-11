@@ -30,7 +30,7 @@ all = { file = [
 "code/code2parquet/python/requirements.txt",
 
 "language/doc_quality/python/requirements.txt",
-"language/doc_chunk/python/requirements.txt",
+"language/doc_chunk/requirements.txt",
 ##### Cannot have html2parquet until we solve
 ## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
 ## trafilatura 1.12.0 depends on lxml>=5.2.2; platform_system != "Darwin" or python_version > "3.8"
@@ -38,7 +38,7 @@ all = { file = [
 ##### pii_redactor seem to be failing UT
 ## "language/pii_redactor/python/requirements.txt",
 "language/lang_id/python/requirements.txt",
-"language/text_encoder/python/requirements.txt",
+"language/text_encoder/requirements.txt",
 "language/pdf2parquet/python/requirements.txt",
 
 "universal/hap/python/requirements.txt",
@@ -62,11 +62,11 @@ code_quality = { file = ["code/code_quality/python/requirements.txt"]}
 code2parquet = {file =  ["code/code2parquet/python/requirements.txt"]}
 
 doc_quality = { file = ["language/doc_quality/python/requirements.txt"]} 
-doc_chunk = { file = ["language/doc_chunk/python/requirements.txt"]} 
+doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
 html2parquet = { file = ["language/html2parquet/python/requirements.txt"]} 
 pii_redactor = { file = ["language/pii_redactor/python/requirements.txt"]} 
 lang_id = { file = ["language/lang_id/python/requirements.txt"]} 
-text_encoder = { file = ["language/text_encoder/python/requirements.txt"]} 
+text_encoder = { file = ["language/text_encoder/requirements.txt"]} 
 pdf2parquet = { file = ["language/pdf2parquet/python/requirements.txt"]} 
 
 hap = { file = ["universal/hap/python/requirements.txt"]} 
@@ -91,16 +91,12 @@ web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 # To include this, comment out the package.find section, 
 # uncomment the package-dir section and rerun the build 
 # while keeping the build folder from previous run
-#[tool.setuptools.package-dir]
-#dpk_pdf2parquet = "language/html2parquet/dpk_pdf2parquet"
-#dpk_html2parquet = "language/html2parquet/dpk_html2parquet"
-#dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
-
-[options]
-package_dir = ["src","test"]
-
-[options.packages.find]
-where = ["src"]
+[tool.setuptools.package-dir]
+dpk_pdf2parquet = "language/html2parquet/dpk_pdf2parquet"
+dpk_doc_chunck = "universal/doc_chunck/dpk_doc_chunk"
+dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
+dpk_html2parquet = "language/html2parquet/dpk_html2parquet"
+dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
 
 [tool.pytest.ini_options]
 # Currently we use low coverage since we have to run tests separately (see makefile)

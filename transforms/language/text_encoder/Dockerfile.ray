@@ -11,26 +11,10 @@ ARG DPK_WHEEL_FILE_NAME
 COPY --chown=ray:users data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
 
-## Copy the python version of the tansform
-COPY --chown=ray:users python-transform/  python-transform/
-RUN cd python-transform && pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -e .
+COPY --chown=ray:users dpk_text_encoder/ dpk_text_encoder/
+COPY --chown=ray:users requirements.txt requirements.txt
+RUN pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -r requirements.txt
 
-#COPY requirements.txt requirements.txt
-#RUN pip install --no-cache-dir -r  requirements.txt
-
-COPY --chown=ray:users src/ src/
-COPY --chown=ray:users pyproject.toml pyproject.toml 
-RUN pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -e .
-
-# copy the main() entry point to the image 
-COPY ./src/text_encoder_transform_ray.py .
-
-# copy some of the samples in
-COPY ./src/text_encoder_local_ray.py local/
-
-# copy test
-COPY test/ test/
-COPY test-data/ test-data/
 
 # Set environment
 ENV PYTHONPATH /home/ray

@@ -12,14 +12,14 @@
 
 import os
 
-from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from text_encoder_transform_python import TextEncoderPythonTransformConfiguration
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_text_encoder.ray.transform import TextEncoderRayTransformConfiguration
 
 
-class TestPythonTextEncoderTransform(AbstractTransformLauncherTest):
+class TestRayTextEncoderTransform(AbstractTransformLauncherTest):
     """
     Extends the super-class to define the test data for the tests defined there.
     The name of this class MUST begin with the word Test so that pytest recognizes it as a test class.
@@ -29,15 +29,15 @@ class TestPythonTextEncoderTransform(AbstractTransformLauncherTest):
         basedir = "../test-data"
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))
         fixtures = []
-        launcher = PythonTransformLauncher(TextEncoderPythonTransformConfiguration())
+        launcher = RayTransformLauncher(TextEncoderRayTransformConfiguration())
         fixtures.append(
             (
                 launcher,
-                {},
+                {"run_locally": True},
                 basedir + "/input",
                 basedir + "/expected",
                 # this is added as a fixture to remove these columns from comparison
                 ["embeddings"],
-            ),
+            )
         )
         return fixtures

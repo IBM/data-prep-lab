@@ -23,62 +23,40 @@ file = ["requirements.txt"]
 dev = { file = ["requirements-dev.txt"]}
 ray = { file = ["requirements-ray.txt"]}
 all = { file = [
-"code/proglang_select/python/requirements.txt",
-"code/header_cleanser/python/requirements.txt",
-"code/license_select/python/requirements.txt",
-"code/code_quality/python/requirements.txt",
-"code/code2parquet/python/requirements.txt",
 
-"language/doc_quality/python/requirements.txt",
-"language/doc_chunk/requirements.txt",
+"language/doc_quality/requirements.txt",
 "language/doc_chunk/requirements.txt",
 ##### Cannot have html2parquet until we solve
 ## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
 ## trafilatura 1.12.0 depends on lxml>=5.2.2; platform_system != "Darwin" or python_version > "3.8"
-## "language/html2parquet/python/requirements.txt",
+## "language/html2parquet/requirements.txt",
 ##### pii_redactor seem to be failing UT
 ## "language/pii_redactor/python/requirements.txt",
-"language/lang_id/python/requirements.txt",
+"language/lang_id/requirements.txt",
 "language/text_encoder/requirements.txt",
-"language/pdf2parquet/python/requirements.txt",
+"language/pdf2parquet/requirements.txt",
 
-"universal/hap/python/requirements.txt",
-"universal/tokenization/python/requirements.txt",
-"universal/ededup/python/requirements.txt",
-"universal/fdedup/python/requirements.txt",
-"universal/profiler/python/requirements.txt",
-"universal/doc_id/python/requirements.txt",
-"universal/filter/python/requirements.txt",
-"universal/resize/python/requirements.txt",
+"universal/doc_id/requirements.txt",
+#"universal/ededup/requirements.txt",
+"universal/hap/requirements.txt",
+"universal/tokenization/requirements.txt",
 "universal/web2parquet/requirements.txt"
 ]}
 
 # pyproject.toml must be in a parent and cannot be in sibling
 # i.e. Cannot access '../code/proglang_select/python/..
 
-proglang_select = { file = ["code/proglang_select/python/requirements.txt"]} 
-header_cleanser = {file =  ["code/header_cleanser/python/requirements.txt"]}
-license_select = { file = ["code/license_select/python/requirements.txt"]} 
-code_quality = { file = ["code/code_quality/python/requirements.txt"]} 
-code2parquet = {file =  ["code/code2parquet/python/requirements.txt"]}
-
-doc_quality = { file = ["language/doc_quality/python/requirements.txt"]} 
 doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
-doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
-html2parquet = { file = ["language/html2parquet/python/requirements.txt"]} 
-pii_redactor = { file = ["language/pii_redactor/python/requirements.txt"]} 
-lang_id = { file = ["language/lang_id/python/requirements.txt"]} 
+doc_quality = { file = ["language/doc_quality/requirements.txt"]} 
+html2parquet = { file = ["language/html2parquet/requirements.txt"]} 
+lang_id = { file = ["language/lang_id/requirements.txt"]} 
+pdf2parquet = { file = ["language/pdf2parquet/requirements.txt"]} 
 text_encoder = { file = ["language/text_encoder/requirements.txt"]} 
-pdf2parquet = { file = ["language/pdf2parquet/python/requirements.txt"]} 
 
-hap = { file = ["universal/hap/python/requirements.txt"]} 
-tokenization = { file = ["universal/tokenization/python/requirements.txt"]} 
-ededup = { file = ["universal/ededup/python/requirements.txt"]} 
-fdedup = { file = ["universal/fdedup/python/requirements.txt"]} 
-profiler = { file = ["universal/profiler/python/requirements.txt"]} 
-doc_id = { file = ["universal/doc_id/python/requirements.txt"]} 
-filter = { file = ["universal/filter/python/requirements.txt"]} 
-resize = { file = ["universal/resize/python/requirements.txt"]} 
+doc_id = { file = ["universal/doc_id/requirements.txt"]} 
+#ededup = { file = ["universal/ededup/requirements.txt"]} 
+hap = { file = ["universal/hap/requirements.txt"]} 
+tokenization = { file = ["universal/tokenization/requirements.txt"]} 
 web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 
 # Does not seem to work for our custom layout
@@ -94,10 +72,16 @@ web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 # uncomment the package-dir section and rerun the build 
 # while keeping the build folder from previous run
 [tool.setuptools.package-dir]
-dpk_pdf2parquet = "language/html2parquet/dpk_pdf2parquet"
-dpk_doc_chunck = "universal/doc_chunck/dpk_doc_chunk"
-dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
+dpk_doc_chunk = "language/doc_chunk/dpk_doc_chunk"
+dpk_doc_quality = "language/doc_quality/dpk_doc_quality"
 dpk_html2parquet = "language/html2parquet/dpk_html2parquet"
+dpk_lang_id = "language/lang_id/dpk_lang_id"
+dpk_pdf2parquet = "language/pdf2parquet/dpk_pdf2parquet"
+dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
+
+dpk_doc_id = "universal/doc_id/dpk_doc_id"
+dpk_hap = "universal/hap/dpk_hap"
+dpk_tokenization = "universal/tokenization/dpk_tokenization"
 dpk_web2parquet = "universal/web2parquet/dpk_web2parquet"
 
 [tool.pytest.ini_options]

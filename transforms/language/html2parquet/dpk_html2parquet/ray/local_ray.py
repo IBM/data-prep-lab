@@ -10,13 +10,14 @@
 # limitations under the License.
 ################################################################################
 
+
 import ast
 import os
 import sys
 
-from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
-from html2parquet_transform_python import Html2ParquetPythonTransformConfiguration
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_html2parquet.ray.transform import Html2ParquetRayTransformConfiguration
 
 
 # create parameters
@@ -26,21 +27,29 @@ local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,
 }
+worker_options = {"num_cpus": 0.8}
 code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
 params = {
+    # where to run
+    "run_locally": True,
     # Data access. Only required parameters are specified
     "data_local_config": ParamsUtils.convert_to_ast(local_conf),
     "data_files_to_use": ast.literal_eval("['.html','.zip']"),
-    # execution info
+    # orchestrator
+    "runtime_worker_options": ParamsUtils.convert_to_ast(worker_options),
+    "runtime_num_workers": 3,
     "runtime_pipeline_id": "pipeline_id",
     "runtime_job_id": "job_id",
+    "runtime_creation_delay": 0,
     "runtime_code_location": ParamsUtils.convert_to_ast(code_location),
-
+    # pdf2parquet params
 }
+
+html2parquet_params = {}
 if __name__ == "__main__":
     # Set the simulated command line args
     sys.argv = ParamsUtils.dict_to_req(d=params)
     # create launcher
-    launcher = PythonTransformLauncher(runtime_config=Html2ParquetPythonTransformConfiguration())
+    launcher = RayTransformLauncher(Html2ParquetRayTransformConfiguration())
     # Launch the ray actor(s) to process the input
     launcher.launch()

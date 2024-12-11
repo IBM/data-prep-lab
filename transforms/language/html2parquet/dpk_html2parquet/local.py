@@ -13,7 +13,7 @@
 import os
 
 from data_processing.data_access import DataAccessLocal
-from html2parquet_transform import Html2ParquetTransform
+from dpk_html2parquet.transform import Html2ParquetTransform
 
 
 # create parameters

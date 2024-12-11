@@ -12,7 +12,6 @@
 
 import enum
 import io
-import time
 import zipfile
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
@@ -51,7 +50,7 @@ class Html2ParquetTransform(AbstractBinaryTransform):
         if not isinstance(self.favor_recall, html2parquet_favor_recall):
             self.favor_recall = html2parquet_favor_recall[self.favor_recall]
 
-    def _convert_html2parquet(self, member_filename: str, file_name: str, content_bytes: bytes) -> dict:
+    def convert_html2parquet(self, member_filename: str, file_name: str, content_bytes: bytes) -> dict:
 
         title = member_filename if member_filename else TransformUtils.get_file_basename(file_name)
 
@@ -126,7 +125,7 @@ class Html2ParquetTransform(AbstractBinaryTransform):
                                 # Read the content of the file
                                 content_bytes = file.read()
 
-                                row_data = self._convert_html2parquet(
+                                row_data = self.convert_html2parquet(
                                     member_filename=member.filename, file_name=file_name, content_bytes=content_bytes
                                 )
 
@@ -142,7 +141,7 @@ class Html2ParquetTransform(AbstractBinaryTransform):
                 # Read the content of the HTML file
                 content_bytes = buf.read()
 
-                row_data = self._convert_html2parquet(
+                row_data = self.convert_html2parquet(
                     member_filename=None, file_name=file_name, content_bytes=content_bytes
                 )
 
@@ -154,6 +153,7 @@ class Html2ParquetTransform(AbstractBinaryTransform):
 
         table = pa.Table.from_pylist(data)
         return [(TransformUtils.convert_arrow_to_binary(table=table), ".parquet")], {"nrows": number_of_rows}
+
 
 
 logger = get_logger(__name__)
@@ -236,3 +236,35 @@ class Html2ParquetTransformConfiguration(TransformConfiguration):
         self.params = self.params | captured
         logger.info(f"html2parquet parameters are : {self.params}")
         return True
+
+
+class Html2Parquet(Html2ParquetTransform):
+    def __init__(self, **kwargs):
+        super().__init__(dict(kwargs))
+
+    def transform(self, table: pa.Table, file_name: str = None) -> tuple[list[pa.Table], dict[str, Any]]:
+        """ """
+        self.logger.debug(f"Transforming one table with {len(table)} rows")
+
+        # make sure that the content column exists
+        TransformUtils.validate_columns(table=table, required=[self.content_column_name])
+
+        data = []
+        for batch in table.to_batches():
+            for row in batch.to_pylist():
+                buf = io.BytesIO(bytes(row['contents']))
+                # Read the content of the HTML file
+                content_bytes = buf.read()
+
+                row_data = self.convert_html2parquet(
+                    member_filename=None, file_name=row['filename'], content_bytes=content_bytes
+                )
+                data.append({**row, **row_data})
+
+        table = pa.Table.from_pylist(data)
+        metadata = {
+            "columns" : table.schema.names,
+            "nrows": len(table),
+        }
+        return [table], metadata
+

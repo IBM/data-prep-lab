@@ -1,7 +1,7 @@
 pipeline_parameters:
     name: "html2parquet"
     description: "Pipeline for html2parquet task"
-    script_name: "html2parquet_transform_ray.py"
+    script_name: "-m dpk_html2parquet.ray.transform"
     prefix: ""
     multi_s3: False
     compute_func_name: ""

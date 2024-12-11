@@ -14,24 +14,9 @@ COPY --chown=ray:users data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
 
 ## Copy the python version of the tansform
-COPY --chown=ray:users python-transform/  python-transform/
-RUN cd python-transform && pip install --no-cache-dir -e .
-
-# END OF STEPS destined for a data-prep-kit base image 
-
-COPY --chown=ray:users pyproject.toml pyproject.toml 
+COPY --chown=ray:users dpk_html2parquet/ dpk_html2parquet/
 COPY --chown=ray:users requirements.txt requirements.txt
-RUN pip install --no-cache-dir -e .
-
-# copy transform main() entry point to the image 
-COPY --chown=ray:users src/html2parquet_transform_ray.py ./
-
-# copy some of the samples in
-COPY --chown=ray:users ./src/html2parquet_local_ray.py local/
-
-# copy test
-COPY test/ test/
-COPY test-data/ test-data/
+RUN pip install -r requirements.txt
 
 # Set environment
 ENV PYTHONPATH /home/ray

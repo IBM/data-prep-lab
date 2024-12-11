@@ -13,13 +13,14 @@
 import ast
 import os
 
-from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from html2parquet_transform_python import Html2ParquetPythonTransformConfiguration
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_html2parquet.ray.transform import Html2ParquetRayTransformConfiguration
 
-class TestPythonHtml2ParquetTransform(AbstractTransformLauncherTest):
+
+class TestRayHtml2ParquetTransform(AbstractTransformLauncherTest):
     """
     Extends the super-class to define the test data for the tests defined there.
     The name of this class MUST begin with the word Test so that pytest recognizes it as a test class.
@@ -30,22 +31,19 @@ class TestPythonHtml2ParquetTransform(AbstractTransformLauncherTest):
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))
         config = {
             "data_files_to_use": ast.literal_eval("['.html','.zip']"),
-            "html2parquet_output_format": "markdown",
+            "run_locally": True,
         }
-        # this is added as a fixture to remove these columns from comparison
-        ignore_columns = ["date_acquired"]
-
         fixtures = []
-        launcher = PythonTransformLauncher(Html2ParquetPythonTransformConfiguration())
+        launcher = RayTransformLauncher(Html2ParquetRayTransformConfiguration())
         fixtures.append(
             (
                 launcher,
                 config,
                 basedir + "/input",
                 basedir + "/expected",
-                ignore_columns,
+                # this is added as a fixture to remove these columns from comparison
+                ["date_acquired"],
 
             )
         )
         return fixtures
-

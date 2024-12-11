@@ -192,8 +192,8 @@ Chicago |
 Run the transform with the following command:
 
 ```
-python ../html2parquet/python/src/html2parquet_transform_python.py \
-  --data_local_config "{'input_folder': '../html2parquet/python/test-data/input', 'output_folder': '../html2parquet/python/test-data/expected'}" \
+python ./dpk_html2parquet/transform_python.py \
+  --data_local_config "{'input_folder': './test-data/input', 'output_folder': './test-data/expected'}" \
   --data_files_to_use '[".html", ".zip"]'
 ```
 
@@ -202,10 +202,26 @@ python ../html2parquet/python/src/html2parquet_transform_python.py \
 
 ### Sample Notebook
 
-See the [sample notebook](../notebooks/html2parquet.ipynb)
+See the [sample notebook](./notebooks/html2parquet.ipynb)
 ) for an example.
 
 
 ## Further Resources
 
 - [Trafilatura](https://trafilatura.readthedocs.io/en/latest/usage-python.html).
+# html2parquet Ray Transform 
+
+This module implements the ray version of the [html2parquet transform](./dpk_html2parquet/ray/).
+
+The HTML conversion is using the [Trafilatura](https://trafilatura.readthedocs.io/en/latest/usage-python.html).
+
+## Prometheus metrics
+
+The transform will produce the following statsd metrics:
+
+| metric name                      | Description                                                      |
+|----------------------------------|------------------------------------------------------------------|
+| worker_html_doc_count             | Number of HTML documents converted by the worker                  |
+| worker_html_pages_count           | Number of HTML pages converted by the worker                      |
+| worker_html_page_avg_convert_time | Average time for converting a single HTML page on each worker     |
+| worker_html_convert_time          | Time spent converting a single document                           |

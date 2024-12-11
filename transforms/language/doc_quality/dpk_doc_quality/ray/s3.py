@@ -20,12 +20,12 @@ from doc_quality_transform import (
     doc_content_column_cli_param,
     text_lang_cli_param,
 )
-from doc_quality_transform_ray import DocQualityRayTransformConfiguration
+from dpk_doc_quality.ray.transform import DocQualityRayTransformConfiguration
 
 
 print(os.environ)
 # create parameters
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 s3_cred = {
     "access_key": "localminioaccesskey",
     "secret_key": "localminiosecretkey",
@@ -38,8 +38,9 @@ s3_conf = {
 worker_options = {"num_cpus": 0.8}
 code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
 model_path = os.path.join(basedir, "models")
-if not os.path.exists(model_path):
-    model_path = os.path.abspath(os.path.join(basedir, "..", "models"))
+# why is this here and how is it being used ?
+# if not os.path.exists(model_path):
+#    model_path = os.path.abspath(os.path.join(basedir, "..", "models"))
 params = {
     # where to run
     "run_locally": True,

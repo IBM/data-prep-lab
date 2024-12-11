@@ -13,7 +13,7 @@
 import os
 
 from data_processing.data_access import DataAccessLocal
-from doc_quality_transform import (
+from dpk_doc_quality.transform import (
     DocQualityTransform,
     bad_word_filepath_key,
     doc_content_column_key,
@@ -22,7 +22,7 @@ from doc_quality_transform import (
 
 
 # create parameters
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
 input_folder = os.path.join(basedir, "test-data", "input")
 doc_quality_params = {
     text_lang_key: "en",

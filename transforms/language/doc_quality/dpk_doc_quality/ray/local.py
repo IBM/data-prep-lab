@@ -20,13 +20,13 @@ from doc_quality_transform import (
     doc_content_column_cli_param,
     text_lang_cli_param,
 )
-from doc_quality_transform_ray import DocQualityRayTransformConfiguration
+from dpk_doc_quality.ray.transform import DocQualityRayTransformConfiguration
 
 
 # create parameters
 basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
-input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
-output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
+input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", "test-data", "input"))
+output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", "output"))
 local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,

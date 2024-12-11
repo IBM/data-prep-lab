@@ -15,15 +15,16 @@ import sys
 
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
-from doc_quality_transform import (
+from dpk_doc_quality.transform import (
     bad_word_filepath_cli_param,
     doc_content_column_cli_param,
     text_lang_cli_param,
 )
-from doc_quality_transform_python import DocQualityPythonTransformConfiguration
+from dpk_doc_quality.transform_python import DocQualityPythonTransformConfiguration
 
 
 # create parameters
+## Why is it  based on where the code is deployed? should this be os.getcwd() instead of os.path.dirname(__file__)?
 input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
 output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
 local_conf = {
@@ -31,10 +32,13 @@ local_conf = {
     "output_folder": output_folder,
 }
 code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
+basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "."))
+
+## Where is model_path being used ? also,
+## Why is it  based on where the code is deployed? should this be os.getcwd() ?
 model_path = os.path.join(basedir, "models")
-if not os.path.exists(model_path):
-    model_path = os.path.abspath(os.path.join(basedir, "..", "models"))
+# if not os.path.exists(model_path):
+#    model_path = os.path.abspath(os.path.join(basedir, "..", "models"))
 
 params = {
     # Data access. Only required parameters are specified

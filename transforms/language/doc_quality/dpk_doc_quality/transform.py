@@ -18,13 +18,13 @@ import pyarrow as pa
 from data_processing.data_access import DataAccess, DataAccessFactory
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import CLIArgumentProvider, TransformUtils, get_logger
-from doc_c4_statistics import (
+from dpk_doc_quality.doc_c4_statistics import (
     c4_contain_pattern_ratio,
     c4_contains_ldnoobw_words,
     c4_load_ldnoobw_words,
     c4_sentence_count,
 )
-from doc_Gopher_statistics import (
+from dpk_doc_quality.doc_Gopher_statistics import (
     compute_average_japanese_sentence_length,
     compute_bullet_point_ellipsis_alphabet_word_ratio,
     compute_word_statistics,

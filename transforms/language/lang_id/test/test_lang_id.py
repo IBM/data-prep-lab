@@ -14,8 +14,8 @@ import pyarrow as pa
 from data_processing.test_support.transform.table_transform_test import (
     AbstractTableTransformTest,
 )
-from lang_id_transform import LangIdentificationTransform
-from lang_models import KIND_FASTTEXT
+from dpk_lang_id.lang_models import KIND_FASTTEXT
+from dpk_lang_id.transform import LangIdentificationTransform
 
 
 class TestLangIdentificationTransform(AbstractTableTransformTest):

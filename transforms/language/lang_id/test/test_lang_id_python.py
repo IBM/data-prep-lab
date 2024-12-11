@@ -16,8 +16,8 @@ from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from lang_id_transform_python import LangIdentificationPythonTransformConfiguration
-from lang_models import KIND_FASTTEXT
+from dpk_lang_id.lang_models import KIND_FASTTEXT
+from dpk_lang_id.transform_python import LangIdentificationPythonTransformConfiguration
 
 
 class TestPythonLangIdentificationTransform(AbstractTransformLauncherTest):

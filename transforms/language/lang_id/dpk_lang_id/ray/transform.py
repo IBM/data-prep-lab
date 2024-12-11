@@ -10,20 +10,21 @@
 # limitations under the License.
 ################################################################################
 
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.runtime.pure_python.runtime_configuration import (
-    PythonTransformRuntimeConfiguration,
-)
+import pyarrow as pa
 from data_processing.utils import get_logger
-from lang_id_transform import LangIdentificationTransformConfiguration
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from data_processing_ray.runtime.ray.runtime_configuration import (
+    RayTransformRuntimeConfiguration,
+)
+from dpk_lang_id.transform import LangIdentificationTransformConfiguration
 
 
 logger = get_logger(__name__)
 
 
-class LangIdentificationPythonTransformConfiguration(PythonTransformRuntimeConfiguration):
+class LangIdentificationRayTransformConfiguration(RayTransformRuntimeConfiguration):
     """
-    Implements the PythonTransformConfiguration for Language Identification as required by the PythonTransformLauncher.
+    Implements the RayTransformConfiguration for Language Identification as required by the RayTransformLauncher.
     Language Identification does not use a RayRuntime class so the superclass only needs the base
     python-only configuration.
     """
@@ -37,6 +38,6 @@ class LangIdentificationPythonTransformConfiguration(PythonTransformRuntimeConfi
 
 
 if __name__ == "__main__":
-    launcher = PythonTransformLauncher(LangIdentificationPythonTransformConfiguration())
+    launcher = RayTransformLauncher(LangIdentificationRayTransformConfiguration())
     logger.info("Launching lang_id transform")
     launcher.launch()

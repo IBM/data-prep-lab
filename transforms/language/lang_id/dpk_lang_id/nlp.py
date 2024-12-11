@@ -14,19 +14,19 @@ from typing import Any
 
 import pyarrow as pa
 from data_processing.utils import TransformUtils, get_logger
-from lang_models import LangModel
+from dpk_lang_id.lang_models import LangModel
 
 
 logger = get_logger(__name__)
 
 
 def get_lang_ds_pa(
-        table: pa.table,
-        nlp: LangModel,
-        content_column_name: str,
-        output_lang_column_name: str,
-        output_score_column_name: str,
-    ) -> tuple[pa.table, dict[str, Any]]:
+    table: pa.table,
+    nlp: LangModel,
+    content_column_name: str,
+    output_lang_column_name: str,
+    output_score_column_name: str,
+) -> tuple[pa.table, dict[str, Any]]:
     detected_language = pa.Table.from_pylist(
         list(
             map(

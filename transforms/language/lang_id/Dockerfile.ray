@@ -19,13 +19,10 @@ USER ray
 COPY --chown=ray:users data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
 
-## Copy the python version of the tansform
-COPY --chown=ray:users python-transform/  python-transform/
-RUN cd python-transform && pip install --no-cache-dir -e .
 
-COPY --chown=ray:users src/ src/
-COPY --chown=ray:users pyproject.toml pyproject.toml 
-RUN pip install --no-cache-dir -e .
+COPY --chown=ray:users dpk_lang_id/ dpk_lang_id/
+COPY --chown=ray:users requirements.txt requirements.txt 
+RUN pip install --no-cache-dir -r requirements.txt
 
 # clean up apt
 USER root 
@@ -33,16 +30,6 @@ RUN sudo apt remove gcc g++ -y \
     && sudo apt clean \
     && sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 USER ray
-
-# copy the main() entry point to the image 
-COPY ./src/lang_id_transform_ray.py .
-
-# copy some of the samples in
-COPY ./src/lang_id_local_ray.py local/
-
-# copy test
-COPY test/ test/
-COPY test-data/ test-data/
 
 # Set environment
 ENV PYTHONPATH /home/ray

@@ -11,8 +11,8 @@
 ################################################################################
 
 import pyarrow as pa
-from lang_models import KIND_FASTTEXT, LangModelFactory
-from nlp import get_lang_ds_pa
+from dpk_lang_id.lang_models import KIND_FASTTEXT, LangModelFactory
+from dpk_lang_id.nlp import get_lang_ds_pa
 
 
 def test_language_identification():

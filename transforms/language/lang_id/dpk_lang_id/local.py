@@ -13,7 +13,7 @@
 import os
 
 from data_processing.data_access import DataAccessLocal
-from lang_id_transform import (
+from dpk_lang_id.transform import (
     LangIdentificationTransform,
     content_column_name_key,
     model_credential_key,

@@ -16,8 +16,8 @@ from typing import Any
 import pyarrow as pa
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import CLIArgumentProvider, TransformUtils
-from lang_models import LangModelFactory
-from nlp import get_lang_ds_pa
+from dpk_lang_id.lang_models import LangModelFactory
+from dpk_lang_id.nlp import get_lang_ds_pa
 
 
 short_name = "lang_id"
@@ -78,7 +78,12 @@ class LangIdentificationTransform(AbstractTableTransform):
             )
         self.logger.debug(f"Transforming one table with {len(table)} rows")
         table, stats = get_lang_ds_pa(
-            table, self.nlp_langid, self.content_column_name, self.output_lang_column_name, self.output_score_column_name)
+            table,
+            self.nlp_langid,
+            self.content_column_name,
+            self.output_lang_column_name,
+            self.output_score_column_name,
+        )
         self.logger.debug(f"Transformed one table with {len(table)} rows")
         return [table], stats
 

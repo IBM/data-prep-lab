@@ -15,7 +15,9 @@ from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from lang_id_transform import (
+from dpk_lang_id.lang_models import KIND_FASTTEXT
+from dpk_lang_id.ray.transform import LangIdentificationRayTransformConfiguration
+from dpk_lang_id.transform import (
     content_column_name_cli_param,
     model_credential_cli_param,
     model_kind_cli_param,
@@ -23,8 +25,6 @@ from lang_id_transform import (
     output_lang_column_name_cli_param,
     output_score_column_name_cli_param,
 )
-from lang_id_transform_ray import LangIdentificationRayTransformConfiguration
-from lang_models import KIND_FASTTEXT
 
 
 class TestRayLangIdentificationTransform(AbstractTransformLauncherTest):

@@ -15,6 +15,8 @@ import sys
 
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_lang_id.lang_models import KIND_FASTTEXT
+from dpk_lang_id.ray.transform import LangIdentificationRayTransformConfiguration
 from lang_id_transform import (
     content_column_name_cli_param,
     model_credential_cli_param,
@@ -23,22 +25,14 @@ from lang_id_transform import (
     output_lang_column_name_cli_param,
     output_score_column_name_cli_param,
 )
-from lang_id_transform_ray import LangIdentificationRayTransformConfiguration
-from lang_models import KIND_FASTTEXT
 
 
-print(os.environ)
-# create launcher
-launcher = RayTransformLauncher(LangIdentificationRayTransformConfiguration())
 # create parameters
-s3_cred = {
-    "access_key": "localminioaccesskey",
-    "secret_key": "localminiosecretkey",
-    "url": "http://localhost:9000",
-}
-s3_conf = {
-    "input_folder": "test/lang_id/input",
-    "output_folder": "test/lang_id/output",
+input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
+output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output"))
+local_conf = {
+    "input_folder": input_folder,
+    "output_folder": output_folder,
 }
 worker_options = {"num_cpus": 0.8}
 code_location = {"github": "github", "commit_hash": "12345", "path": "path"}
@@ -46,8 +40,7 @@ params = {
     # where to run
     "run_locally": True,
     # Data access. Only required parameters are specified
-    "data_s3_cred": ParamsUtils.convert_to_ast(s3_cred),
-    "data_s3_config": ParamsUtils.convert_to_ast(s3_conf),
+    "data_local_config": ParamsUtils.convert_to_ast(local_conf),
     # orchestrator
     "runtime_worker_options": ParamsUtils.convert_to_ast(worker_options),
     "runtime_num_workers": 3,
@@ -63,9 +56,10 @@ params = {
     output_lang_column_name_cli_param: "ft_lang",
     output_score_column_name_cli_param: "ft_score",
 }
-sys.argv = ParamsUtils.dict_to_req(d=params)
-# for arg in sys.argv:
-#     print(arg)
-
-# launch
-launcher.launch()
+if __name__ == "__main__":
+    # Set the simulated command line args
+    sys.argv = ParamsUtils.dict_to_req(d=params)
+    # create launcher
+    launcher = RayTransformLauncher(LangIdentificationRayTransformConfiguration())
+    # Launch the ray actor(s) to process the input
+    launcher.launch()

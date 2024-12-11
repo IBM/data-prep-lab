@@ -31,6 +31,7 @@ all = { file = [
 
 "language/doc_quality/python/requirements.txt",
 "language/doc_chunk/requirements.txt",
+"language/doc_chunk/requirements.txt",
 ##### Cannot have html2parquet until we solve
 ## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
 ## trafilatura 1.12.0 depends on lxml>=5.2.2; platform_system != "Darwin" or python_version > "3.8"
@@ -62,6 +63,7 @@ code_quality = { file = ["code/code_quality/python/requirements.txt"]}
 code2parquet = {file =  ["code/code2parquet/python/requirements.txt"]}
 
 doc_quality = { file = ["language/doc_quality/python/requirements.txt"]} 
+doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
 doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
 html2parquet = { file = ["language/html2parquet/python/requirements.txt"]} 
 pii_redactor = { file = ["language/pii_redactor/python/requirements.txt"]} 

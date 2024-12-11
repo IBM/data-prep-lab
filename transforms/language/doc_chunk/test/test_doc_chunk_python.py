@@ -16,12 +16,12 @@ from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from doc_chunk_transform import (
+from dpk_doc_chunk.transform import (
     chunking_type_cli_param, 
     output_chunk_column_name_cli_param,
     chunking_types
 )
-from doc_chunk_transform_python import DocChunkPythonTransformConfiguration
+from dpk_doc_chunk.transform_python import DocChunkPythonTransformConfiguration
 
 
 class TestPythonDocChunkTransform(AbstractTransformLauncherTest):

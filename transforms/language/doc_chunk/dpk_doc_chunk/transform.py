@@ -11,14 +11,13 @@
 ################################################################################
 
 import enum
-import time
 from argparse import ArgumentParser, Namespace
 from typing import Any
 
 import pyarrow as pa
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import CLIArgumentProvider, TransformUtils, get_logger
-from doc_chunk_chunkers import ChunkingExecutor, DLJsonChunker, LIMarkdown, LITokenTextSplitter
+from dpk_doc_chunk.chunkers import ChunkingExecutor, DLJsonChunker, LIMarkdown, LITokenTextSplitter
 
 
 short_name = "doc_chunk"

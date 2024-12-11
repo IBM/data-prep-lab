@@ -16,7 +16,7 @@ from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from doc_chunk_transform_ray import DocChunkRayTransformConfiguration
+from dpk_doc_chunk.ray.transform import DocChunkRayTransformConfiguration
 
 
 class TestRayDocChunkTransform(AbstractTransformLauncherTest):

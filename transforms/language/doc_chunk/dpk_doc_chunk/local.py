@@ -13,7 +13,7 @@
 import os
 
 from data_processing.data_access import DataAccessLocal
-from doc_chunk_transform import DocChunkTransform
+from dpk_doc_chunk.transform import DocChunkTransform
 
 
 # create parameters

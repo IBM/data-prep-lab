@@ -111,7 +111,7 @@ class DocIDPythonTransformRuntimeConfiguration(PythonTransformRuntimeConfigurati
     def __init__(self):
         super().__init__(
             transform_config=DocIDTransformConfiguration(),
-            runtime_class=DocIDPythonRuntime,
+            runtime_class=DocIDRuntime,
         )
 
 

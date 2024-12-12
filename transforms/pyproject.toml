@@ -37,7 +37,7 @@ all = { file = [
 "language/pdf2parquet/requirements.txt",
 
 "universal/doc_id/requirements.txt",
-#"universal/ededup/requirements.txt",
+"universal/ededup/requirements.txt",
 "universal/hap/requirements.txt",
 "universal/tokenization/requirements.txt",
 "universal/web2parquet/requirements.txt"
@@ -54,7 +54,7 @@ pdf2parquet = { file = ["language/pdf2parquet/requirements.txt"]}
 text_encoder = { file = ["language/text_encoder/requirements.txt"]} 
 
 doc_id = { file = ["universal/doc_id/requirements.txt"]} 
-#ededup = { file = ["universal/ededup/requirements.txt"]} 
+ededup = { file = ["universal/ededup/requirements.txt"]} 
 hap = { file = ["universal/hap/requirements.txt"]} 
 tokenization = { file = ["universal/tokenization/requirements.txt"]} 
 web2parquet = { file = ["universal/web2parquet/requirements.txt"]}

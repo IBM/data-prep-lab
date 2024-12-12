@@ -37,7 +37,7 @@ class Pdf2ParquetPythonTransformConfiguration(PythonTransformRuntimeConfiguratio
 
 
 # Class used by the notebooks to ingest binary files and create parquet files
-class Pdf2ParquetRuntime:
+class Pdf2Parquet:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

@@ -25,7 +25,7 @@ class TokenizationPythonConfiguration(PythonTransformRuntimeConfiguration):
         super().__init__(transform_config=TokenizationTransformConfiguration())
 
 
-class TokenizationRuntime:
+class Tokenization:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

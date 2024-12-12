@@ -71,7 +71,7 @@ class DocIDTransformConfiguration(DocIDTransformConfigurationBase):
         return super().apply_input_params(args=args)
 
 
-class DocIDPythonRuntime(DefaultPythonTransformRuntime):
+class DocIDRuntime(DefaultPythonTransformRuntime):
     """
     Exact dedup runtime support
     """
@@ -115,7 +115,7 @@ class DocIDPythonTransformRuntimeConfiguration(PythonTransformRuntimeConfigurati
         )
 
 
-class DocIDRuntime:
+class DocID:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

@@ -35,7 +35,7 @@ This code uses DPK to
 
 Here is the code: 
 
-- Python version: TODO
+- Python version: [rag_1A_dpk_process_python.ipynb](rag_1A_dpk_process_python.ipynb)
 - Ray version: [rag_1A_dpk_process_ray.ipynb](rag_1A_dpk_process_ray.ipynb)
 
 
@@ -76,7 +76,7 @@ REPLICATE_API_TOKEN=your REPLICATE token goes here
 
 ### 5.2 - Run the query code
 
-Code: [rag_1D_query_llama_replicate.ipynb](rag_1D_query_llama_replicate.ipynb)
+Code: [rag_1D_query_replicate.ipynb](rag_1D_query_replicate.ipynb)
 
 
 

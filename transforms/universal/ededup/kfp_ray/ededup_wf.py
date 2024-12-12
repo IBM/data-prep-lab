@@ -43,14 +43,14 @@ if os.getenv("KFPv2", "0") == "1":
     compute_exec_params_op = dsl.component_decorator.component(
         func=ededup_compute_execution_params, base_image=base_kfp_image
     )
+    print(
+        "WARNING: the ray cluster name can be non-unique at runtime, please do not execute simultaneous Runs of the "
+        + "same version of the same pipeline !!!"
+    )
     run_id = uuid.uuid4().hex
 else:
     compute_exec_params_op = comp.create_component_from_func(
         func=ededup_compute_execution_params, base_image=base_kfp_image
-    )
-    print(
-        "WARNING: the ray cluster name can be non-unique at runtime, please do not execute simultaneous Runs of the "
-        + "same version of the same pipeline !!!"
     )
     run_id = dsl.RUN_ID_PLACEHOLDER
 
@@ -89,7 +89,7 @@ def ededup(
     ededup_hash_cpu: float = 0.5,
     ededup_doc_column: str = "contents",
     ededup_use_snapshot: bool = False,
-    ededup_snapshot_directory: str = None,
+    ededup_snapshot_directory: str = "",
     # data sampling
     ededup_n_samples: int = 10,
     # additional parameters

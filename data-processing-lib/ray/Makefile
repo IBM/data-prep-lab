@@ -17,6 +17,15 @@ setup::
 
 set-versions: .check-env
 	$(MAKE) TOML_VERSION=$(DPK_LIB_VERSION) .defaults.update-toml
+	if [ -e pyproject.toml ]; then					\
+		cat pyproject.toml | sed -e 's/"ray[default]==.*",/"ray[default]==$(RAY)",/' > tt.toml; \
+		mv tt.toml pyproject.toml; \
+	fi
+	if [ -e requirements.txt ]; then					\
+		cat requirements.txt | sed -e 's/ray[default]==.*/ray[default]==$(RAY)/' > tt.txt; \
+		mv tt.txt requirements.txt; \
+	fi
+
 
 build:: build-dist 
 
@@ -26,7 +35,7 @@ publish:: publish-dist
 
 publish-dist :: .check-env .defaults.publish-dist 
 
-venv::	pyproject.toml
+venv::
 	$(MAKE) .defaults.ray-lib-src-venv
 	pip install moto==5.0.5 markupsafe==2.0.1
 

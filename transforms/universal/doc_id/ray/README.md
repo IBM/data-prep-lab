@@ -1,9 +1,17 @@
-# Document ID Annotator
+# Document ID Ray Annotator
 
 Please see the set of
 [transform project conventions](../../../README.md)
 for details on general project conventions, transform configuration,
 testing and IDE set up.
+
+## Summary
+This project wraps the Document ID transform with a Ray runtime.
+
+## Configuration and command line Options
+
+Document ID configuration and command line options are the same as for the
+[base python transform](../python/README.md).
 
 ## Building
 

@@ -1,3 +1,15 @@
+# (C) Copyright IBM Corp. 2024.
+# Licensed under the Apache License, Version 2.0 (the “License”);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#  http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an “AS IS” BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
 
 PIPELINE_TEMPLATE_FILE = "simple_pipeline.py"
 
@@ -14,6 +26,7 @@ DESCRIPTION = "description"
 if __name__ == "__main__":
     import argparse
     import os
+
     import yaml
     from jinja2 import Environment, FileSystemLoader
 
@@ -21,7 +34,7 @@ if __name__ == "__main__":
     environment = Environment(loader=FileSystemLoader(f"{script_dir}/templates/"))
     template = environment.get_template(PIPELINE_TEMPLATE_FILE)
 
-    #pre_commit_config = f"{script_dir}/../pre-commit-config.yaml"
+    pre_commit_config = f"{script_dir}/../../../.pre-commit-config.yaml"
     parser = argparse.ArgumentParser(description="Kubeflow pipeline generator for Foundation Models")
     parser.add_argument("-c", "--config_file", type=str, default="")
     parser.add_argument("-od", "--output_dir_file", type=str, default="")
@@ -57,3 +70,10 @@ if __name__ == "__main__":
         message.write(content)
         print(f"... wrote {output_file}")
 
+    # format the pipeline python file
+    import sys
+
+    from pre_commit.main import main
+
+    args = ["run", "--file", f"{output_file}", "-c", f"{pre_commit_config}"]
+    sys.exit(main(args))

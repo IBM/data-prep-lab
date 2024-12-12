@@ -1,0 +1,144 @@
+# Define the root of the local git clone for the common rules to be able 
+# know where they are running from.
+
+# Include a library of common .transform.* targets which most
+# transforms should be able to reuse.  However, feel free
+# to override/redefine the rules below. 
+include $(REPOROOT)/transforms/.make.transforms
+
+######################################################################
+## Default setting for TRANSFORM_RUNTIME entry point: 
+# python -m dpk_html2parquet.ray.transform --help
+# or
+# python -m dpk_html2parquet.transform_python --help
+#
+TRANSFORM_PYTHON_SRC?="-m dpk_$(TRANSFORM_NAME).transform_python"
+TRANSFORM_RAY_SRC?="-m dpk_$(TRANSFORM_NAME).ray.transform"
+TRANSFORM_SPARK_SRC?="-m dpk_$(TRANSFORM_NAME).spark.transform"
+
+
+venv::	.defaults.create-venv
+	source venv/bin/activate && $(PIP) install -e $(REPOROOT)/data-processing-lib[ray,spark]
+	source venv/bin/activate && $(PIP) install -e $(REPOROOT)/data-connector-lib
+	if [ -e requirements.txt ]; then \
+		source venv/bin/activate && $(PIP) install -r  requirements.txt; \
+	fi; 
+
+test:: .transforms.test-src test-image
+
+clean:: .transforms.clean
+
+## We need to think how we want to do this going forward
+set-versions::
+
+## We need to think how we want to do this going forward
+
+build:: image
+
+publish:
+	@if [ -e Dockerfile.python ]; then \
+		$(MAKE) DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(TRANSFORM_NAME)-python:$(DOCKER_IMAGE_VERSION) \
+				.defaults.publish-image ; \
+	fi
+	@if [ -e Dockerfile.ray ]; then \
+		$(MAKE) DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(TRANSFORM_NAME)-ray:$(DOCKER_IMAGE_VERSION) \
+				.defaults.publish-image ; \
+	fi
+	@if [ -e Dockerfile.spark ]; then \
+		$(MAKE) DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(TRANSFORM_NAME)-spark:$(DOCKER_IMAGE_VERSION) \
+				.defaults.publish-image ; \
+	fi
+
+test-image-sequence:: .defaults.lib-whl-image .transforms.test-image-help .transforms.clean
+
+test-image:: .default.build-lib-wheel
+	@if [ -e Dockerfile.python ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.python \
+				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_PYTHON_SRC) \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
+				test-image-sequence ; \
+	fi
+	@if [ -e Dockerfile.ray ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.ray \
+				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_RAY_SRC) \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
+				BASE_IMAGE=$(RAY_BASE_IMAGE)  \
+				test-image-sequence ; \
+	fi
+	@if [ -e Dockerfile.spark ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.spark \
+				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_SPARK_SRC) \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
+				BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
+				test-image-sequence ; \
+	fi
+	-rm -rf data-processing-dist
+
+
+image-python:
+	@if [ -e Dockerfile.python ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.python \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
+				.defaults.lib-whl-image ; \
+	fi
+
+image-ray:
+	@if [ -e Dockerfile.ray ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.ray \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
+				BASE_IMAGE=$(RAY_BASE_IMAGE)  \
+				.defaults.lib-whl-image ; \
+	fi
+
+image-spark:
+	@if [ -e Dockerfile.spark ]; then \
+		$(MAKE) DOCKER_FILE=Dockerfile.spark \
+				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
+				BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
+				.defaults.lib-whl-image ; \
+	fi
+
+image:: .default.build-lib-wheel
+	## Build all possible images unless a specific runtime is specified
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "python" ]; then \
+		$(MAKE) image-python ; \
+	fi
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "ray" ]; then \
+		$(MAKE) image-ray ; \
+	fi
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "spark" ]; then \
+		$(MAKE) image-spark ; \
+	fi
+	-rm -rf data-processing-dist
+
+test-src:: .transforms.test-src
+
+setup:: .transforms.setup
+
+kind-load-image:: .transforms.kind-load-image
+
+.PHONY: workflow-vent
+workflow-venv:
+	if [ -e kfp_ray ]; then                 \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) workflow-venv;   \
+	fi
+
+.PHONY: workflow-test
+workflow-test:
+	if [ -e kfp_ray ]; then                 \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) workflow-test;   \
+	fi
+
+.PHONY: workflow-upload
+workflow-upload:
+	if [ -e kfp_ray ]; then                 \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) workflow-upload; \
+	fi
+
+.PHONY: workflow-build
+workflow-build:
+	if [ -e kfp_ray ]; then                 \
+	    $(MAKE) -C  kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) workflow-build; \
+	fi
+
+

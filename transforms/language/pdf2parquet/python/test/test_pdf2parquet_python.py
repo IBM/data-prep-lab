@@ -19,8 +19,7 @@ from data_processing.test_support.abstract_test import _allowed_float_percent_di
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from docling_core.types import Document
-from docling_core.types.doc.base import BaseText
+from docling_core.types.doc import DocItem, DoclingDocument, TextItem
 from pdf2parquet_transform_python import Pdf2ParquetPythonTransformConfiguration
 from pydantic import ValidationError
 
@@ -35,7 +34,7 @@ class TestPythonPdf2ParquetTransform(AbstractTransformLauncherTest):
         basedir = "../test-data"
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))
         config = {
-            "data_files_to_use": ast.literal_eval("['.pdf','.zip']"),
+            "data_files_to_use": ast.literal_eval("['.pdf','.docx','.pptx','.zip']"),
             "pdf2parquet_double_precision": 0,
         }
 
@@ -54,6 +53,20 @@ class TestPythonPdf2ParquetTransform(AbstractTransformLauncherTest):
                 },
                 basedir + "/input",
                 basedir + "/expected",
+                ignore_columns,
+            )
+        )
+
+        # All input in a single parquet
+        fixtures.append(
+            (
+                launcher,
+                {
+                    **config,
+                    "pdf2parquet_batch_size": 10,
+                },
+                basedir + "/input",
+                basedir + "/expected_batch",
                 ignore_columns,
             )
         )
@@ -130,8 +143,10 @@ class TestPythonPdf2ParquetTransform(AbstractTransformLauncherTest):
                     # Test for Document type
                     try:
 
-                        expected_doc = Document.model_validate_json(expected_value)
-                        test_doc = Document.model_validate_json(test_value)
+                        expected_doc = DoclingDocument.model_validate_json(
+                            expected_value
+                        )
+                        test_doc = DoclingDocument.model_validate_json(test_value)
                         cls.validate_documents(
                             row_index=row_index,
                             table_index=table_index,
@@ -164,27 +179,32 @@ class TestPythonPdf2ParquetTransform(AbstractTransformLauncherTest):
         cls,
         row_index: int,
         table_index: int,
-        test_doc: Document,
-        expected_doc: Document,
+        test_doc: DoclingDocument,
+        expected_doc: DoclingDocument,
     ):
 
         msg = f"Row {row_index} of table {table_index} are not equal\n\t"
-        assert(test_doc.main_text is not None, msg + "Test document has no content")
-        assert len(test_doc.main_text) == len(expected_doc.main_text), (
+        assert len(test_doc.texts) == len(expected_doc.texts), (
             msg + f"Main Text lengths do not match."
         )
 
-        for i in range(len(expected_doc.main_text)):
-            expected_item = expected_doc.main_text[i]
-            test_item = test_doc.main_text[i]
+        for (expected_item, _expected_level), (test_item, _test_level) in zip(
+            expected_doc.iterate_items(), test_doc.iterate_items()
+        ):
+            if not isinstance(expected_item, DocItem):
+                continue
+            assert isinstance(test_item, DocItem), msg + "Test item is not a DocItem"
 
             # Validate type
-            assert expected_item.obj_type == test_item.obj_type, (
-                msg + f"Object type does not match."
+            assert expected_item.label == test_item.label, (
+                msg + f"Object label does not match."
             )
 
             # Validate text content
-            if isinstance(expected_item, BaseText):
+            if isinstance(expected_item, TextItem):
+                assert isinstance(test_item, TextItem), (
+                    msg + "Test item is not a TextItem as the expected one"
+                )
                 assert expected_item.text == test_item.text, (
                     msg + f"Text does not match."
                 )

@@ -9,9 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
-
+import os
 import time
 import traceback
+import psutil
 from datetime import datetime
 from multiprocessing import Pool
 from typing import Any
@@ -23,11 +24,28 @@ from data_processing.runtime.pure_python import (
     PythonTransformFileProcessor,
     PythonTransformRuntimeConfiguration,
 )
-from data_processing.transform import AbstractBinaryTransform, TransformStatistics
-from data_processing.utils import get_logger
+from data_processing.transform import AbstractTransform, TransformStatistics, AbstractFolderTransform
+from data_processing.utils import GB, get_logger
 
 
 logger = get_logger(__name__)
+
+
+def _execution_resources() -> dict[str, Any]:
+    """
+    Get Execution resource
+    :return: tuple of cpu/memory usage
+    """
+    # Getting loadover15 minutes
+    load1, load5, load15 = psutil.getloadavg()
+    # Getting memory used
+    mused = round(psutil.virtual_memory()[3] / GB, 2)
+    return {
+        "cpus": round((load15/os.cpu_count()) * 100, 1),
+        "gpus": 0,
+        "memory": mused,
+        "object_store": 0,
+    }
 
 
 def orchestrate(
@@ -43,6 +61,7 @@ def orchestrate(
     :return: 0 - success or 1 - failure
     """
     start_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    start_time = time.time()
     logger.info(f"orchestrator {runtime_config.get_name()} started at {start_ts}")
     # create statistics
     statistics = TransformStatistics()
@@ -53,15 +72,21 @@ def orchestrate(
         return 1
     # create additional execution parameters
     runtime = runtime_config.create_transform_runtime()
+    is_folder = issubclass(runtime_config.get_transform_class(), AbstractFolderTransform)
     try:
-        # Get files to process
-        files, profile, retries = data_access.get_files_to_process()
-        if len(files) == 0:
-            logger.error("No input files to process - exiting")
-            return 0
-        if retries > 0:
-            statistics.add_stats({"data access retries": retries})
-        logger.info(f"Number of files is {len(files)}, source profile {profile}")
+        if is_folder:
+            # folder transform
+            files = runtime.get_folders(data_access=data_access)
+            logger.info(f"Number of folders is {len(files)}")
+        else:
+            # Get files to process
+            files, profile, retries = data_access.get_files_to_process()
+            if len(files) == 0:
+                logger.error("No input files to process - exiting")
+                return 0
+            if retries > 0:
+                statistics.add_stats({"data access retries": retries})
+            logger.info(f"Number of files is {len(files)}, source profile {profile}")
         # Print interval
         print_interval = int(len(files) / 100)
         if print_interval == 0:
@@ -78,6 +103,7 @@ def orchestrate(
                     data_access_factory=data_access_factory, statistics=statistics, files=files
                 ),
                 transform_class=runtime_config.get_transform_class(),
+                is_folder=is_folder,
             )
         else:
             # using sequential execution
@@ -90,6 +116,7 @@ def orchestrate(
                     data_access_factory=data_access_factory, statistics=statistics, files=files
                 ),
                 transform_class=runtime_config.get_transform_class(),
+                is_folder=is_folder,
             )
         status = "success"
         return_code = 0
@@ -118,6 +145,8 @@ def orchestrate(
             "job_input_params": input_params
             | data_access_factory.get_input_params()
             | execution_config.get_input_params(),
+            "execution_stats": _execution_resources() |
+                               {"execution time, min": round((time.time() - start_time) / 60.0, 3)},
             "job_output_stats": stats,
         }
         logger.debug(f"Saving job metadata: {metadata}.")
@@ -135,7 +164,8 @@ def _process_transforms(
     data_access_factory: DataAccessFactoryBase,
     statistics: TransformStatistics,
     transform_params: dict[str, Any],
-    transform_class: type[AbstractBinaryTransform],
+    transform_class: type[AbstractTransform],
+    is_folder: bool,
 ) -> None:
     """
     Process transforms sequentially
@@ -145,9 +175,8 @@ def _process_transforms(
     :param data_access_factory: data access factory
     :param transform_params - transform parameters
     :param transform_class: transform class
+    :param is_folder: folder transform flag
     :return: metadata for the execution
-
-    :return: None
     """
     # create executor
     executor = PythonTransformFileProcessor(
@@ -155,6 +184,7 @@ def _process_transforms(
         statistics=statistics,
         transform_params=transform_params,
         transform_class=transform_class,
+        is_folder=is_folder,
     )
     # process data
     t_start = time.time()
@@ -180,7 +210,8 @@ def _process_transforms_multiprocessor(
     print_interval: int,
     data_access_factory: DataAccessFactoryBase,
     transform_params: dict[str, Any],
-    transform_class: type[AbstractBinaryTransform],
+    transform_class: type[AbstractTransform],
+    is_folder: bool
 ) -> TransformStatistics:
     """
     Process transforms using multiprocessing pool
@@ -190,13 +221,17 @@ def _process_transforms_multiprocessor(
     :param data_access_factory: data access factory
     :param transform_params - transform parameters
     :param transform_class: transform class
+    :param is_folder: folder transform class
     :return: metadata for the execution
     """
     # result statistics
     statistics = TransformStatistics()
     # create processor
     processor = PythonPoolTransformFileProcessor(
-        data_access_factory=data_access_factory, transform_params=transform_params, transform_class=transform_class
+        data_access_factory=data_access_factory,
+        transform_params=transform_params,
+        transform_class=transform_class,
+        is_folder=is_folder,
     )
     completed = 0
     t_start = time.time()

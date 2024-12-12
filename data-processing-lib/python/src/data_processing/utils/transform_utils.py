@@ -11,6 +11,7 @@
 ################################################################################
 
 import hashlib
+import io
 import os
 import string
 import sys
@@ -144,8 +145,21 @@ class TransformUtils:
             table = pq.read_table(reader, schema=schema)
             return table
         except Exception as e:
-            logger.error(f"Failed to convert byte array to arrow table, exception {e}. Skipping it")
-            return None
+            logger.warning(f"Could not convert bytes to pyarrow: {e}")
+
+        # We have seen this exception before when using pyarrow, but polars does not throw it.
+        # "Nested data conversions not implemented for chunked array outputs"
+        # See issue 816 https://github.com/IBM/data-prep-kit/issues/816.
+        logger.info(f"Attempting read of pyarrow Table using polars")
+        try:
+            import polars
+
+            df = polars.read_parquet(io.BytesIO(data))
+            table = df.to_arrow()
+        except Exception as e:
+            logger.error(f"Could not convert bytes to pyarrow using polars: {e}. Skipping.")
+            table = None
+        return table
 
     @staticmethod
     def convert_arrow_to_binary(table: pa.Table) -> bytes:

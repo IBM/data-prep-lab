@@ -30,7 +30,8 @@ The goal is to offer high-level APIs for developers to quickly get started in wo
 - [Scaling transforms from laptop to cluster](#laptop_cluster)
 - [Repository Use and Navigation](doc/repo.md)
 - [How to Contribute](CONTRIBUTING.md)
-- [Papers and Talks](#talks_papers)
+- [Resources (papers, talks, presentations and tutorials)](resources.md)
+- [Citations](#citations)
 
 ## &#x1F4D6; About <a name = "about"></a>
 
@@ -75,10 +76,11 @@ conda install gcc_linux-64
 conda install gxx_linux-64
 ```
 
-Next, install the data prep toolkit library. This library installs both the python and ray versions of the transforms.
+Next, install the data prep toolkit library. This library installs both the python and ray versions of the transforms. For better management of dependencies, it is recommended to install the same tagged version of both the library and the transform. 
 
 ```bash
-pip3 install  data-prep-toolkit-transforms-ray
+pip3 install  'data-prep-toolkit[ray]==0.2.3.dev0'
+pip3 install  'data-prep-toolkit-transforms[ray,all]==0.2.3.dev1'
 pip3 install jupyterlab   ipykernel  ipywidgets
 
 ## install custom kernel
@@ -88,7 +90,7 @@ python -m ipykernel install --user --name=data-prep-kit --display-name "dataprep
 Test, your installation. If you are able to import these data-prep-kit libraries successfully in python, your installation has succeeded. 
 
 ```bash
-## start python interpretter
+## start python interpreter
 $   python
 
 # import DPK libraries
@@ -120,7 +122,14 @@ Explore more examples [here](examples/notebooks).
 
 ### Run your first data prep pipeline
 
-Now that you have run a single transform, the next step is to explore how to put these transforms together to run a data prep pipeline for an end to end use case like fine tuning model or building a RAG application. This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of how to build an end to end data prep pipeline for fine tuning for code LLMs. You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
+Now that you have run a single transform, the next step is to explore how to put these transforms 
+together to run a data prep pipeline for an end to end use case like fine tuning a model or building 
+a RAG application. 
+This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of 
+how to build an end to end data prep pipeline for fine tuning for code LLMs. Similarly, this 
+[notebook](examples/notebooks/fine%20tuning/language/demo_with_launcher.ipynb) is a fine tuning 
+example of an end-to-end sample data pipeline designed for processing language datasets. 
+You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
 
 ### Current list of transforms 
 The matrix below shows the the combination of modules and supported runtimes. All the modules can be accessed [here](transforms) and can be combined to form data processing pipelines, as shown in the [examples](examples) folder. 
@@ -131,14 +140,16 @@ The matrix below shows the the combination of modules and supported runtimes. Al
 | **Data Ingestion**                                                                   |                    |                    |                    |                    |
 | [Code (from zip) to Parquet](transforms/code/code2parquet/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [PDF to Parquet](transforms/language/pdf2parquet/python/README.md)                   | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [HTML to Parquet](transforms/universal/html2parquet/python/README.md)                | :white_check_mark: |                    |                    |                    |
+| [HTML to Parquet](transforms/language/html2parquet/python/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Web to Parquet](transforms/universal/web2parquet/README.md)                         | :white_check_mark: |                    |                    |                    |         
 | **Universal (Code & Language)**                                                      |                    |                    |                    |                    | 
 | [Exact dedup filter](transforms/universal/ededup/ray/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      |                    | :white_check_mark: |                    | :white_check_mark: |
+| [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Unique ID annotation](transforms/universal/doc_id/ray/README.md)                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Filter on annotations](transforms/universal/filter/python/README.md)                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Profiler](transforms/universal/profiler/ray/README.md)                              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Resize](transforms/universal/resize/python/README.md)                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [HAP](transforms/universal/hap/python/README.md)                                     | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Tokenizer](transforms/universal/tokenization/python/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | **Language-only**                                                                    |                    |                    |                    |                    |
 | [Language identification](transforms/language/lang_id/python/README.md)              | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
@@ -147,7 +158,7 @@ The matrix below shows the the combination of modules and supported runtimes. Al
 | [Text encoder](transforms/language/text_encoder/python/README.md)                    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [PII Annotator/Redactor](transforms/language/pii_redactor/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | **Code-only**                                                                        |                    |                    |                    |                    |
-| [Programming language annnotation](transforms/code/proglang_select/python/README.md) | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Programming language annotation](transforms/code/proglang_select/python/README.md)  | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Code quality annotation](transforms/code/code_quality/python/README.md)             | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Malware annotation](transforms/code/malware/python/README.md)                       | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Header cleanser](transforms/code/header_cleanser/python/README.md)                  | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
@@ -210,12 +221,25 @@ When you finish working with the cluster, and want to clean up or destroy it. Se
 You can run transforms via docker image or using virtual environments. This [document](doc/quick-start/run-transform-venv.md) shows how to run a transform using virtual environment. You can follow this [document](doc/quick-start/run-transform-image.md) to run using docker image. 
 
 
-## 🎤 + 📄 Talks and Papers <a name = "talks_papers"></a>
 
-1. [Data-Prep-Kit: getting your data ready for LLM application development](https://arxiv.org/abs/2409.18164)
-2. [Granite Code Models: A Family of Open Foundation Models for Code Intelligence](https://arxiv.org/abs/2405.04324)
-3. [Scaling Granite Code Models to 128K Context](https://arxiv.org/abs/2407.13739)
-4. Talk on "Building Successful LLM Apps: The Power of high quality data" [Video](https://www.youtube.com/watch?v=u_2uiZBBVIE) [Slides](https://www.slideshare.net/slideshow/data_prep_techniques_challenges_methods-pdf-a190/271527890)
-5. Talk on "Hands on session for fine tuning LLMs" [Video](https://www.youtube.com/watch?v=VEHIA3E64DM)
-6. Talk on "Build your own data preparation module using data-prep-kit" [Video](https://www.youtube.com/watch?v=0WUMG6HIgMg)
 
+## Citations <a name = "citations"></a>
+
+If you use Data Prep Kit in your research, please cite our paper:
+
+```bash
+@misc{wood2024dataprepkitgettingdataready,
+      title={Data-Prep-Kit: getting your data ready for LLM application development}, 
+      author={David Wood and Boris Lublinsky and Alexy Roytman and Shivdeep Singh 
+      and Constantin Adam and Abdulhamid Adebayo and Sungeun An and Yuan Chi Chang 
+      and Xuan-Hong Dang and Nirmit Desai and Michele Dolfi and Hajar Emami-Gohari 
+      and Revital Eres and Takuya Goto and Dhiraj Joshi and Yan Koyfman 
+      and Mohammad Nassar and Hima Patel and Paramesvaran Selvam and Yousaf Shah  
+      and Saptha Surendran and Daiki Tsuzuku and Petros Zerfos and Shahrokh Daijavad},
+      year={2024},
+      eprint={2409.18164},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2409.18164}, 
+}
+```

@@ -12,6 +12,8 @@ on:
         tags:
             - "*"
         paths:
+            - ".make.*"
+            - "transforms/.make.transforms"
             - "transforms/universal/filter/**"
             - "data-processing-lib/**"
             - "!transforms/universal/filter/**/kfp_ray/**" # This is/will be tested in separate workflow
@@ -26,6 +28,8 @@ on:
             - "dev"
             - "releases/**"
         paths:
+            - ".make.*"
+            - "transforms/.make.transforms"
             - "transforms/universal/filter/**"
             - "data-processing-lib/**"
             - "!transforms/universal/filter/**/kfp_ray/**" # This is/will be tested in separate workflow
@@ -35,6 +39,11 @@ on:
             - "!**/doc/**"
             - "!**/images/**"
             - "!**.gitignore"
+
+# Taken from https://stackoverflow.com/questions/66335225/how-to-cancel-previous-runs-in-the-pr-when-you-push-new-commitsupdate-the-curre
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 jobs:
     check_if_push_image:

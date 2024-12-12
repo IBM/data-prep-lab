@@ -1,3 +1,15 @@
+# (C) Copyright IBM Corp. 2024.
+# Licensed under the Apache License, Version 2.0 (the “License”);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#  http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an “AS IS” BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
 import sys
 
 from data_processing.utils import ParamsUtils
@@ -127,7 +139,7 @@ def invoke_sub_workflow(
     input_folder = input_folder.replace('"', "'")
     output_folder = output_folder.replace('"', "'")
     data_s3_config = {"input_folder": input_folder, "output_folder": output_folder}
-    prm["data_s3_config"] = data_s3_config
+    prm["data_s3_config"] = ParamsUtils.convert_to_ast(data_s3_config)
     # Check if to skip preprocessing
     if _skip_task(prm):
         print("skipped preprocess step")
@@ -137,10 +149,6 @@ def invoke_sub_workflow(
         return output_folder
 
     _remove_unused_params(prm)
-
-    for key, value in prm.items():
-        if isinstance(value, dict):
-            prm[key] = ParamsUtils.convert_to_ast(value)
 
     print(f"start pipeline {name} with parameters {prm}")
 

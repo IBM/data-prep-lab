@@ -40,8 +40,11 @@ def compute_exec_params_func(
     runtime_pipeline_id: str,
     runtime_job_id: str,
     runtime_code_location: dict,
+    pdf2parquet_batch_size: int,
     pdf2parquet_do_table_structure: bool,
     pdf2parquet_do_ocr: bool,
+    pdf2parquet_ocr_engine: str,
+    pdf2parquet_bitmap_area_threshold: float,
 ) -> dict:
     from runtime_utils import KFPUtils
 
@@ -55,8 +58,11 @@ def compute_exec_params_func(
         "runtime_pipeline_id": runtime_pipeline_id,
         "runtime_job_id": runtime_job_id,
         "runtime_code_location": str(runtime_code_location),
+        "pdf2parquet_batch_size": pdf2parquet_batch_size,
         "pdf2parquet_do_table_structure": pdf2parquet_do_table_structure,
         "pdf2parquet_do_ocr": pdf2parquet_do_ocr,
+        "pdf2parquet_ocr_engine": pdf2parquet_ocr_engine,
+        "pdf2parquet_bitmap_area_threshold": pdf2parquet_bitmap_area_threshold,
     }
 
 
@@ -116,8 +122,11 @@ def pdf2parquet(
     runtime_pipeline_id: str = "pipeline_id",
     runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
     # pdf2parquet parameters
+    pdf2parquet_batch_size: int = -1,
     pdf2parquet_do_table_structure: bool = True,
     pdf2parquet_do_ocr: bool = False,
+    pdf2parquet_ocr_engine: str = "easyocr",
+    pdf2parquet_bitmap_area_threshold: float = 0.05,
     # additional parameters
     additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
 ):
@@ -154,8 +163,11 @@ def pdf2parquet(
     :param runtime_actor_options - actor options
     :param runtime_pipeline_id - pipeline id
     :param runtime_code_location - code location
+    :param pdf2parquet_batch_size - how many inputs to batch into one output table
     :param pdf2parquet_do_table_structure - run table structure model
     :param pdf2parquet_do_ocr - run ocr model
+    :param pdf2parquet_ocr_engine - which ocr engine
+    :param pdf2parquet_bitmap_area_threshold - threshold for bitmaps
     :return: None
     """
     # create clean_up task
@@ -174,8 +186,11 @@ def pdf2parquet(
             runtime_pipeline_id=runtime_pipeline_id,
             runtime_job_id=run_id,
             runtime_code_location=runtime_code_location,
+            pdf2parquet_batch_size=pdf2parquet_batch_size,
             pdf2parquet_do_table_structure=pdf2parquet_do_table_structure,
             pdf2parquet_do_ocr=pdf2parquet_do_ocr,
+            pdf2parquet_ocr_engine=pdf2parquet_ocr_engine,
+            pdf2parquet_bitmap_area_threshold=pdf2parquet_bitmap_area_threshold,
         )
         ComponentUtils.add_settings_to_component(compute_exec_params, ONE_HOUR_SEC * 2)
         # start Ray cluster

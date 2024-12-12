@@ -45,7 +45,7 @@ class DocChunkRayTransformConfiguration(RayTransformRuntimeConfiguration):
 
 
 # Class used by the notebooks to ingest binary files and create parquet files
-class DocChunkRuntime:
+class DocChunk:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

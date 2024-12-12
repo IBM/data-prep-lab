@@ -36,7 +36,7 @@ class HAPPythonTransformConfiguration(PythonTransformRuntimeConfiguration):
         super().__init__(transform_config=HAPTransformConfiguration())
 
 
-class HAPRuntime:
+class HAP:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

@@ -47,7 +47,7 @@ class DocQualityPythonTransformConfiguration(PythonTransformRuntimeConfiguration
 # Currently support basic to ingest binary files and create parquet files
 ## such as DocQualityRuntime(input_folder='input_folder',
 # #                          output_folder='output_folder').transform()
-class DocQualityRuntime:
+class DocQuality:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

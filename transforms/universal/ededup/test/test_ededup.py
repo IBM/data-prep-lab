@@ -15,9 +15,12 @@ from typing import Tuple
 
 from data_processing.test_support import get_tables_in_folder
 from data_processing.test_support.transform import AbstractTableTransformTest
-from ededup_transform_base import HashFilter
-from ededup_transform_python import EdedupTransform
-from ededup_transform_base import doc_column_name_key, int_column_name_key
+from dpk_ededup.transform_base import (
+    HashFilter,
+    doc_column_name_key,
+    int_column_name_key,
+)
+from dpk_ededup.transform_python import EdedupTransform
 
 
 class TestEdedupTransform(AbstractTableTransformTest):

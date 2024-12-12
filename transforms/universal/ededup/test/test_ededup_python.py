@@ -16,8 +16,11 @@ from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from ededup_transform_python import EdedupPythonTransformRuntimeConfiguration
-from ededup_transform_base import doc_column_name_cli_param, int_column_name_cli_param
+from dpk_ededup.transform_base import (
+    doc_column_name_cli_param,
+    int_column_name_cli_param,
+)
+from dpk_ededup.transform_python import EdedupPythonTransformRuntimeConfiguration
 
 
 class TestPythonEdedupTransform(AbstractTransformLauncherTest):

@@ -16,20 +16,10 @@ ARG DPK_WHEEL_FILE_NAME
 COPY --chown=dpk:root data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}
 
-COPY --chown=dpk:root src/ src/
-COPY --chown=dpk:root pyproject.toml pyproject.toml
-COPY --chown=dpk:root README.md README.md
+COPY --chown=dpk:root dpk_ededup/ dpk_ededup/
 COPY --chown=dpk:root requirements.txt requirements.txt
-
-RUN pip install --no-cache-dir -e .
-
-# copy source data
-COPY ./src/ededup_transform_python.py .
-COPY ./src/ededup_local.py local/
-
-# copy test
-COPY test/ test/
-COPY test-data/ test-data/
+COPY --chown=dpk:root README.md README.md
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Set environment
 ENV PYTHONPATH /home/dpk

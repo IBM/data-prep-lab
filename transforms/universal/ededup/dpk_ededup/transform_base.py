@@ -16,10 +16,7 @@ from typing import Any
 
 import pyarrow as pa
 from data_processing.data_access import SnapshotUtils
-from data_processing.transform import (
-    AbstractTableTransform,
-    TransformConfiguration,
-)
+from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import (
     GB,
     CLIArgumentProvider,
@@ -41,6 +38,7 @@ doc_column_name_cli_param = f"{cli_prefix}{doc_column_name_key}"
 int_column_name_cli_param = f"{cli_prefix}{int_column_name_key}"
 use_snapshot_cli_param = f"{cli_prefix}{use_snapshot_key}"
 snapshot_directory_cli_param = f"{cli_prefix}{snapshot_directory_key}"
+
 
 class HashFilter:
     """
@@ -218,12 +216,13 @@ class EdedupTransformConfigurationBase(TransformConfiguration):
             f"--{doc_column_name_cli_param}",
             type=str,
             default="contents",
-            help="name of the column containing document")
+            help="name of the column containing document",
+        )
         parser.add_argument(
             f"--{int_column_name_cli_param}",
             type=str,
             default="document_id",
-            help="name of the column containing document id"
+            help="name of the column containing document id",
         )
         parser.add_argument(
             f"--{use_snapshot_cli_param}",

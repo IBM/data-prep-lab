@@ -16,14 +16,17 @@ from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from ededup_transform_ray import EdedupRayTransformRuntimeConfiguration
-from ededup_transform_base import (
+from dpk_ededup.ray.transform import (
+    EdedupRayTransformRuntimeConfiguration,
+    hash_cpu_cli_params,
+    num_hashes_cli_params,
+)
+from dpk_ededup.transform_base import (
     doc_column_name_cli_param,
     int_column_name_cli_param,
-    use_snapshot_cli_param,
     snapshot_directory_cli_param,
+    use_snapshot_cli_param,
 )
-from ededup_transform_ray import hash_cpu_cli_params, num_hashes_cli_params
 
 
 class TestRayEdedupTransform(AbstractTransformLauncherTest):
@@ -33,7 +36,7 @@ class TestRayEdedupTransform(AbstractTransformLauncherTest):
     """
 
     def get_test_transform_fixtures(self) -> list[tuple]:
-        basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../test-data"))
+        basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../test-data-ray"))
         config = {
             "run_locally": True,
             # When running in ray, our Runtime's get_transform_config() method  will load the domains using

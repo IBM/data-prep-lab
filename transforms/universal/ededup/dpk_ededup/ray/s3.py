@@ -14,9 +14,15 @@ import sys
 
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from ededup_transform_ray import EdedupRayTransformRuntimeConfiguration
-from ededup_transform_base import doc_column_name_cli_param, int_column_name_cli_param
-from ededup_transform_ray import hash_cpu_cli_params, num_hashes_cli_params
+from dpk_ededup.ray.transform import (
+    EdedupRayTransformRuntimeConfiguration,
+    hash_cpu_cli_params,
+    num_hashes_cli_params,
+)
+from dpk_ededup.transform_base import (
+    doc_column_name_cli_param,
+    int_column_name_cli_param,
+)
 
 
 # create launcher

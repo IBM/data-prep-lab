@@ -37,7 +37,7 @@ class LangIdentificationPythonTransformConfiguration(PythonTransformRuntimeConfi
         super().__init__(transform_config=LangIdentificationTransformConfiguration())
 
 
-class LangIdRuntime:
+class LangId:
     def __init__(self, **kwargs):
         self.params = {}
         for key in kwargs:

@@ -16,19 +16,21 @@ TRANSFORM_NAME=$(shell basename `pwd`)
 
 
 run-cli-sample:
-	$(MAKE) RUN_FILE="-m dpk_$(TRANSFORM_NAME).transform_python" \
-                RUN_ARGS=" --data_local_config \"{ 'input_folder' : '../test-data/input', 'output_folder' : '../output'}\"  \
-                --docq_text_lang \"en\"	\
-				--docq_doc_content_column \"contents\"	\
-				--docq_bad_word_filepath \"../ldnoobw/en\" \
-                .transforms.run-src-file
-
+	make venv
+	source venv/bin/activate && \
+	$(PYTHON) -m dpk_$(TRANSFORM_NAME).transform_python \
+             --data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
+            --docq_text_lang "en"	\
+			--docq_doc_content_column "contents"	\
+			--docq_bad_word_filepath "dpk_doc_quality/ldnoobw/en"
+			
 
 run-ray-cli-sample: 
-	$(MAKE) RUN_FILE"-m dpk_$(TRANSFORM_NAME).ray.transform" \
-                RUN_ARGS=" --run_locally True --data_local_config \"{ 'input_folder' : '../test-data/input', 'output_folder' : '../output'}\"  \
-                --docq_text_lang \"en\"	\
-				--docq_doc_content_column \"contents\"	\
-				--docq_bad_word_filepath \"../ldnoobw/en\" \
-                .transforms.run-src-file
-
+	make venv
+	source venv/bin/activate && \
+	$(PYTHON) -m dpk_$(TRANSFORM_NAME).ray.transform \
+		--data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
+        --run_locally True \
+        --docq_text_lang "en" \
+		--docq_doc_content_column "contents"	\
+		--docq_bad_word_filepath "dpk_doc_quality/ldnoobw/en"

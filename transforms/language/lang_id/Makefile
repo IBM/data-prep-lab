@@ -17,6 +17,7 @@ TRANSFORM_NAME=$(shell basename `pwd`)
 
 run-cli-sample:
 	make venv
+	source venv/bin/activate && \
 	$(PYTHON) -m dpk_$(TRANSFORM_NAME).transform_python \
                 --data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
                 --lang_id_model_credential "ANY CREDENTIAL"	\
@@ -26,6 +27,7 @@ run-cli-sample:
 
 run-cli-ray-sample: 
 	make venv
+	source venv/bin/activate && \
 	$(PYTHON) -m dpk_$(TRANSFORM_NAME).ray.transform \
                 --run_locally True --data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
                 --lang_id_model_credential "ANY CREDENTIAL"	\

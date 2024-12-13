@@ -101,6 +101,7 @@ dpk_pdf2parquet = "language/pdf2parquet/dpk_pdf2parquet"
 dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
 
 dpk_doc_id = "universal/doc_id/dpk_doc_id"
+dpk_ededup = "universal/ededup/dpk_ededup"
 dpk_hap = "universal/hap/dpk_hap"
 dpk_tokenization = "universal/tokenization/dpk_tokenization"
 

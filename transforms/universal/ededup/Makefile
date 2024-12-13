@@ -15,6 +15,7 @@ TRANSFORM_NAME=$(shell basename `pwd`)
 
 run-cli-sample:
 	make venv
+	source venv/bin/activate && \
 	python -m dpk_$(TRANSFORM_NAME).ray.transform \
                 --run_locally True --data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
                 --ededup_num_hashes 2

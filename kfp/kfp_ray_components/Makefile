@@ -2,6 +2,12 @@
 # # know where they are running from.
 REPOROOT=../..
 
+ifeq ($(KFPv2), 1)
+        DOCKER_IMAGE_NAME=kfp-data-processing_v2
+else
+        DOCKER_IMAGE_NAME=kfp-data-processing
+endif
+
 # Include the common rules.
 # Use "make help" to see them.
 include $(REPOROOT)/.make.defaults
@@ -9,12 +15,6 @@ include $(REPOROOT)/.make.defaults
 #DOCKER_IMG=${DOCKER_HOSTNAME}/${DOCKER_NAMESPACE}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_VERSION}
 DOCKER_IMG=$(DOCKER_LOCAL_IMAGE)
 BASE_IMAGE=${RAY_BASE_IMAGE}
-
-ifeq ($(KFPv2), 1)
-        DOCKER_IMAGE_NAME=kfp-data-processing_v2
-else
-        DOCKER_IMAGE_NAME=kfp-data-processing
-endif
 
 .PHONY: .lib-src-image
 .lib-src-image:: .default.build-lib-wheel

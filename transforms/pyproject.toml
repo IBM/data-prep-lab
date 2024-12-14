@@ -54,6 +54,32 @@ all = { file = [
 "universal/web2parquet/requirements.txt"
 ]}
 
+language = { file = [
+##### pii_redactor seem to be failing UT
+## "language/pii_redactor/python/requirements.txt",
+
+"universal/fdedup/python/requirements.txt",
+"universal/profiler/python/requirements.txt",
+"universal/filter/python/requirements.txt",
+"universal/resize/python/requirements.txt",
+
+"language/doc_quality/requirements.txt",
+"language/doc_chunk/requirements.txt",
+##### Cannot have html2parquet until we solve
+## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
+## trafilatura 1.12.0 depends on lxml>=5.2.2; platform_system != "Darwin" or python_version > "3.8"
+## "language/html2parquet/requirements.txt",
+"language/lang_id/requirements.txt",
+"language/text_encoder/requirements.txt",
+"language/pdf2parquet/requirements.txt",
+
+"universal/doc_id/requirements.txt",
+"universal/ededup/requirements.txt",
+"universal/hap/requirements.txt",
+"universal/tokenization/requirements.txt",
+"universal/web2parquet/requirements.txt"
+]}
+
 # pyproject.toml must be in a parent and cannot be in sibling
 # i.e. Cannot access '../code/proglang_select/python/..
 
@@ -99,7 +125,6 @@ dpk_html2parquet = "language/html2parquet/dpk_html2parquet"
 dpk_lang_id = "language/lang_id/dpk_lang_id"
 dpk_pdf2parquet = "language/pdf2parquet/dpk_pdf2parquet"
 dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
-
 dpk_doc_id = "universal/doc_id/dpk_doc_id"
 dpk_ededup = "universal/ededup/dpk_ededup"
 dpk_hap = "universal/hap/dpk_hap"

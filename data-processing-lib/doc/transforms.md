@@ -9,9 +9,12 @@ There are currently two types of transforms defined in DPK:
 
 * [AbstractBinaryTransform](../python/src/data_processing/transform/binary_transform.py) which is a base 
 class for all data transforms. Data transforms convert a file of data producing zero or more data files 
-and metadata. A specific class of the binary transform is 
+and metadata. Specific classes of the binary transform are
 [AbstractTableTransform](../python/src/data_processing/transform/table_transform.py) that consumes and produces
 data files containing [pyarrow tables](https://arrow.apache.org/docs/python/generated/pyarrow.Table.html)
+and [AbstractPipelineTransform](../python/src/data_processing/transform/pipeline_transform.py) that creates 
+pipelined execution of one or more transforms. For more information on pipelined transforms reffer to 
+[this](pipelined_transform.md)
 * [AbstractFolderTransform](../python/src/data_processing/transform/folder_transform.py) which is a base
 class consuming a folder (that can contain an arbitrary set of files, that need to be processed together)
 and proces zero or more data files and metadata.

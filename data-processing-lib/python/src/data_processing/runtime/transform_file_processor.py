@@ -48,6 +48,7 @@ class AbstractTransformFileProcessor:
         # Add data access and statistics to the processor parameters
         self.transform_params = transform_parameters
         self.transform_params["data_access"] = self.data_access
+        self.transform_params["data_access_factory"] = data_access_factory
         self.is_folder = is_folder
 
     def process_file(self, f_name: str) -> None:
@@ -103,10 +104,10 @@ class AbstractTransformFileProcessor:
         the hook for them to return back locally stored data and their statistics.
         :return: None
         """
-        if self.last_file_name is None or self.is_folder:
+        if self.last_file_name is None:
             # for some reason a given worker never processed anything. Happens in testing
             # when the amount of workers is greater than the amount of files
-            self.logger.debug("skipping flush, no name for file is defined or this is a folder transform")
+            self.logger.debug("skipping flush, no name for file is defined")
             return
         try:
             t_start = time.time()
@@ -226,7 +227,7 @@ class AbstractTransformFileProcessor:
     def _publish_stats(self, stats: dict[str, Any]) -> None:
         """
         Publishing execution statistics
-        :param stats: Statistics
+        :param stats: dictionary
         :return: None
         """
-        raise ValueError("must be implemented by subclass")
+        raise NotImplemented("must be implemented by subclass")

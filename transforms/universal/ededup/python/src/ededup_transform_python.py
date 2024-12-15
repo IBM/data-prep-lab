@@ -65,8 +65,6 @@ class EdedupRuntime(DefaultPythonTransformRuntime):
         self.filter = None
         self.logger = get_logger(__name__)
 
-
-
     def get_transform_config(
         self, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics, files: list[str]
     ) -> dict[str, Any]:

@@ -7,5 +7,14 @@ from data_processing.test_support.transform.noop_transform import (
 )
 from data_processing.test_support.transform.noop_folder_transform import (
     NOOPFolderTransform,
-    NOOPFolderPythonTransformConfiguration
+    NOOPTransformConfiguration,
+    NOOPFolderPythonTransformConfiguration,
+)
+from data_processing.test_support.transform.resize_transform import (
+    ResizeTransform,
+    ResizePythonTransformConfiguration,
+)
+
+from data_processing.test_support.transform.pipeline_transform import (
+    ResizeNOOPPythonTransformConfiguration,
 )

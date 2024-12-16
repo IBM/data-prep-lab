@@ -228,8 +228,9 @@ class UASTParser():
         return
 
     # Traversing through the AST to create nodes recursively.
-    def _dfs(self, AST_node, parent) :
-        if (AST_node.type in self.rules) :
+    def _dfs(self, AST_node, parent):
+
+        if (AST_node.type in self.rules):
             ast_snippet = AST_node.text.decode("utf8")
             node_type = self.rules[AST_node.type]["uast_node_type"]
             exec_string = self.rules[AST_node.type]["extractor"]
@@ -269,3 +270,31 @@ class UASTParser():
             return self.grammar[node_type]["keyword"] + " " + self.extracted        
         except Exception as e:
             print(e)
+
+def uast_read(jsonstring):
+    """
+    Reads an input json string into UAST class object
+    """
+    uast = UAST()
+    if jsonstring is not None and jsonstring != 'null':
+        uast.load_from_json_string(jsonstring)
+        return uast
+    return None
+
+def extract_ccr(uast):
+    """
+    Calculates the code to comment ratio given an UAST object as input
+    """
+    if uast is not None:
+        total_comment_loc = 0
+        for node_idx in uast.nodes:
+            node = uast.get_node(node_idx)
+            if node.node_type == 'uast_comment':
+                total_comment_loc += node.metadata.get("loc_original_code", 0)
+            elif node.node_type == 'uast_root':
+                loc_snippet = node.metadata.get("loc_snippet", 0)
+        if total_comment_loc > 0:
+            return loc_snippet / total_comment_loc
+        else:
+            return None 
+    return None

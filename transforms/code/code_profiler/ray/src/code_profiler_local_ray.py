@@ -16,18 +16,16 @@ from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
 from code_profiler_transform_ray import CodeProfilerRayTransformConfiguration
 
-# Define default input and output directories relative to the script's location
-
 # create parameters
-input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
-output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "expected"))
+input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../", "../", "input"))
+output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../", "../", "output"))
 
 # Create local configuration
 local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,
-    "contents": "Contents",
-    "language": "Language"
+    "contents": "contents",
+    "language": "language"
 }
 worker_options = {"num_cpus": 1}
 # Code location and parameters
@@ -39,7 +37,7 @@ params = {
     "data_local_config": ParamsUtils.convert_to_ast(local_conf),
     # orchestrator
     "runtime_worker_options": ParamsUtils.convert_to_ast(worker_options),
-    "runtime_num_workers": 2,
+    "runtime_num_workers": 3,
     "runtime_pipeline_id": "pipeline_id",
     "runtime_job_id": "job_id",
     "runtime_creation_delay": 0,

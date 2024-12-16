@@ -79,8 +79,8 @@ conda install gxx_linux-64
 Next, install the data prep toolkit library. This library installs both the python and ray versions of the transforms. For better management of dependencies, it is recommended to install the same tagged version of both the library and the transform. 
 
 ```bash
-pip3 install  'data-prep-toolkit[ray]==0.2.2.dev1'
-pip3 install  'data-prep-toolkit-transforms[ray,all]==0.2.2.dev1'
+pip3 install  'data-prep-toolkit[ray]==0.2.3.dev0'
+pip3 install  'data-prep-toolkit-transforms[ray,all]==0.2.3.dev1'
 pip3 install jupyterlab   ipykernel  ipywidgets
 
 ## install custom kernel
@@ -144,7 +144,7 @@ The matrix below shows the the combination of modules and supported runtimes. Al
 | [Web to Parquet](transforms/universal/web2parquet/README.md)                         | :white_check_mark: |                    |                    |                    |         
 | **Universal (Code & Language)**                                                      |                    |                    |                    |                    | 
 | [Exact dedup filter](transforms/universal/ededup/ray/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      |                    | :white_check_mark: |                    | :white_check_mark: |
+| [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Unique ID annotation](transforms/universal/doc_id/ray/README.md)                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Filter on annotations](transforms/universal/filter/python/README.md)                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Profiler](transforms/universal/profiler/ray/README.md)                              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |

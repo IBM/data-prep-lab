@@ -213,7 +213,7 @@ To see results of the transform.
 
 ### Code example
 
-TBD (link to the notebook will be provided)
+This is a [sample notebook](../fdedup_python.ipynb) that shows how to invoke the python fuzzy dedup transform.
 
 ### Transforming data using the transform image
 

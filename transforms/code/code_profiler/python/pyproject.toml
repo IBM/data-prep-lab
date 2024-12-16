@@ -1,12 +1,13 @@
 [project]
 name = "dpk_code_profiler_transform_python"
-version = "0.2.3.dev0"
+version = "0.2.3.dev2"
 requires-python = ">=3.10,<3.13"
 description = "Code Profiler Python Transform"
 license = {text = "Apache-2.0"}
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
     { name = "Pankaj Thorat", email = "pankaj.thorat@ibm.com" },
+    { name = "Aishwariya Chakraborty", email = "aishwariya.chakraborty1@ibm.com" },
 ]
 
 dynamic = ["dependencies"]

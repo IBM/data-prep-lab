@@ -17,6 +17,18 @@ the options provided by
 the [python launcher](../../../../data-processing-lib/doc/python-launcher-options.md).
 
 ### Running the samples
+
+The code profiler can be run on mach-arm64 and x86_64 host architecture.
+Depending on your host architecture, please change the `RUNTIME_HOST_ARCH` in the Makefile.
+```
+# values possible mach-arm64, x86_64
+export RUNTIME_HOST_ARCH=x86_64
+```
+If you are using mac, you may need to permit your Mac to load the .so from the security settings. Generally, you get the pop-up under the tab security while running the transform.
+
+![alt text](image.png)
+
+
 To run the samples, use the following `make` targets
 
 * `run-local-ray-sample` - runs src/code_profiler_local_ray.py

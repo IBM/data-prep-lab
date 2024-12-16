@@ -51,6 +51,10 @@ To use the transform image to transform your data, please refer to the
 [running images quickstart](../../../../doc/quick-start/run-transform-image.md),
 substituting the name of this transform image and runtime as appropriate.
 
+## Code Example
+
+This is a [sample notebook](../fdedup_ray.ipynb) that shows how to invoke the ray fuzzy dedup transform.
+
 ## Testing
 
 For testing fuzzy deduplication in a ray runtime, use the following `make` targets. To launch integration tests

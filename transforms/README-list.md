@@ -39,6 +39,10 @@ Note: This list includes the transforms that were part of the release starting w
    
 ## Release notes:
 
+### 0.2.3.dev1 
+* code_profiler
+### 0.2.3.dev0 
+* fdedup
 ### 0.2.2.dev3 
 * web2parquet
 ### 0.2.2.dev2

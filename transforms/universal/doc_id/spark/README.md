@@ -6,23 +6,25 @@ testing and IDE set up.
 
 ## Summary 
 
-This transform assigns a unique integer ID to each row in a Spark DataFrame. It relies on the [monotonically_increasing_id](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.functions.monotonically_increasing_id.html) pyspark function to generate the unique integer IDs. As described in the documentation of this function:
+This transform assigns a unique integer ID to each row in a Spark DataFrame. It relies on the
+[monotonically_increasing_id](https://spark.apache.org/docs/3.1.3/api/python/reference/api/pyspark.sql.functions.monotonically_increasing_id.html)
+pyspark function to generate the unique integer IDs. As described in the documentation of this function:
 > The generated ID is guaranteed to be monotonically increasing and unique, but not consecutive. 
 
 ## Configuration and command line Options
 
-The set of dictionary keys holding [DocIdTransform](src/doc_id_transform.py) 
-configuration for values are as follows:
-
-* _doc_id_column_name_ - specifies the name of the DataFrame column that holds the generated document IDs.
+Document ID configuration and command line options are the same as for the
+[base python transform](../python/README.md).
 
 ## Running
-You can run the [doc_id_local.py](src/doc_id_local_spark.py) (spark-based implementation) to transform the `test1.parquet` file in [test input data](test-data/input) to an `output` directory.  The directory will contain both the new annotated `test1.parquet` file and the `metadata.json` file.
+You can run the [doc_id_local.py](src/doc_id_local_spark.py) (spark-based implementation) to transform the
+`test1.parquet` file in [test input data](test-data/input) to an `output` directory.  The directory will contain both
+the new annotated `test1.parquet` file and the `metadata.json` file.
 
 ### Launched Command Line Options 
-When running the transform with the Spark launcher (i.e. SparkTransformLauncher),
-the following command line arguments are available in addition to 
-the options provided by the [python launcher](../../../../data-processing-lib/doc/python-launcher-options.md).
+When running the transform with the Spark launcher (i.e. SparkTransformLauncher), the following command line arguments
+are available in addition to the options provided by the
+[python launcher](../../../../data-processing-lib/doc/python-launcher-options.md).
 
 ```
   --doc_id_column_name DOC_ID_COLUMN_NAME

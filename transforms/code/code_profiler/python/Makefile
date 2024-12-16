@@ -35,7 +35,7 @@ setup:: .transforms.setup
 set-versions:
 	$(MAKE) TRANSFORM_PYTHON_VERSION=$(CODE_PROFILER_PYTHON_VERSION) TOML_VERSION=$(CODE_PROFILER_PYTHON_VERSION) .transforms.set-versions 
         
-build-dist:: .defaults.build-dist 
+build-dist:: .defaults.build-dist
 
 publish-dist:: .defaults.publish-dist
 
@@ -51,5 +51,5 @@ run-local-sample: .transforms.run-local-sample
 
 run-local-python-sample:
 	$(MAKE) RUN_FILE=code_profiler_local_python.py \
-	RUN_ARGS="--content 'Contents' --language 'Language'" \
+	RUN_ARGS="--content 'contents' --language 'language'" \
 	.transforms.run-local-python-sample

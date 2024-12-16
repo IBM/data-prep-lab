@@ -23,6 +23,10 @@ from typing import Any, Optional
 
 import filetype
 import pandas as pd
+try:
+    from pandas.io.json import ujson_dumps
+except:
+    from pandas.io.json import dumps as ujson_dumps
 import pyarrow as pa
 import numpy as np
 from data_processing.transform import AbstractBinaryTransform, TransformConfiguration
@@ -230,7 +234,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
         elif self.contents_type == pdf2parquet_contents_types.TEXT:
             content_string = doc.export_to_text()
         elif self.contents_type == pdf2parquet_contents_types.JSON:
-            content_string = pd.io.json.ujson_dumps(
+            content_string = ujson_dumps(
                 doc.export_to_dict(), double_precision=self.double_precision
             )
         else:

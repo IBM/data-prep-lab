@@ -24,8 +24,8 @@ output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "../", "
 local_conf = {
     "input_folder": input_folder,
     "output_folder": output_folder,
-    "contents": "Contents",
-    "language": "Language"
+    "contents": "contents",
+    "language": "language"
 }
 params = {
     # Data access. Only required parameters are specified

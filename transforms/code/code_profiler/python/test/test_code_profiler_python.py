@@ -13,10 +13,10 @@ import os
 
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from code_profiler_transform_python import CodeProfilerPythonTransformConfiguration
-from data_processing.test_support import get_tables_in_folder
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
+
 class TestCodeProfilerTransformPython(AbstractTransformLauncherTest):
     """
     Extends the super-class to define the test data for the tests defined there.
@@ -30,9 +30,9 @@ class TestCodeProfilerTransformPython(AbstractTransformLauncherTest):
         input_dir = os.path.join(src_file_dir, "../test-data/input")
         expected_dir = os.path.join(src_file_dir, "../test-data/expected/python")
         transform_config = {
-            "CodeProfiler_contents": "Contents",
-            "CodeProfiler_language": "Language",
-        }
+            "contents": "contents",
+            "language": "language"}
+
         fixtures.append(
             (
                 launcher,

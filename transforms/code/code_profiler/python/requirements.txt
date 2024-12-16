@@ -1,4 +1,4 @@
-data-prep-toolkit>=0.2.3.dev0
+data-prep-toolkit>=0.2.3.dev2
 parameterized
 pandas
 aiolimiter==1.1.0
@@ -96,3 +96,4 @@ urllib3==2.2.2
 uuid
 wcwidth==0.2.13
 wrapt==1.16.0
+plotly==5.15.0

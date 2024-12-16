@@ -50,6 +50,8 @@ run-cli-sample: .transforms.run-cli-ray-sample
 
 run-local-sample: .transforms.run-local-ray-sample
 
+run-s3-sample: .transforms.run-s3-ray-sample
+
 minio-start:	.minio-start
 
 kind-load-image:: .transforms.kind-load-image

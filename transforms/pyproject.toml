@@ -1,6 +1,6 @@
 [project]
 name = "data_prep_toolkit_transforms"
-version = "0.2.3.dev1"
+version = "0.2.3.dev3"
 requires-python = ">=3.10,<3.13"
 keywords = ["transforms", "data preprocessing", "data preparation", "llm", "generative", "ai", "fine-tuning", "llmapps" ]
 description = "Data Preparation Toolkit Transforms using Ray"
@@ -60,6 +60,7 @@ header_cleanser = {file =  ["code/header_cleanser/python/requirements.txt"]}
 license_select = { file = ["code/license_select/python/requirements.txt"]} 
 code_quality = { file = ["code/code_quality/python/requirements.txt"]} 
 code2parquet = {file =  ["code/code2parquet/python/requirements.txt"]}
+code_profiler = { file = ["code/code_profiler/python/requirements.txt"]} 
 
 doc_quality = { file = ["language/doc_quality/python/requirements.txt"]} 
 doc_chunk = { file = ["language/doc_chunk/requirements.txt"]} 
@@ -82,8 +83,8 @@ web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 # Does not seem to work for our custom layout
 # copy all files to a single src and let automatic discovery find them
 
-#[tool.setuptools.package-data]
-#"*" = ["*.txt"]
+[tool.setuptools.package-data]
+"*" = ["*.txt"]
 
 #[tool.setuptools.packages.find]
 #where = ["src"]

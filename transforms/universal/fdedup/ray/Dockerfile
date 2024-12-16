@@ -35,6 +35,9 @@ COPY --chown=ray:users ./src/signature_calc_local_ray.py local/fdedup_local_ray.
 COPY test/ test/
 COPY test-data/ test-data/
 
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
 USER root
 RUN chmod a+rwx /home/ray
 USER ray

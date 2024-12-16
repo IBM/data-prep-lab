@@ -29,6 +29,9 @@ COPY src/license_select_local_ray.py local/
 COPY test/ test/
 COPY test-data/ test-data/
 
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
 # Put these at the end since they seem to upset the docker cache.
 ARG BUILD_DATE
 ARG GIT_COMMIT

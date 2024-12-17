@@ -1,2 +1,0 @@
-data-prep-toolkit>=0.2.3.dev2
-trafilatura==1.12.0

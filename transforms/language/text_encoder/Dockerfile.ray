@@ -1,0 +1,28 @@
+ARG BASE_IMAGE=docker.io/rayproject/ray:2.24.0-py310
+FROM ${BASE_IMAGE}
+
+# install pytest
+RUN pip install --no-cache-dir pytest
+
+ARG PIP_INSTALL_EXTRA_ARGS
+ARG DPK_WHEEL_FILE_NAME
+# Copy and install data processing libraries 
+# These are expected to be placed in the docker context before this is run (see the make image).
+COPY --chown=ray:users data-processing-dist data-processing-dist
+RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
+
+COPY --chown=ray:users dpk_text_encoder/ dpk_text_encoder/
+COPY --chown=ray:users requirements.txt requirements.txt
+RUN pip install ${PIP_INSTALL_EXTRA_ARGS} --no-cache-dir -r requirements.txt
+
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
+# Set environment
+ENV PYTHONPATH /home/ray
+
+# Put these at the end since they seem to upset the docker cache.
+ARG BUILD_DATE
+ARG GIT_COMMIT
+LABEL build-date=$BUILD_DATE
+LABEL git-commit=$GIT_COMMIT

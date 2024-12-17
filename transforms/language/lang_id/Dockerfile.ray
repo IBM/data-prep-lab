@@ -1,0 +1,44 @@
+ARG BASE_IMAGE=docker.io/rayproject/ray:2.24.0-py310
+
+FROM ${BASE_IMAGE}
+
+RUN pip install --upgrade --no-cache-dir pip 
+
+# install pytest
+RUN pip install --no-cache-dir pytest
+ARG DPK_WHEEL_FILE_NAME
+
+# set up environment required to install and use huggingface and fasttext
+USER root
+RUN sudo apt update && sudo apt install gcc g++ -y
+RUN mkdir -p /home/ray/.cache/huggingface/hub && chmod -R 777 /home/ray/.cache/huggingface/hub
+USER ray
+
+# Copy and install data processing libraries 
+# These are expected to be placed in the docker context before this is run (see the make image).
+COPY --chown=ray:users data-processing-dist data-processing-dist
+RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
+
+
+COPY --chown=ray:users dpk_lang_id/ dpk_lang_id/
+COPY --chown=ray:users requirements.txt requirements.txt 
+RUN pip install --no-cache-dir -r requirements.txt
+
+# clean up apt
+USER root 
+RUN sudo apt remove gcc g++ -y \
+    && sudo apt clean \
+    && sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+USER ray
+
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
+# Set environment
+ENV PYTHONPATH /home/ray
+
+# Put these at the end since they seem to upset the docker cache.
+ARG BUILD_DATE
+ARG GIT_COMMIT
+LABEL build-date=$BUILD_DATE
+LABEL git-commit=$GIT_COMMIT

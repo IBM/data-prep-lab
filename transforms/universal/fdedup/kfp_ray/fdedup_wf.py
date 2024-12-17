@@ -34,7 +34,7 @@ GET_DUPLICATE_LIST_EXEC_SCRIPT_NAME: str = "get_duplicate_list_transform_ray.py"
 DATA_CLEANING_EXEC_SCRIPT_NAME: str = "data_cleaning_transform_ray.py"
 
 # components
-base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:latest"
+base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:0.2.3"
 
 # path to kfp component specifications files
 component_spec_path = "../../../../kfp/kfp_ray_components/"

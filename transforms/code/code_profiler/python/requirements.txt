@@ -1,4 +1,4 @@
-data-prep-toolkit>=0.2.3.dev2
+data-prep-toolkit>=0.2.3
 parameterized
 pandas
 aiolimiter==1.1.0

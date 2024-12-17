@@ -1,3 +1,3 @@
-dpk-html2parquet-transform-python==0.2.3.dev2
-data-prep-toolkit[ray]>=0.2.3.dev2
+dpk-html2parquet-transform-python==0.2.3
+data-prep-toolkit[ray]>=0.2.3
 trafilatura==1.12.0

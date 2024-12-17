@@ -33,6 +33,9 @@ COPY src/filter_local_ray.py local/
 COPY test/ test/
 COPY test-data/ test-data/
 
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
 # Set environment
 ENV PYTHONPATH /home/ray
 

@@ -30,6 +30,9 @@ COPY ./src /pipelines/component/src
 # Set environment
 ENV KFP_v2=$KFP_v2
 
+# Grant non-root users the necessary permissions to the ray directory
+RUN chmod 755 /home/ray
+
 # Put these at the end since they seem to upset the docker cache.
 ARG BUILD_DATE
 ARG GIT_COMMIT

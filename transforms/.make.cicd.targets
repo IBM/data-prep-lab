@@ -34,19 +34,19 @@ YAML_WF := $(patsubst %.py, %.yaml, ${PYTHON_WF})
 
 workflow-venv: .check_python_version ${WORKFLOW_VENV_ACTIVATE}
 
-workflow-venv: .check_python_version ${WORKFLOW_VENV_ACTIVATE}
-
-.PHONY: kfp-workflow-clean
-kfp-workflow-clean:
+.PHONY: workflow-clean
+workflow-clean:
 	@# Help: Clean up the virtual environment.
 	rm -rf ${REPOROOT}/transforms/venv
 
 .PHONY: kfp-workflow-build
 kfp-workflow-build: workflow-venv
+	cd kfp_ray
 	$(MAKE) $(YAML_WF)
 
 .PHONY: kfp-workflow-test
 kfp-workflow-test: kfp-workflow-build
+	cd kfp_ray
 	$(MAKE) TRANSFORM_SRC=${SRC_DIR} \
 		TRANSFORM_RUNTIME=$(TRANSFORM_RUNTIME) \
 		TRANSFORM_NAME=$(TRANSFORM_NAME) \
@@ -54,8 +54,9 @@ kfp-workflow-test: kfp-workflow-build
 		DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) \
 		PIPELINE_FILE=$(TRANSFORM_NAME)_wf.yaml .workflows.test-pipeline
 
-.PHONY: --workflow-upload
---workflow-upload:
+.PHONY: kfp-workflow-upload
+kfp-workflow-upload:
+	cd kfp_ray
 	@for file in $(YAML_WF); do \
 		$(MAKE) .workflows.upload-pipeline PIPELINE_FILE=$$file; \
 	done
@@ -176,28 +177,22 @@ setup:: .transforms.setup
 
 kind-load-image:: .transforms.kind-load-image
 
-.PHONY: workflow-venv
-workflow-venv:
-	if [ -e kfp_ray ]; then                 \
-	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-venv;   \
-	fi
-
 .PHONY: workflow-test
 workflow-test:
 	if [ -e kfp_ray ]; then                 \
-	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-test;   \
+	    $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-test;   \
 	fi
 
 .PHONY: workflow-upload
 workflow-upload:
 	if [ -e kfp_ray ]; then                 \
-	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-upload; \
+	    $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-upload; \
 	fi
 
 .PHONY: workflow-build
 workflow-build:
 	if [ -e kfp_ray ]; then                 \
-		cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-build; \
+		$(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-build; \
 	fi
 
 

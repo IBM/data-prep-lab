@@ -176,28 +176,28 @@ setup:: .transforms.setup
 
 kind-load-image:: .transforms.kind-load-image
 
-.PHONY: workflow-vent
+.PHONY: workflow-venv
 workflow-venv:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-venv;   \
+	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-venv;   \
 	fi
 
 .PHONY: workflow-test
 workflow-test:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-test;   \
+	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-test;   \
 	fi
 
 .PHONY: workflow-upload
 workflow-upload:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-upload; \
+	    cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-upload; \
 	fi
 
 .PHONY: workflow-build
 workflow-build:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-build; \
+		cd kfp_ray && $(MAKE) TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-build; \
 	fi
 
 

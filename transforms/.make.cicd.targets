@@ -46,7 +46,6 @@ kfp-workflow-build: workflow-venv
 
 .PHONY: kfp-workflow-test
 kfp-workflow-test: kfp-workflow-build
-	cd kfp_ray
 	$(MAKE) TRANSFORM_SRC=${SRC_DIR} \
 		TRANSFORM_RUNTIME=$(TRANSFORM_RUNTIME) \
 		TRANSFORM_NAME=$(TRANSFORM_NAME) \
@@ -56,7 +55,6 @@ kfp-workflow-test: kfp-workflow-build
 
 .PHONY: kfp-workflow-upload
 kfp-workflow-upload:
-	cd kfp_ray
 	@for file in $(YAML_WF); do \
 		$(MAKE) .workflows.upload-pipeline PIPELINE_FILE=$$file; \
 	done

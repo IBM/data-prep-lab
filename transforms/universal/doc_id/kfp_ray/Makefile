@@ -27,21 +27,6 @@ clean:
 	@# Help: Clean up the virtual environment.
 	rm -rf ${REPOROOT}/transforms/venv
 
-venv::
-
-build::
-
-test::
-
-test-src::
-
-test-image::
-
-publish::
-
-image::
-
-load-image::
 
 .PHONY: workflow-build
 workflow-build: workflow-venv

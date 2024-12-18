@@ -17,7 +17,6 @@ COPY --chown=dpk:root dpk_doc_id/ dpk_doc_id/
 COPY --chown=dpk:root requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-
 # Set environment
 ENV PYTHONPATH /home/dpk
 

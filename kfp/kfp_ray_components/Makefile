@@ -15,6 +15,7 @@ ifeq ($(KFPv2), 1)
 else
         DOCKER_IMAGE_NAME=kfp-data-processing
 endif
+DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION)
 
 .PHONY: .lib-src-image
 .lib-src-image:: .default.build-lib-wheel

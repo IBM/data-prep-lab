@@ -36,17 +36,17 @@ workflow-venv: .check_python_version ${WORKFLOW_VENV_ACTIVATE}
 
 workflow-venv: .check_python_version ${WORKFLOW_VENV_ACTIVATE}
 
-.PHONY: --workflow-clean
---workflow-clean:
+.PHONY: kfp-workflow-clean
+kfp-workflow-clean:
 	@# Help: Clean up the virtual environment.
 	rm -rf ${REPOROOT}/transforms/venv
 
-.PHONY: --workflow-build
---workflow-build: workflow-venv
+.PHONY: kfp-workflow-build
+kfp-workflow-build: workflow-venv
 	$(MAKE) $(YAML_WF)
 
-.PHONY: --workflow-test
---workflow-test: workflow-build
+.PHONY: kfp-workflow-test
+kfp-workflow-test: kfp-workflow-build
 	$(MAKE) TRANSFORM_SRC=${SRC_DIR} \
 		TRANSFORM_RUNTIME=$(TRANSFORM_RUNTIME) \
 		TRANSFORM_NAME=$(TRANSFORM_NAME) \
@@ -179,25 +179,25 @@ kind-load-image:: .transforms.kind-load-image
 .PHONY: workflow-vent
 workflow-venv:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) --workflow-venv;   \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-venv;   \
 	fi
 
 .PHONY: workflow-test
 workflow-test:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) --workflow-test;   \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-test;   \
 	fi
 
 .PHONY: workflow-upload
 workflow-upload:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) --workflow-upload; \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-upload; \
 	fi
 
 .PHONY: workflow-build
 workflow-build:
 	if [ -e kfp_ray ]; then                 \
-	    $(MAKE) -C  kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) --workflow-build; \
+	    $(MAKE) -C kfp_ray TRANSFORM_NAME=$(TRANSFORM_NAME) kfp-workflow-build; \
 	fi
 
 

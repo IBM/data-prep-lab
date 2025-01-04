@@ -18,12 +18,12 @@ from data_processing.runtime.pure_python import (
     PythonTransformLauncher,
     PythonTransformRuntimeConfiguration,
 )
-from data_processing.utils import UnrecoverableException
 from data_processing.transform import TransformStatistics
+from data_processing.utils import UnrecoverableException
 from profiler_transform_base import (
+    DataAggregator,
     ProfilerTransformBase,
     ProfilerTransformConfigurationBase,
-    DataAggregator,
 )
 
 
@@ -59,12 +59,16 @@ class ProfilerRuntime(DefaultPythonTransformRuntime):
 
     def __init__(self, params: dict[str, Any]):
         from data_processing.utils import get_logger
+
         super().__init__(params=params)
         self.aggregator = None
         self.logger = get_logger(__name__)
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: TransformStatistics,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Get the dictionary of configuration that will be provided to the transform's initializer.

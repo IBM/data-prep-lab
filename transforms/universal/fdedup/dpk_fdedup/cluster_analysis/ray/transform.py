@@ -13,17 +13,17 @@
 import os
 from typing import Any
 
-from dpk_fdedup.cluster_analysis.transform import (
-    ClusterAnalysisTransformConfiguration,
-    num_bands_key,
-    num_segments_key,
-)
 from data_processing.data_access import DataAccess
 from data_processing.utils import CLIArgumentProvider, get_logger
 from data_processing_ray.runtime.ray import (
     DefaultRayTransformRuntime,
     RayTransformLauncher,
     RayTransformRuntimeConfiguration,
+)
+from dpk_fdedup.cluster_analysis.transform import (
+    ClusterAnalysisTransformConfiguration,
+    num_bands_key,
+    num_segments_key,
 )
 
 

@@ -12,10 +12,9 @@
 
 import os
 
-from data_processing.data_access import DataAccessLocal, DataAccessFactory
-from profiler_transform_base import DataAggregator
+from data_processing.data_access import DataAccessFactory, DataAccessLocal
+from profiler_transform_base import DataAggregator, doc_column_name_key
 from profiler_transform_python import ProfilerTransform
-from profiler_transform_base import doc_column_name_key
 
 
 # create parameters
@@ -26,8 +25,10 @@ local_conf = {
     "output_folder": output_folder,
 }
 
-profiler_params = {doc_column_name_key: "contents",
-                   "aggregator": DataAggregator({"data_access_factory": DataAccessFactory()})}
+profiler_params = {
+    doc_column_name_key: "contents",
+    "aggregator": DataAggregator({"data_access_factory": DataAccessFactory()}),
+}
 
 if __name__ == "__main__":
     # Here we show how to run outside of ray

@@ -48,6 +48,7 @@ ALLOW_NO_LICENSE_CLI_KEY = f"{CLI_PREFIX}{ALLOW_NO_LICENSE_KEY}"
 LICENSE_COLUMN_DEFAULT = "license"
 LICENSES_KEY = "licenses"
 
+
 def _get_supported_licenses(license_file: str, data_access: DataAccess) -> list[str]:
     logger.info(f"Getting supported licenses from file {license_file}")
     licenses_list = None
@@ -119,6 +120,7 @@ class LicenseSelectTransform(AbstractTableTransform):
         new_table = self.transformer.transform(table)
         return [new_table], {}
 
+
 class LicenseSelectTransformConfiguration(TransformConfiguration):
     def __init__(self):
         super().__init__(name="license_select", transform_class=LicenseSelectTransform)
@@ -159,13 +161,13 @@ class LicenseSelectTransformConfiguration(TransformConfiguration):
     def apply_input_params(self, args: Namespace) -> bool:
         if not self.daf.apply_input_params(args):
             return False
-        
+
         captured = CLIArgumentProvider.capture_parameters(args, CLI_PREFIX, False)
         license_column_name = captured.get(LICENSE_COLUMN_NAME_KEY)
         allow_licenses = captured.get(ALLOW_NO_LICENSE_KEY)
         deny_licenses = captured.get(DENY_LICENSES_KEY, False)
         licenses_file = captured.get(LICENSES_FILE_KEY)
-        
+
         # Read licenses from allow-list or deny-list
         data_access = self.daf.create_data_access()
         licenses = _get_supported_licenses(licenses_file, data_access)

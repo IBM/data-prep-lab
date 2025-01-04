@@ -434,7 +434,12 @@ def add_files_info_to_analysis_obj(analysis, files_list):
     return analysis
 
 
-def build_edges(files_df_org, logger: Logger, title_column_name="new_title", language_column_name="language"):
+def build_edges(
+    files_df_org,
+    logger: Logger,
+    title_column_name="new_title",
+    language_column_name="language",
+):
     full_repo_name = files_df_org.repo_name.to_list()[0]
     analysis = get_analysis_obj(full_repo_name)
     files_df = add_repo_path(files_df_org, analysis, title_column_name)

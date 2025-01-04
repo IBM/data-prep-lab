@@ -14,8 +14,8 @@ import os
 
 from data_processing.runtime import AbstractTransformLauncher
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from dpk_filter.test_support import AbstractPythonFilterTransformTest
 from dpk_filter.ray.transform import FilterRayTransformConfiguration
+from dpk_filter.test_support import AbstractPythonFilterTransformTest
 
 
 class TestPythonFilterTransform(AbstractPythonFilterTransformTest):
@@ -29,4 +29,7 @@ class TestPythonFilterTransform(AbstractPythonFilterTransformTest):
         return dir
 
     def _get_launcher(self) -> (AbstractTransformLauncher, dict):
-        return (RayTransformLauncher(FilterRayTransformConfiguration()), {"run_locally": True})
+        return (
+            RayTransformLauncher(FilterRayTransformConfiguration()),
+            {"run_locally": True},
+        )

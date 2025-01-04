@@ -18,7 +18,12 @@ from typing import Any
 
 import pyarrow as pa
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
-from data_processing.utils import GB, CLIArgumentProvider, TransformUtils, UnrecoverableException
+from data_processing.utils import (
+    GB,
+    CLIArgumentProvider,
+    TransformUtils,
+    UnrecoverableException,
+)
 
 
 short_name = "profiler"
@@ -150,6 +155,7 @@ class ProfilerTransformConfigurationBase(TransformConfiguration):
             transform_class=transform_class,
         )
         from data_processing.utils import get_logger
+
         self.logger = get_logger(__name__)
         self.print_config = print_config
 
@@ -161,7 +167,8 @@ class ProfilerTransformConfigurationBase(TransformConfiguration):
             f"--{doc_column_name_cli_param}",
             type=str,
             default="contents",
-            help="key for accessing data")
+            help="key for accessing data",
+        )
 
     def apply_input_params(self, args: Namespace) -> bool:
         """

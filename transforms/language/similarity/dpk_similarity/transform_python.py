@@ -16,6 +16,8 @@ from data_processing.runtime.pure_python.runtime_configuration import (
 )
 from data_processing.utils import get_logger
 from dpk_similarity.transform import SimilarityTransformConfiguration
+
+
 logger = get_logger(__name__)
 
 

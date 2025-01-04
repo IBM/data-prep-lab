@@ -126,7 +126,12 @@ class DocQualityTransform(AbstractTableTransform):
             docq_sentence_count.append(c4_sentence_count(text, ft_lang=self.text_lang))
 
             docq_lorem_ipsum_ratio.append(
-                c4_contain_pattern_ratio(text, pattern="lorem ipsum", ft_lang=self.text_lang, normalize_text=True)
+                c4_contain_pattern_ratio(
+                    text,
+                    pattern="lorem ipsum",
+                    ft_lang=self.text_lang,
+                    normalize_text=True,
+                )
             )
             curly_bracket_ratio = 0.0
             for sign in ["{", "}"]:
@@ -154,23 +159,33 @@ class DocQualityTransform(AbstractTableTransform):
         table = TransformUtils.add_column(table=table, name="docq_total_words", content=docq_total_words)
         table = TransformUtils.add_column(table=table, name="docq_mean_word_len", content=docq_mean_word_len)
         table = TransformUtils.add_column(
-            table=table, name="docq_symbol_to_word_ratio", content=docq_symbol_to_word_ratio
+            table=table,
+            name="docq_symbol_to_word_ratio",
+            content=docq_symbol_to_word_ratio,
         )
         table = TransformUtils.add_column(table=table, name="docq_sentence_count", content=docq_sentence_count)
         table = TransformUtils.add_column(table=table, name="docq_lorem_ipsum_ratio", content=docq_lorem_ipsum_ratio)
         table = TransformUtils.add_column(
-            table=table, name="docq_curly_bracket_ratio", content=docq_curly_bracket_ratio
+            table=table,
+            name="docq_curly_bracket_ratio",
+            content=docq_curly_bracket_ratio,
         )
         table = TransformUtils.add_column(table=table, name="docq_contain_bad_word", content=docq_contain_bad_word)
         table = TransformUtils.add_column(table=table, name="docq_bullet_point_ratio", content=docq_bullet_point_ratio)
         table = TransformUtils.add_column(
-            table=table, name="docq_ellipsis_line_ratio", content=docq_ellipsis_line_ratio
+            table=table,
+            name="docq_ellipsis_line_ratio",
+            content=docq_ellipsis_line_ratio,
         )
         table = TransformUtils.add_column(
-            table=table, name="docq_alphabet_word_ratio", content=docq_alphabet_word_ratio
+            table=table,
+            name="docq_alphabet_word_ratio",
+            content=docq_alphabet_word_ratio,
         )
         table = TransformUtils.add_column(
-            table=table, name="docq_contain_common_en_words", content=docq_contain_common_en_words
+            table=table,
+            name="docq_contain_common_en_words",
+            content=docq_contain_common_en_words,
         )
 
         if self.text_lang == "ja":
@@ -185,7 +200,6 @@ class DocQualityTransform(AbstractTableTransform):
 
 
 class DocQualityTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.
@@ -207,7 +221,9 @@ class DocQualityTransformConfiguration(TransformConfiguration):
         (e.g, noop_, pii_, etc.)
         """
         parser.add_argument(
-            f"--{text_lang_cli_param}", default=default_text_lang, help="language used in the text content"
+            f"--{text_lang_cli_param}",
+            default=default_text_lang,
+            help="language used in the text content",
         )
         parser.add_argument(
             f"--{doc_content_column_cli_param}",

@@ -11,8 +11,10 @@
 ################################################################################
 
 from data_processing.utils import get_logger
-from data_processing_spark.runtime.spark import SparkTransformLauncher
-from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration
+from data_processing_spark.runtime.spark import (
+    SparkTransformLauncher,
+    SparkTransformRuntimeConfiguration,
+)
 from dpk_filter.transform import FilterTransformConfiguration
 
 

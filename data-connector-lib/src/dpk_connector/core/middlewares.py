@@ -13,6 +13,13 @@
 import logging
 from typing import Any, Generator, Iterable
 
+from dpk_connector.core.item import ConnectorItem
+from dpk_connector.core.utils import (
+    get_content_type,
+    get_etld1,
+    get_mime_type,
+    get_netloc,
+)
 from scrapy import Spider, signals
 from scrapy.crawler import Crawler
 from scrapy.downloadermiddlewares.robotstxt import RobotsTxtMiddleware
@@ -26,8 +33,6 @@ from scrapy.utils.httpobj import urlparse_cached
 from scrapy.utils.python import to_unicode
 from twisted.internet.defer import Deferred
 
-from dpk_connector.core.item import ConnectorItem
-from dpk_connector.core.utils import get_content_type, get_etld1, get_mime_type, get_netloc
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +53,7 @@ class DelayingProtegoRobotParser(ProtegoRobotParser):
         if crawl_delay is None and request_rate is None:
             return None
         crawl_delay = crawl_delay or 0
-        request_rate = (
-            request_rate.seconds / request_rate.requests if request_rate else 0
-        )
+        request_rate = request_rate.seconds / request_rate.requests if request_rate else 0
         delay = min(max(crawl_delay, request_rate), self.max_delay)
         return delay
 
@@ -64,9 +67,7 @@ class DelayingRobotsTxtMiddleware(RobotsTxtMiddleware):
         super().__init__(crawler)
         self.download_timeout = download_timeout
         self._delays: dict[str, float] = {}
-        crawler.signals.connect(
-            self._request_reached_downloader, signal=signals.request_reached_downloader
-        )
+        crawler.signals.connect(self._request_reached_downloader, signal=signals.request_reached_downloader)
 
     @classmethod
     def from_crawler(cls, crawler: Crawler):
@@ -86,9 +87,7 @@ class DelayingRobotsTxtMiddleware(RobotsTxtMiddleware):
                     slot.delay = delay
                     slot.randomize_delay = False
 
-    def process_request_2(
-        self, rp: RobotParser, request: Request, spider: Spider
-    ) -> None:
+    def process_request_2(self, rp: RobotParser, request: Request, spider: Spider) -> None:
         super().process_request_2(rp, request, spider)
         if isinstance(rp, DelayingProtegoRobotParser):
             parts = urlparse_cached(request)
@@ -96,15 +95,11 @@ class DelayingRobotsTxtMiddleware(RobotsTxtMiddleware):
             if domain not in self._delays:
                 user_agent = self._robotstxt_useragent
                 if not user_agent:
-                    user_agent = request.headers.get(
-                        b"User-Agent", self._default_useragent
-                    )
+                    user_agent = request.headers.get(b"User-Agent", self._default_useragent)
                 delay = rp.delay(user_agent) or 0.0
                 self._delays[domain] = delay
                 if delay:
-                    logger.info(
-                        f"Set download delay to {delay} according to robots.txt. domain: {domain}"
-                    )
+                    logger.info(f"Set download delay to {delay} according to robots.txt. domain: {domain}")
 
     def robot_parser(self, request: Request, spider: Spider):
         url = urlparse_cached(request)
@@ -207,9 +202,7 @@ class ConnectorRequestedStats(DownloaderStats):
         super().process_request(request, spider)
         prefix = "dpk_connector/requested"
         if not request.meta.get("system_request", False):
-            _update_request_stats(
-                self.stats, request, spider, prefix, self.skip_domains
-            )
+            _update_request_stats(self.stats, request, spider, prefix, self.skip_domains)
         if request.meta.get("sitemap", False):
             _update_sitemap_stats(self.stats, spider, prefix)
 
@@ -217,9 +210,7 @@ class ConnectorRequestedStats(DownloaderStats):
         ret = super().process_response(request, response, spider)
         prefix = "dpk_connector/accessed"
         if not request.meta.get("system_request", False):
-            _update_stats(
-                self.stats, request, response, spider, prefix, self.skip_domains
-            )
+            _update_stats(self.stats, request, response, spider, prefix, self.skip_domains)
         if request.meta.get("sitemap", False):
             _update_sitemap_stats(self.stats, spider, prefix)
         return ret

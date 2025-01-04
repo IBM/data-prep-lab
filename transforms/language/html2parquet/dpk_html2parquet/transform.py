@@ -31,8 +31,6 @@ from data_processing.utils import CLIArgumentProvider, TransformUtils, get_logge
 # import data_processing
 
 
-
-
 class Html2ParquetTransform(AbstractBinaryTransform):
     def __init__(self, config: dict[str, Any]):
         super().__init__(config)
@@ -126,7 +124,9 @@ class Html2ParquetTransform(AbstractBinaryTransform):
                                 content_bytes = file.read()
 
                                 row_data = self.convert_html2parquet(
-                                    member_filename=member.filename, file_name=file_name, content_bytes=content_bytes
+                                    member_filename=member.filename,
+                                    file_name=file_name,
+                                    content_bytes=content_bytes,
                                 )
 
                                 data.append(row_data)
@@ -142,7 +142,9 @@ class Html2ParquetTransform(AbstractBinaryTransform):
                 content_bytes = buf.read()
 
                 row_data = self.convert_html2parquet(
-                    member_filename=None, file_name=file_name, content_bytes=content_bytes
+                    member_filename=None,
+                    file_name=file_name,
+                    content_bytes=content_bytes,
                 )
 
                 data.append(row_data)
@@ -153,7 +155,6 @@ class Html2ParquetTransform(AbstractBinaryTransform):
 
         table = pa.Table.from_pylist(data)
         return [(TransformUtils.convert_arrow_to_binary(table=table), ".parquet")], {"nrows": number_of_rows}
-
 
 
 logger = get_logger(__name__)
@@ -252,19 +253,20 @@ class Html2Parquet(Html2ParquetTransform):
         data = []
         for batch in table.to_batches():
             for row in batch.to_pylist():
-                buf = io.BytesIO(bytes(row['contents']))
+                buf = io.BytesIO(bytes(row["contents"]))
                 # Read the content of the HTML file
                 content_bytes = buf.read()
 
                 row_data = self.convert_html2parquet(
-                    member_filename=None, file_name=row['filename'], content_bytes=content_bytes
+                    member_filename=None,
+                    file_name=row["filename"],
+                    content_bytes=content_bytes,
                 )
                 data.append({**row, **row_data})
 
         table = pa.Table.from_pylist(data)
         metadata = {
-            "columns" : table.schema.names,
+            "columns": table.schema.names,
             "nrows": len(table),
         }
         return [table], metadata
-

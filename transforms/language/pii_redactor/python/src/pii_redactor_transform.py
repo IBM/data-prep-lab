@@ -44,7 +44,14 @@ default_score_threshold_key = 0.6
 The default score_threshold value will be 0.6. At this range false positives are reduced significantly
 """
 
-default_supported_entities = ["PERSON", "EMAIL_ADDRESS", "ORGANIZATION", "DATE_TIME", "CREDIT_CARD", "PHONE_NUMBER"]
+default_supported_entities = [
+    "PERSON",
+    "EMAIL_ADDRESS",
+    "ORGANIZATION",
+    "DATE_TIME",
+    "CREDIT_CARD",
+    "PHONE_NUMBER",
+]
 """By default it supports person name, email address, organization, date, credti card, phone number.To know more about entities refer https://microsoft.github.io/presidio/supported_entities/
 """
 
@@ -68,7 +75,8 @@ class PIIRedactorTransform(AbstractTableTransform):
         score_threshold_value = config.get(score_threshold_key, default_score_threshold_key)
 
         self.analyzer = PIIAnalyzerEngine(
-            supported_entities=self.supported_entities, score_threshold=score_threshold_value
+            supported_entities=self.supported_entities,
+            score_threshold=score_threshold_value,
         )
         self.anonymizer = PIIAnonymizer(operator=self.redaction_operator.lower())
 
@@ -92,7 +100,10 @@ class PIIRedactorTransform(AbstractTableTransform):
         """
 
         TransformUtils.validate_columns(table=table, required=[pii_contents_column])
-        metadata = {"original_table_rows": table.num_rows, "original_column_count": len(table.column_names)}
+        metadata = {
+            "original_table_rows": table.num_rows,
+            "original_column_count": len(table.column_names),
+        }
 
         redacted_texts, entity_types_list = zip(*table[pii_contents_column].to_pandas().apply(self._redact_pii))
         table = table.add_column(0, self.doc_contents_key, [redacted_texts])

@@ -77,7 +77,10 @@ class PIIAnalyzerEngine:
         """
         analyzer = AnalyzerEngine(nlp_engine=self.nlp_engine, registry=self.registry)
         analyze_results = analyzer.analyze(
-            text=text, language=language, entities=self.supported_entities, score_threshold=self.score_threshold
+            text=text,
+            language=language,
+            entities=self.supported_entities,
+            score_threshold=self.score_threshold,
         )
         entity_types = [result.entity_type for result in analyze_results]
         return analyze_results, entity_types

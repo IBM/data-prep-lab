@@ -13,13 +13,15 @@
 import os
 import sys
 
+from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.utils import ParamsUtils
 from dpk_fdedup.data_cleaning.transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
 )
-from dpk_fdedup.data_cleaning.transform_python import DataCleaningPythonTransformConfiguration
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.utils import ParamsUtils
+from dpk_fdedup.data_cleaning.transform_python import (
+    DataCleaningPythonTransformConfiguration,
+)
 
 
 # create parameters

@@ -88,7 +88,6 @@ class DocIDTransform(AbstractTableTransform):
 
 
 class DocIDTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args and combining of metadata.
@@ -111,7 +110,10 @@ class DocIDTransformConfiguration(TransformConfiguration):
         (e.g, noop_, pii_, etc.)
         """
         parser.add_argument(
-            f"--{doc_column_name_cli_param}", type=str, default=doc_column_name_default, help="doc column name"
+            f"--{doc_column_name_cli_param}",
+            type=str,
+            default=doc_column_name_default,
+            help="doc column name",
         )
         parser.add_argument(
             f"--{hash_column_name_cli_param}",
@@ -151,7 +153,10 @@ class DocIDSparkTransformRuntime(DefaultSparkTransformRuntime):
         super().__init__(params)
 
         def get_transform_config(
-            self, partition: int, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics
+            self,
+            partition: int,
+            data_access_factory: DataAccessFactoryBase,
+            statistics: TransformStatistics,
         ) -> dict[str, Any]:
             """
             Get the dictionary of configuration that will be provided to the transform's initializer.
@@ -177,7 +182,10 @@ class DocIDSparkTransformConfiguration(SparkTransformRuntimeConfiguration):
         """
         Initialization
         """
-        super().__init__(transform_config=DocIDTransformConfiguration(), runtime_class=DocIDSparkTransformRuntime)
+        super().__init__(
+            transform_config=DocIDTransformConfiguration(),
+            runtime_class=DocIDSparkTransformRuntime,
+        )
 
 
 if __name__ == "__main__":

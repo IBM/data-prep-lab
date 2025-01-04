@@ -14,6 +14,7 @@ run_ededup_op = comp.load_component_from_file(component_spec_path + "executeSubW
 doc_id_image = "quay.io/dataprep1/data-prep-kit/doc_id-ray:latest`"
 ededup_image = "quay.io/dataprep1/data-prep-kit/ededup-ray:latest"
 
+
 # Pipeline to invoke execution on remote resource
 @dsl.pipeline(
     name="sample-super-kubeflow-pipeline",
@@ -79,11 +80,19 @@ def super_pipeline(
             op.after(prev_op)
 
     doc_id = run_doc_id_op(
-        name=p1_orch_doc_id_name, prefix="p3_", params=args, host=orch_host, input_folder=p2_pipeline_input_parent_path
+        name=p1_orch_doc_id_name,
+        prefix="p3_",
+        params=args,
+        host=orch_host,
+        input_folder=p2_pipeline_input_parent_path,
     )
     _set_component(doc_id, "doc_id")
     ededup = run_ededup_op(
-        name=p1_orch_ededup_name, prefix="p4_", params=args, host=orch_host, input_folder=doc_id.output
+        name=p1_orch_ededup_name,
+        prefix="p4_",
+        params=args,
+        host=orch_host,
+        input_folder=doc_id.output,
     )
     _set_component(ededup, "ededup", doc_id)
 

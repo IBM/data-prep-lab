@@ -15,6 +15,7 @@ import kfp.components as comp
 import kfp.dsl as dsl
 from workflow_support.compile_utils import ONE_WEEK_SEC
 
+
 # Components
 # path to kfp component specifications files
 component_spec_path = "../../../../../kfp/kfp_ray_components/"
@@ -27,6 +28,7 @@ doc_id_image = "quay.io/dataprep1/data-prep-kit/doc_id-ray:latest"
 ededup_image = "quay.io/dataprep1/data-prep-kit/ededup-ray:latest"
 fdedup_image = "quay.io/dataprep1/data-prep-kit/fdedup-ray:latest"
 
+
 # Pipeline to invoke execution on remote resource
 @dsl.pipeline(
     name="sample-super-kubeflow-pipeline",
@@ -38,16 +40,31 @@ def sample_ray_orchestrator(
     p1_orch_exact_dedup_name: str = "ededup_wf",
     p1_orch_fuzzy_dedup_name: str = "fdedup_wf",
     p2_pipeline_runtime_pipeline_id: str = "pipeline_id",
-    p2_pipeline_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": ""},
-    p2_pipeline_ray_worker_options: dict = {"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""},
+    p2_pipeline_ray_head_options: dict = {
+        "cpu": 1,
+        "memory": 4,
+        "image_pull_secret": "",
+    },
+    p2_pipeline_ray_worker_options: dict = {
+        "replicas": 2,
+        "max_replicas": 2,
+        "min_replicas": 2,
+        "cpu": 2,
+        "memory": 4,
+        "image_pull_secret": "",
+    },
     p2_pipeline_server_url: str = "http://kuberay-apiserver-service.kuberay.svc.cluster.local:8888",
     p2_pipeline_input_parent_path: str = "test/doc_id/input/",
     p2_pipeline_output_parent_path: str = "test/super/output/",
     p2_pipeline_parent_path_suffix: str = "",
     p2_pipeline_additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
     p2_pipeline_data_s3_access_secret: str = "s3-secret",
-    p2_pipeline_runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
-    p2_pipeline_runtime_actor_options: dict = {'num_cpus': 0.7},
+    p2_pipeline_runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
+    p2_pipeline_runtime_actor_options: dict = {"num_cpus": 0.7},
     # data access.
     p2_pipeline_data_max_files: int = -1,
     p2_pipeline_data_num_samples: int = -1,
@@ -134,19 +151,31 @@ def sample_ray_orchestrator(
 
     # document ID
     doc_id = run_doc_id_op(
-        name=p1_orch_doc_id_name, prefix="p3_", params=args, host=orch_host, input_folder=p2_pipeline_input_parent_path
+        name=p1_orch_doc_id_name,
+        prefix="p3_",
+        params=args,
+        host=orch_host,
+        input_folder=p2_pipeline_input_parent_path,
     )
     _set_component(doc_id, "doc ID")
 
     # exact deduplication
     exact_dedup = run_exact_dedup_op(
-        name=p1_orch_exact_dedup_name, prefix="p4_", params=args, host=orch_host, input_folder=doc_id.output
+        name=p1_orch_exact_dedup_name,
+        prefix="p4_",
+        params=args,
+        host=orch_host,
+        input_folder=doc_id.output,
     )
     _set_component(exact_dedup, "exact dedup", doc_id)
 
     # fuzzy deduplication
     fuzzy_dedup = run_fuzzy_dedup_op(
-        name=p1_orch_fuzzy_dedup_name, prefix="p5_", params=args, host=orch_host, input_folder=exact_dedup.output
+        name=p1_orch_fuzzy_dedup_name,
+        prefix="p5_",
+        params=args,
+        host=orch_host,
+        input_folder=exact_dedup.output,
     )
     _set_component(fuzzy_dedup, "fuzzy dedup", exact_dedup)
 

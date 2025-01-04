@@ -15,7 +15,9 @@ from data_processing_spark.runtime.spark import (
     SparkTransformLauncher,
     SparkTransformRuntimeConfiguration,
 )
-from dpk_fdedup.signature_calc.transform import SignatureCalculationTransformConfiguration
+from dpk_fdedup.signature_calc.transform import (
+    SignatureCalculationTransformConfiguration,
+)
 
 
 logger = get_logger(__name__)

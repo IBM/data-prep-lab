@@ -32,10 +32,16 @@ def test_configuration():
 
 def test_execution():
     input_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../../transforms/universal/noop/python/test-data/input")
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../transforms/universal/noop/python/test-data/input",
+        )
     )
     output_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../../transforms/universal/noop/python/output")
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../transforms/universal/noop/python/output",
+        )
     )
     t_configuration = TransformsConfiguration()
     res = execute_python_transform(

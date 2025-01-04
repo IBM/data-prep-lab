@@ -194,7 +194,11 @@ class HeaderCleanserTransform(AbstractTableTransform):
 
         updated_content = pa.array(updated_content)
 
-        table = table.set_column(table.column_names.index(self.column_name), self.column_name, updated_content)
+        table = table.set_column(
+            table.column_names.index(self.column_name),
+            self.column_name,
+            updated_content,
+        )
 
         return [table], {"Removed code count": remove_code_count}
 

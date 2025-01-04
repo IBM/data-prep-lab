@@ -29,5 +29,12 @@ class TestRayNOOPTransform(AbstractTransformLauncherTest):
         basedir = "../../../../test-data/data_processing/ray/noop/"
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))
         launcher = RayTransformLauncher(NOOPRayTransformConfiguration())
-        fixtures = [(launcher, {"noop_sleep_sec": 0, "run_locally": True}, basedir + "/input", basedir + "/expected")]
+        fixtures = [
+            (
+                launcher,
+                {"noop_sleep_sec": 0, "run_locally": True},
+                basedir + "/input",
+                basedir + "/expected",
+            )
+        ]
         return fixtures

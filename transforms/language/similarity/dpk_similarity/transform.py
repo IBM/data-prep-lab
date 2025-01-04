@@ -10,18 +10,18 @@
 # limitations under the License.
 ################################################################################
 
-import time
-from argparse import ArgumentParser, Namespace
 import json
 import os
+import time
+from argparse import ArgumentParser, Namespace
 from typing import Any
 
 import pyarrow as pa
+import requests
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import CLIArgumentProvider, TransformUtils
+from requests.auth import HTTPBasicAuth
 
-import requests
-from requests.auth import HTTPBasicAuth 
 
 short_name = "similarity"
 cli_prefix = f"{short_name}_"
@@ -102,7 +102,7 @@ PARAMS = [
         "required": False,
         "help": "Shingle size for query construction (default is 8)",
     },
-        {
+    {
         "key": RESULT_SIZE_KEY,
         "cli_param": RESULT_SIZE_CLI_PARAM,
         "default": RESULT_SIZE_DEFAULT,
@@ -125,9 +125,8 @@ PARAMS = [
         "type": str,
         "required": False,
         "help": "The column name that contains the document text",
-    }
+    },
 ]
-
 
 
 class SimilarityTransform(AbstractTableTransform):
@@ -154,33 +153,44 @@ class SimilarityTransform(AbstractTableTransform):
         self.annotation_column = config.get(ANNOTATION_COLUMN_KEY, ANNOTATION_COLUMN_DEFAULT)
         self.doc_text_column = config.get(DOC_TEXT_COLUMN_KEY, DOC_TEXT_COLUMN_DEFAULT)
 
-
-    def _testElasticFuncioning(self):   
-        url=self.es_endpoint 
-        headers = {'Content-Type': 'application/json'}
-        res = requests.get(url=url, headers=headers, auth = HTTPBasicAuth(self.es_userid, self.es_pwd), verify=False)
+    def _testElasticFuncioning(self):
+        url = self.es_endpoint
+        headers = {"Content-Type": "application/json"}
+        res = requests.get(
+            url=url,
+            headers=headers,
+            auth=HTTPBasicAuth(self.es_userid, self.es_pwd),
+            verify=False,
+        )
 
         if res.status_code != 200:
             print(f"ERROR: {res.text}")
             return False
         return True
 
-
     def _excecuteQuery(self, query):
         if self._testElasticFuncioning():
-            r = requests.post(url=f"{self.es_endpoint.rstrip('/')}/_search", json=query, auth = HTTPBasicAuth(self.es_userid, self.es_pwd), verify=False)
+            r = requests.post(
+                url=f"{self.es_endpoint.rstrip('/')}/_search",
+                json=query,
+                auth=HTTPBasicAuth(self.es_userid, self.es_pwd),
+                verify=False,
+            )
             q = r.json()
             res = []
             # try:
             for d in q["hits"]["hits"]:
-                ddd = {"id":d["fields"]["_id"][0],"index":d["fields"]["_index"][0], "score" :d["_score"]}
+                ddd = {
+                    "id": d["fields"]["_id"][0],
+                    "index": d["fields"]["_index"][0],
+                    "score": d["_score"],
+                }
                 ddd["contents"] = d["highlight"]["contents"]
                 res.append(ddd)
             # except Exception as ex:
             #     print(ex)
             return res
         return None
-
 
     def _getNgramQuery(self, text):
         slop = 2
@@ -189,13 +199,13 @@ class SimilarityTransform(AbstractTableTransform):
 
         # generate all possible shingles
         s = []
-        spaces = [i for i,j in enumerate(document) if j==' ']
-        spaces.insert(0,0)
+        spaces = [i for i, j in enumerate(document) if j == " "]
+        spaces.insert(0, 0)
         end = len(spaces) - context
         if end > 0:
             for c in range(0, end):
-                s.append( document[spaces[c]:spaces[c+context]].strip())
-            s.append( document[spaces[end]:len (document)].strip())
+                s.append(document[spaces[c] : spaces[c + context]].strip())
+            s.append(document[spaces[end] : len(document)].strip())
         else:
             s.append(document.strip())
 
@@ -203,55 +213,32 @@ class SimilarityTransform(AbstractTableTransform):
         shingles = []
         for ss in s:
 
-            shingles.append (
-                            {
-                                "match_phrase": {
-                                    "contents": {
-                                        "query": ss,
-                                        "slop": slop
-                                    }
-                                }
-                            })
+            shingles.append({"match_phrase": {"contents": {"query": ss, "slop": slop}}})
 
         # construct elastic query
-        query = {    
-        "size": self.result_size,
-        # "_source": "false",
-        "fields":["_id", "_index", "_score"],
-        "query": {
-            "bool": {
-                "filter": {
-                    "exists": {
-                        "field": "contents"
+        query = {
+            "size": self.result_size,
+            # "_source": "false",
+            "fields": ["_id", "_index", "_score"],
+            "query": {
+                "bool": {
+                    "filter": {"exists": {"field": "contents"}},
+                    "must": [{"bool": {"should": shingles, "minimum_should_match": 1}}],
+                }
+            },
+            "highlight": {
+                "pre_tags": [""],
+                "post_tags": [""],
+                "fields": {
+                    "contents": {
+                        "order": "score",
+                        "fragment_size": 0,
+                        "number_of_fragments": 1,
                     }
                 },
-                "must": [
-                    {
-                        "bool": {
-                            "should": shingles,
-                            "minimum_should_match": 1
-                        }
-                    }
-                ]
-            }
-        },
-        "highlight": {
-                    "pre_tags": [
-                ""
-            ],
-            "post_tags": [
-                ""
-            ],
-            "fields": {
-                "contents": {
-                                "order": "score",
-            "fragment_size": 0,
-            "number_of_fragments": 1}
-            }
+            },
         }
-    }
         return query
-    
 
     def transform(self, table: pa.Table, file_name: str = None) -> tuple[list[pa.Table], dict[str, Any]]:
         """
@@ -276,15 +263,13 @@ class SimilarityTransform(AbstractTableTransform):
             with open(json_file_path, "r") as f:
                 result_list = json.load(f)
 
+        assert len(self.df) == len(
+            result_list
+        ), "The number of rows in the dataframe does not match the number of elements in result_list."
 
-        assert len(self.df) == len(result_list), "The number of rows in the dataframe does not match the number of elements in result_list."
-
-        
-        
-        
         self.df[self.annotation_column] = result_list
         print(self.df)
-        
+
         table = pa.Table.from_pandas(self.df)
 
         self.logger.debug(f"Transformed one table with {len(table)} rows")
@@ -293,7 +278,6 @@ class SimilarityTransform(AbstractTableTransform):
 
 
 class SimilarityTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.
@@ -309,7 +293,6 @@ class SimilarityTransformConfiguration(TransformConfiguration):
 
         self.logger = get_logger(__name__)
 
-
     def add_input_params(self, parser: ArgumentParser) -> None:
         """
         Add Transform-specific arguments to the given parser.
@@ -323,9 +306,8 @@ class SimilarityTransformConfiguration(TransformConfiguration):
                 type=param["type"],
                 required=param["required"],
                 default=param["default"],
-                help=param["help"]
+                help=param["help"],
             )
-
 
     def apply_input_params(self, args: Namespace) -> bool:
         """
@@ -340,17 +322,23 @@ class SimilarityTransformConfiguration(TransformConfiguration):
         try:
             shingle_size_int = int(shingle_size_value)
             if shingle_size_int <= 0:
-                print(f"Parameter '--{SHINGLE_SIZE_CLI_PARAM}' should be greater than 0. You specified '{shingle_size_value}'.")
+                print(
+                    f"Parameter '--{SHINGLE_SIZE_CLI_PARAM}' should be greater than 0. You specified '{shingle_size_value}'."
+                )
                 return False
         except (ValueError, TypeError):
-            print(f"Parameter '--{SHINGLE_SIZE_CLI_PARAM}' should be an integer greater than 0. You specified '{shingle_size_value}'.")
+            print(
+                f"Parameter '--{SHINGLE_SIZE_CLI_PARAM}' should be an integer greater than 0. You specified '{shingle_size_value}'."
+            )
             return False
 
         # Set endpoint to None if the input is empty or "None" (as a string)
-        if captured.get('es_endpoint') == "None" or (isinstance(captured.get('es_endpoint'), str) and len(captured.get('es_endpoint')) == 0):
-            captured['es_endpoint'] = None
+        if captured.get("es_endpoint") == "None" or (
+            isinstance(captured.get("es_endpoint"), str) and len(captured.get("es_endpoint")) == 0
+        ):
+            captured["es_endpoint"] = None
 
         self.params = self.params | captured
-        params_to_print = {k:v for k,v in self.params.items() if k != 'es_pwd'}
+        params_to_print = {k: v for k, v in self.params.items() if k != "es_pwd"}
         self.logger.info(f"{short_name} parameters are : {params_to_print}")
         return True

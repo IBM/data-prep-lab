@@ -37,6 +37,11 @@ class TestSparkSignatureCalcTransform(AbstractTransformLauncherTest):
         }
         launcher = SparkTransformLauncher(SignatureCalculationSparkTransformConfiguration())
         fixtures = [
-            (launcher, config, os.path.join(basedir, "input"), os.path.join(basedir, "expected", "signature_calc"))
+            (
+                launcher,
+                config,
+                os.path.join(basedir, "input"),
+                os.path.join(basedir, "expected", "signature_calc"),
+            )
         ]
         return fixtures

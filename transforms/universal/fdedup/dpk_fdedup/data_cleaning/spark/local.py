@@ -18,9 +18,12 @@ from data_cleaning_transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
 )
-from transforms.universal.fdedup.dpk_fdedup.data_cleaning.spark.transform import DataCleaningSparkTransformConfiguration
 from data_processing.utils import ParamsUtils
 from data_processing_spark.runtime.spark import SparkTransformLauncher
+
+from transforms.universal.fdedup.dpk_fdedup.data_cleaning.spark.transform import (
+    DataCleaningSparkTransformConfiguration,
+)
 
 
 # create parameters

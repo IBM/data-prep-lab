@@ -56,13 +56,20 @@ from python_apiserver_client.params import (
 
 def test_toleration():
 
-    tol1 = Toleration(key="blah1", operator=TolerationOperation.Exists, effect=TolerationEffect.NoExecute)
+    tol1 = Toleration(
+        key="blah1",
+        operator=TolerationOperation.Exists,
+        effect=TolerationEffect.NoExecute,
+    )
     print(f"\ntoleration 1: {tol1.to_string()}")
     t1_json = json.dumps(tol1.to_dict())
     print(f"toleration 1 JSON: {t1_json}")
 
     tol2 = Toleration(
-        key="blah2", operator=TolerationOperation.Exists, effect=TolerationEffect.NoExecute, value="value"
+        key="blah2",
+        operator=TolerationOperation.Exists,
+        effect=TolerationEffect.NoExecute,
+        value="value",
     )
     print(f"toleration 2: {tol2.to_string()}")
     t2_json = json.dumps(tol2.to_dict())
@@ -74,12 +81,25 @@ def test_toleration():
 
 def test_templates():
 
-    tol1 = Toleration(key="blah1", operator=TolerationOperation.Exists, effect=TolerationEffect.NoExecute)
+    tol1 = Toleration(
+        key="blah1",
+        operator=TolerationOperation.Exists,
+        effect=TolerationEffect.NoExecute,
+    )
     tol2 = Toleration(
-        key="blah2", operator=TolerationOperation.Exists, effect=TolerationEffect.NoExecute, value="value"
+        key="blah2",
+        operator=TolerationOperation.Exists,
+        effect=TolerationEffect.NoExecute,
+        value="value",
     )
 
-    temp1 = Template(name="template1", namespace="namespace", cpu=1, memory=4, tolerations=[tol1, tol2])
+    temp1 = Template(
+        name="template1",
+        namespace="namespace",
+        cpu=1,
+        memory=4,
+        tolerations=[tol1, tol2],
+    )
     print(f"\ntemplate 1: {temp1.to_string()}")
     tm1_json = json.dumps(temp1.to_dict())
     print(f"template 1 JSON: {tm1_json}")
@@ -121,7 +141,11 @@ def test_volumes():
     assert volume_decoder(json.loads(vol_json)).to_string() == vol.to_string()
 
     vol = EphemeralVolume(
-        name="ephemeral", mount_path="tmp/ephemeral", storage="5Gi", storage_class="blah", access_mode=AccessMode.RWX
+        name="ephemeral",
+        mount_path="tmp/ephemeral",
+        storage="5Gi",
+        storage_class="blah",
+        access_mode=AccessMode.RWX,
     )
     print(f"Ephemeral volume: {vol.to_string()}")
     vol_json = json.dumps(vol.to_dict())
@@ -135,7 +159,10 @@ def test_volumes():
     assert volume_decoder(json.loads(vol_json)).to_string() == vol.to_string()
 
     vol = ConfigMapVolume(
-        name="confmap", mount_path="tmp/confmap", source="my-map", items={"sample_code.py": "sample_code.py"}
+        name="confmap",
+        mount_path="tmp/confmap",
+        source="my-map",
+        items={"sample_code.py": "sample_code.py"},
     )
     print(f"config map volume: {vol.to_string()}")
     vol_json = json.dumps(vol.to_dict())
@@ -409,7 +436,11 @@ def test_submission():
     env_vars:
       counter_name: test_counter    
     """
-    request = RayJobRequest(entrypoint="python /home/ray/samples/sample_code.py", runtime_env=yaml, num_cpu=0.5)
+    request = RayJobRequest(
+        entrypoint="python /home/ray/samples/sample_code.py",
+        runtime_env=yaml,
+        num_cpu=0.5,
+    )
     print(f"job request: {request.to_string()}")
     request_json = json.dumps(request.to_dict())
     print(f"request JSON: {request_json}")

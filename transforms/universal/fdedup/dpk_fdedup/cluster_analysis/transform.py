@@ -196,7 +196,11 @@ class ClusterAnalysisTransform(AbstractFolderTransform):
 
     def _analyze_clusters(self, df: pl.DataFrame) -> tuple[pl.DataFrame, dict[str, Any]]:
         # Define the schema with specific data types
-        schema = {"first_doc": pl.Int64, "docs_to_remove": pl.List(pl.Int64), "docs_to_remove_length": pl.Int64}
+        schema = {
+            "first_doc": pl.Int64,
+            "docs_to_remove": pl.List(pl.Int64),
+            "docs_to_remove_length": pl.Int64,
+        }
         doc_ids_lists = []
         docs_to_remove_lists = []
         len_of_docs2remove_lists = []
@@ -277,7 +281,6 @@ class ClusterAnalysisTransform(AbstractFolderTransform):
 
 
 class ClusterAnalysisTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.

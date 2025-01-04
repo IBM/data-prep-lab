@@ -103,7 +103,13 @@ class AbstractTest:
                 cls.validate_expected_row(i, j, r1, r2)
 
     @classmethod
-    def validate_expected_row(cls, table_index: int, row_index: int, test_row: pa.Table, expected_row: pa.Table):
+    def validate_expected_row(
+        cls,
+        table_index: int,
+        row_index: int,
+        test_row: pa.Table,
+        expected_row: pa.Table,
+    ):
         """
         Compare the two rows for equality, allowing float values to be within a percentage
         of each other as defined by global _allowed_float_percent_diff.
@@ -140,7 +146,11 @@ class AbstractTest:
                         assert diff <= allowed_diff, msg
 
     @classmethod
-    def validate_expected_files(cls, files_list: list[tuple[bytes, str]], expected_files_list: list[tuple[bytes, str]]):
+    def validate_expected_files(
+        cls,
+        files_list: list[tuple[bytes, str]],
+        expected_files_list: list[tuple[bytes, str]],
+    ):
         """
         Verify with assertion messages that the two lists of Tables are equivalent.
         :param files_list:
@@ -172,7 +182,9 @@ class AbstractTest:
             ), f"produced file length {lenf1} vs expected {lenf2}, exceeds allowance of {diff_allowed}"
 
     @classmethod
-    def validate_expected_metadata_lists(cls, metadata: list[dict[str, float]], expected_metadata: list[dict[str, float]]):
+    def validate_expected_metadata_lists(
+        cls, metadata: list[dict[str, float]], expected_metadata: list[dict[str, float]]
+    ):
         elen = len(expected_metadata)
         assert len(metadata) == elen, f"Number of metadata dictionaries not the expected of {elen}"
         for index in range(elen):
@@ -238,7 +250,12 @@ class AbstractTest:
 
     @classmethod
     def __confirm_diffs(
-        cls, src_dir: str, expected_dir: str, diff_files: list, dest_dir: str, drop_columns: list[str] = []
+        cls,
+        src_dir: str,
+        expected_dir: str,
+        diff_files: list,
+        dest_dir: str,
+        drop_columns: list[str] = [],
     ):
         """
         Copy all files from the source dir to the dest dir.

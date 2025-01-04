@@ -61,7 +61,9 @@ class RayRemoteJobs:
         :param http_retries: http retries
         """
         self.api_server_client = KubeRayAPIs(
-            server_url=server_url, http_retries=http_retries, wait_interval=wait_interval
+            server_url=server_url,
+            http_retries=http_retries,
+            wait_interval=wait_interval,
         )
         self.default_image = default_image
 
@@ -233,7 +235,13 @@ class RayRemoteJobs:
         # Build cluster spec
         cluster_spec = ClusterSpec(head_node=head_node_spec, worker_groups=worker_groups)
         # Build cluster
-        cluster = Cluster(name=name, namespace=namespace, user="dataprep", version="2.9.3", cluster_spec=cluster_spec)
+        cluster = Cluster(
+            name=name,
+            namespace=namespace,
+            user="dataprep",
+            version="2.9.3",
+            cluster_spec=cluster_spec,
+        )
         status, error = self.api_server_client.create_cluster(cluster)
         if status != 200:
             return status, error
@@ -352,7 +360,12 @@ class RayRemoteJobs:
             )
             if status // 100 != 2:
                 sys.exit(1)
-            if job_status in {JobStatus.STOPPED, JobStatus.SUCCEEDED, JobStatus.FAILED, JobStatus.RUNNING}:
+            if job_status in {
+                JobStatus.STOPPED,
+                JobStatus.SUCCEEDED,
+                JobStatus.FAILED,
+                JobStatus.RUNNING,
+            }:
                 break
             time.sleep(self.api_server_client.wait_interval)
             job_ready_timeout -= self.api_server_client.wait_interval
@@ -491,7 +504,10 @@ def execute_ray_jobs(
             name=name,
             ns=ns,
             script=exec_script_name,
-            data_access_params={f"{cli_prefix}s3_config": config_value, f"{cli_prefix}s3_cred": s3_creds},
+            data_access_params={
+                f"{cli_prefix}s3_config": config_value,
+                f"{cli_prefix}s3_cred": s3_creds,
+            },
             params=e_params,
             additional_params=additional_params,
             remote_jobs=remote_jobs,
@@ -509,7 +525,10 @@ def execute_ray_jobs(
                 name=name,
                 ns=ns,
                 script=exec_script_name,
-                data_access_params={f"{cli_prefix}s3_config": conf, f"{cli_prefix}s3_cred": s3_creds},
+                data_access_params={
+                    f"{cli_prefix}s3_config": conf,
+                    f"{cli_prefix}s3_cred": s3_creds,
+                },
                 params=launch_params,
                 additional_params=additional_params,
                 remote_jobs=remote_jobs,

@@ -51,7 +51,11 @@ def super_pipeline(
     p1_pipeline_intermediate_path: str = "test/super/output/tmp",
     p1_pipeline_additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
     p1_pipeline_data_s3_access_secret: str = "s3-secret",
-    p1_pipeline_runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
+    p1_pipeline_runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     p1_pipeline_runtime_actor_options: dict = {"num_cpus": 0.8},
     # data access
     p1_pipeline_data_max_files: int = -1,
@@ -62,7 +66,12 @@ def super_pipeline(
     p2_skip: bool = False,
     p2_noop_sleep_sec: int = 10,
     p2_ray_name: str = "noop-kfp-ray",
-    p2_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": "", "image": noop_image},
+    p2_ray_head_options: dict = {
+        "cpu": 1,
+        "memory": 4,
+        "image_pull_secret": "",
+        "image": noop_image,
+    },
     p2_ray_worker_options: dict = {
         "replicas": 2,
         "max_replicas": 2,
@@ -75,7 +84,12 @@ def super_pipeline(
     # Document ID step parameters
     p3_name: str = "doc_id",
     p3_ray_name: str = "docid-kfp-ray",
-    p3_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": "", "image": doc_id_image},
+    p3_ray_head_options: dict = {
+        "cpu": 1,
+        "memory": 4,
+        "image_pull_secret": "",
+        "image": doc_id_image,
+    },
     p3_ray_worker_options: dict = {
         "replicas": 2,
         "max_replicas": 2,

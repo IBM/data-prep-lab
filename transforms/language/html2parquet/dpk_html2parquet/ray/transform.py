@@ -16,11 +16,15 @@ from data_processing_ray.runtime.ray import RayTransformLauncher
 from data_processing_ray.runtime.ray.runtime_configuration import (
     RayTransformRuntimeConfiguration,
 )
-from dpk_html2parquet.transform import Html2ParquetTransform, Html2ParquetTransformConfiguration
-
+from dpk_html2parquet.transform import (
+    Html2ParquetTransform,
+    Html2ParquetTransformConfiguration,
+)
 from ray.util.metrics import Counter, Gauge
 
+
 logger = get_logger(__name__)
+
 
 class Html2ParquetRayTransform(Html2ParquetTransform):
     def __init__(self, config: dict):
@@ -30,7 +34,8 @@ class Html2ParquetRayTransform(Html2ParquetTransform):
         self.doc_counter = Counter("worker_html_doc_count", "Number of HTML documents converted by the worker")
         self.page_counter = Counter("worker_html_pages_count", "Number of HTML pages converted by the worker")
         self.page_convert_gauge = Gauge(
-            "worker_html_page_avg_convert_time", "Average time for converting a single HTML page on each worker"
+            "worker_html_page_avg_convert_time",
+            "Average time for converting a single HTML page on each worker",
         )
         self.doc_convert_gauge = Gauge("worker_html_convert_time", "Time spent converting a single document")
 
@@ -39,6 +44,7 @@ class Html2ParquetRayTransform(Html2ParquetTransform):
         self.doc_convert_gauge.set(elapse_time)
         self.doc_counter.inc(1)
         self.page_counter.inc(num_pages)
+
 
 class Html2ParquetRayTransformConfiguration(RayTransformRuntimeConfiguration):
     """
@@ -57,4 +63,3 @@ if __name__ == "__main__":
     launcher = RayTransformLauncher(Html2ParquetRayTransformConfiguration())
     logger.info("Launching html2parquet transform")
     launcher.launch()
-

@@ -69,7 +69,7 @@ class PythonPoolTransformFileProcessor(AbstractTransformFileProcessor):
         data_access_factory: DataAccessFactoryBase,
         transform_params: dict[str, Any],
         transform_class: type[AbstractTransform],
-        is_folder: bool
+        is_folder: bool,
     ):
         """
         Init method

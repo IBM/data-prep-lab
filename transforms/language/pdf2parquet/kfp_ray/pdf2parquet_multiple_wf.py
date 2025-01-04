@@ -28,6 +28,7 @@ base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:0.2.3"
 # path to kfp component specifications files
 component_spec_path = "../../../../kfp/kfp_ray_components/"
 
+
 # compute execution parameters. Here different transforms might need different implementations. As
 # a result, instead of creating a component we are creating it in place here.
 def compute_exec_params_func(
@@ -123,7 +124,11 @@ def pdf2parquet(
     # orchestrator
     runtime_actor_options: dict = {"num_cpus": 0.8},
     runtime_pipeline_id: str = "pipeline_id",
-    runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
+    runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     # pdf2parquet parameters
     pdf2parquet_batch_size: int = -1,
     pdf2parquet_do_table_structure: bool = True,
@@ -175,7 +180,10 @@ def pdf2parquet(
     """
     # create clean_up task
     clean_up_task = cleanup_ray_op(
-        ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params
+        ray_name=ray_name,
+        run_id=run_id,
+        server_url=server_url,
+        additional_params=additional_params,
     )
     ComponentUtils.add_settings_to_component(clean_up_task, ONE_HOUR_SEC * 2)
     # pipeline definition

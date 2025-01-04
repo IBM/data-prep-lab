@@ -36,5 +36,12 @@ class TestPythonSignatureCalcTransform(AbstractTransformLauncherTest):
             "minhash_num_segments": 2,
         }
         launcher = PythonTransformLauncher(SignatureCalculationPythonTransformConfiguration())
-        fixtures = [(launcher, config, basedir + "/input/", basedir + "/expected/signature_calc/")]
+        fixtures = [
+            (
+                launcher,
+                config,
+                basedir + "/input/",
+                basedir + "/expected/signature_calc/",
+            )
+        ]
         return fixtures

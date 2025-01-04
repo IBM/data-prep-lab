@@ -81,7 +81,11 @@ class KubeRayAPIs:
             try:
                 response = requests.get(url, headers=_headers, timeout=TIMEOUT)
                 if response.status_code // 100 == 2:
-                    return response.status_code, None, templates_decoder(response.json())
+                    return (
+                        response.status_code,
+                        None,
+                        templates_decoder(response.json()),
+                    )
                 else:
                     logger.warning(f"Failed to list compute templates, status : {response.status_code}")
                     status = response.status_code
@@ -110,7 +114,11 @@ class KubeRayAPIs:
             try:
                 response = requests.get(url, headers=_headers, timeout=TIMEOUT)
                 if response.status_code // 100 == 2:
-                    return response.status_code, None, templates_decoder(response.json())
+                    return (
+                        response.status_code,
+                        None,
+                        templates_decoder(response.json()),
+                    )
                 else:
                     logger.warning(
                         f"Failed to list compute templates for namespace {ns}, status : {response.status_code}"
@@ -394,7 +402,11 @@ class KubeRayAPIs:
         status, error, cluster = self.get_cluster(ns=ns, name=name)
         if status // 100 != 2:
             return status, error, None
-        return status, None, f"{name}-head-svc.{ns}.svc.cluster.local:{cluster.service_endpoint['dashboard']}"
+        return (
+            status,
+            None,
+            f"{name}-head-svc.{ns}.svc.cluster.local:{cluster.service_endpoint['dashboard']}",
+        )
 
     def delete_cluster(self, ns: str, name: str) -> tuple[int, str]:
         """
@@ -518,7 +530,11 @@ class KubeRayAPIs:
                     if job_info_array is None:
                         return response.status_code, None, []
                     else:
-                        return response.status_code, None, [RayJobInfo(i) for i in job_info_array]
+                        return (
+                            response.status_code,
+                            None,
+                            [RayJobInfo(i) for i in job_info_array],
+                        )
                 else:
                     logger.warning(
                         f"Failed to list jobs from the cluster {name} in namespace {ns}, "

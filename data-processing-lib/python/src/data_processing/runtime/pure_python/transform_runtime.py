@@ -12,7 +12,7 @@
 
 from typing import Any
 
-from data_processing.data_access import DataAccessFactoryBase, DataAccess
+from data_processing.data_access import DataAccess, DataAccessFactoryBase
 from data_processing.transform import TransformStatistics
 
 
@@ -37,7 +37,10 @@ class DefaultPythonTransformRuntime:
         raise NotImplemented()
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: TransformStatistics,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Get the dictionary of configuration that will be provided to the transform's initializer.

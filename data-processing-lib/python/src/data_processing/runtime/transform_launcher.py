@@ -10,9 +10,9 @@
 # limitations under the License.
 ################################################################################
 
+import argparse
 import sys
 from typing import Any
-import argparse
 
 from data_processing.data_access import DataAccessFactory, DataAccessFactoryBase
 from data_processing.runtime import TransformRuntimeConfiguration
@@ -68,9 +68,9 @@ class AbstractTransformLauncher:
         :return: True if validation passes or False, if not
         """
         return (
-                self.runtime_config.apply_input_params(args=args)
-                and self.execution_config.apply_input_params(args=args)
-                and self.data_access_factory.apply_input_params(args=args)
+            self.runtime_config.apply_input_params(args=args)
+            and self.execution_config.apply_input_params(args=args)
+            and self.data_access_factory.apply_input_params(args=args)
         )
 
     def _submit_for_execution(self) -> int:

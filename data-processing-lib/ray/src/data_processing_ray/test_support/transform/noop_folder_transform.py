@@ -11,14 +11,17 @@
 ################################################################################
 
 
-from data_processing.test_support.transform import NOOPFolderTransform, NOOPTransformConfiguration
+from data_processing.data_access import DataAccess
+from data_processing.test_support.transform import (
+    NOOPFolderTransform,
+    NOOPTransformConfiguration,
+)
 from data_processing.utils import get_logger
 from data_processing_ray.runtime.ray import (
+    DefaultRayTransformRuntime,
     RayTransformLauncher,
     RayTransformRuntimeConfiguration,
-    DefaultRayTransformRuntime
 )
-from data_processing.data_access import DataAccess
 
 
 logger = get_logger(__name__)
@@ -45,8 +48,10 @@ class NOOPFolderRayTransformConfiguration(RayTransformRuntimeConfiguration):
         """
         Initialization
         """
-        super().__init__(transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
-                         runtime_class=NOOPFolderRayRuntime)
+        super().__init__(
+            transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
+            runtime_class=NOOPFolderRayRuntime,
+        )
 
 
 if __name__ == "__main__":

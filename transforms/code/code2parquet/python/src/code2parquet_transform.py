@@ -186,7 +186,10 @@ class CodeToParquetTransformConfiguration(TransformConfiguration):
             help="Infer the programming lang from the file extension using the file of supported languages",
         )
         parser.add_argument(
-            f"--{snapshot_cli_key}", type=str, help="Snapshot value assigned to all imported documents.", default=None
+            f"--{snapshot_cli_key}",
+            type=str,
+            help="Snapshot value assigned to all imported documents.",
+            default=None,
         )
         parser.add_argument(
             f"--{domain_cli_key}",

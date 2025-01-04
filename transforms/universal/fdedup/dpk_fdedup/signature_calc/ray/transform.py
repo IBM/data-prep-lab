@@ -15,7 +15,9 @@ from data_processing_ray.runtime.ray.runtime_configuration import (
     RayTransformRuntimeConfiguration,
 )
 from data_processing_ray.runtime.ray.transform_launcher import RayTransformLauncher
-from dpk_fdedup.signature_calc.transform import SignatureCalculationTransformConfiguration
+from dpk_fdedup.signature_calc.transform import (
+    SignatureCalculationTransformConfiguration,
+)
 
 
 logger = get_logger(__name__)

@@ -118,7 +118,6 @@ class DocIDTransformBase(AbstractTableTransform):
 
 
 class DocIDTransformConfigurationBase(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args and combining of metadata.
@@ -141,7 +140,10 @@ class DocIDTransformConfigurationBase(TransformConfiguration):
         (e.g, noop_, pii_, etc.)
         """
         parser.add_argument(
-            f"--{doc_column_name_cli_param}", type=str, default=doc_column_name_default, help="doc column name"
+            f"--{doc_column_name_cli_param}",
+            type=str,
+            default=doc_column_name_default,
+            help="doc column name",
         )
         parser.add_argument(
             f"--{hash_column_name_cli_param}",

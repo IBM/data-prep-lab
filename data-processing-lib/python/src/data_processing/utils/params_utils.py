@@ -58,7 +58,12 @@ class ParamsUtils:
         return res
 
     @staticmethod
-    def __dict_to_str(dict_val: dict[str, str], initial_indent: str, indent_per_level: str, as_value: bool) -> str:
+    def __dict_to_str(
+        dict_val: dict[str, str],
+        initial_indent: str,
+        indent_per_level: str,
+        as_value: bool,
+    ) -> str:
         all_text = ""
         if as_value:
             all_text = all_text + "{ "

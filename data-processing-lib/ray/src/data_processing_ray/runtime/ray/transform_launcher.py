@@ -53,7 +53,10 @@ class RayTransformLauncher(AbstractTransformLauncher):
         :return: list of arguments
         """
         parser.add_argument(
-            "--run_locally", type=lambda x: bool(str2bool(x)), default=False, help="running ray local flag"
+            "--run_locally",
+            type=lambda x: bool(str2bool(x)),
+            default=False,
+            help="running ray local flag",
         )
         return super()._get_arguments(parser)
 

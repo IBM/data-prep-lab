@@ -70,7 +70,10 @@ class EdedupRuntime(DefaultPythonTransformRuntime):
         self.logger = get_logger(__name__)
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: TransformStatistics,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Get the dictionary of configuration that will be provided to the transform's initializer.
@@ -93,7 +96,13 @@ class EdedupRuntime(DefaultPythonTransformRuntime):
             else:
                 snapshot_path = f"{snapshot_path}/hash_collector_1"
             self.logger.info(f"continuing from the hash snapshot {snapshot_path}")
-            self.filter = HashFilter({"data_access_factory": data_access_factory, "id": 1, "snapshot": snapshot_path})
+            self.filter = HashFilter(
+                {
+                    "data_access_factory": data_access_factory,
+                    "id": 1,
+                    "snapshot": snapshot_path,
+                }
+            )
         else:
             self.logger.info("Starting from the beginning")
             self.filter = HashFilter({"data_access_factory": data_access_factory, "id": 1})

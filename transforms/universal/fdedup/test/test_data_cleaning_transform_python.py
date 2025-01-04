@@ -12,14 +12,16 @@
 
 import os
 
+from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.test_support.launch.transform_test import (
+    AbstractTransformLauncherTest,
+)
 from dpk_fdedup.data_cleaning.transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
 )
-from dpk_fdedup.data_cleaning.transform_python import DataCleaningPythonTransformConfiguration
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.test_support.launch.transform_test import (
-    AbstractTransformLauncherTest,
+from dpk_fdedup.data_cleaning.transform_python import (
+    DataCleaningPythonTransformConfiguration,
 )
 
 
@@ -45,5 +47,12 @@ class TestPythonDataCleaningTransform(AbstractTransformLauncherTest):
             duplicate_list_location_cli_param: duplicate_location,
         }
         launcher = PythonTransformLauncher(DataCleaningPythonTransformConfiguration())
-        fixtures = [(launcher, config, basedir + "/input", basedir + "/expected/data_cleaning/cleaned")]
+        fixtures = [
+            (
+                launcher,
+                config,
+                basedir + "/input",
+                basedir + "/expected/data_cleaning/cleaned",
+            )
+        ]
         return fixtures

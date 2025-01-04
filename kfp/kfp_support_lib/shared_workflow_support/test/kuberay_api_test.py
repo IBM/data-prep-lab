@@ -43,8 +43,18 @@ def test_templates():
     # cleanup
     _, _ = apis.delete_compute_template(ns="default", name="default-template")
     # create
-    toleration = Toleration(key="blah1", operator=TolerationOperation.Exists, effect=TolerationEffect.NoExecute)
-    template = Template(name="default-template", namespace="default", cpu=2, memory=8, tolerations=[toleration])
+    toleration = Toleration(
+        key="blah1",
+        operator=TolerationOperation.Exists,
+        effect=TolerationEffect.NoExecute,
+    )
+    template = Template(
+        name="default-template",
+        namespace="default",
+        cpu=2,
+        memory=8,
+        tolerations=[toleration],
+    )
     status, error = apis.create_compute_template(template)
     assert status == 200
     assert error is None
@@ -250,7 +260,9 @@ def test_job_submission():
       counter_name: test_counter    
     """
     job_request = RayJobRequest(
-        entrypoint="python /home/ray/samples/sample_code.py", runtime_env=resource_yaml, num_cpu=0.5
+        entrypoint="python /home/ray/samples/sample_code.py",
+        runtime_env=resource_yaml,
+        num_cpu=0.5,
     )
     # To ensure that Ray cluster HTTP is ready try to get jobs info from the cluster
     status, error, job_info_array = apis.list_job_info(ns="default", name="test-job")

@@ -15,8 +15,8 @@ import sys
 
 from data_processing.utils import ParamsUtils
 from data_processing_spark.runtime.spark import SparkTransformLauncher
-from profiler_transform_spark import ProfilerSparkTransformRuntimeConfiguration
 from profiler_transform_base import doc_column_name_cli_param
+from profiler_transform_spark import ProfilerSparkTransformRuntimeConfiguration
 
 
 # create parameters

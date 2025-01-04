@@ -14,20 +14,24 @@ import argparse
 import os
 import sys
 
-from dpk_fdedup.cluster_analysis.ray.transform import ClusterAnalysisRayTransformConfiguration
-from dpk_fdedup.data_cleaning.ray.transform import DataCleaningRayTransformConfiguration
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from dpk_fdedup.transform_python import ServiceOrchestrator, parse_args
-from dpk_fdedup.get_duplicate_list.transform_python import (
-    GetDuplicateListPythonTransformConfiguration,
+from dpk_fdedup.cluster_analysis.ray.transform import (
+    ClusterAnalysisRayTransformConfiguration,
 )
+from dpk_fdedup.data_cleaning.ray.transform import DataCleaningRayTransformConfiguration
 from dpk_fdedup.get_duplicate_list.ray.transform import (
     GetDuplicateListRayRuntime,
     GetDuplicateListRayTransformConfiguration,
 )
-from dpk_fdedup.signature_calc.ray.transform import SignatureCalculationRayTransformConfiguration
+from dpk_fdedup.get_duplicate_list.transform_python import (
+    GetDuplicateListPythonTransformConfiguration,
+)
+from dpk_fdedup.signature_calc.ray.transform import (
+    SignatureCalculationRayTransformConfiguration,
+)
+from dpk_fdedup.transform_python import ServiceOrchestrator, parse_args
 
 
 s3_creds = {

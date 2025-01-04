@@ -32,16 +32,18 @@ class TestPythonNOOPTransform(AbstractTransformLauncherTest):
         launcher = PythonTransformLauncher(Web2ParquetPythonTransformConfiguration())
         input_dir = os.path.join(src_file_dir, "../test-data/input")
         expected_dir = os.path.join(src_file_dir, "../test-data/expected")
-        transform_config = {"web2parquet_urls": 'https://thealliance.ai/',
+        transform_config = {
+            "web2parquet_urls": "https://thealliance.ai/",
             "web2parquet_depth": 1,
-            "web2parquet_downloads": 1}
+            "web2parquet_downloads": 1,
+        }
         fixtures.append(
             (
                 launcher,
                 transform_config,
                 input_dir,
                 expected_dir,
-                ['contents'],  # optional list of column names to ignore in comparing test-generated with expected.
+                ["contents"],  # optional list of column names to ignore in comparing test-generated with expected.
             )
         )
 

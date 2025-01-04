@@ -121,7 +121,6 @@ class GetDuplicateListTransform(AbstractFolderTransform):
 
 
 class GetDuplicateListTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.

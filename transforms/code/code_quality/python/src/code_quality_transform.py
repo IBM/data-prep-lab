@@ -205,7 +205,11 @@ class CodeQualityTransform(AbstractTableTransform):
         """
 
         TransformUtils.validate_columns(
-            table, [self.code_quality["contents_column_name"], self.code_quality["language_column_name"]]
+            table,
+            [
+                self.code_quality["contents_column_name"],
+                self.code_quality["language_column_name"],
+            ],
         )
 
         line_mean_values = []

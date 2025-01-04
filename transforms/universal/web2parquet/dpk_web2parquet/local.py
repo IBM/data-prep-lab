@@ -13,14 +13,13 @@
 
 from dpk_web2parquet.transform import Web2Parquet
 
+
 # create parameters
 
 if __name__ == "__main__":
     # Here we show how to run outside of the runtime
     # Create and configure the transform.
-    transform = Web2Parquet(urls= ['https://thealliance.ai/'],
-                                    depth=1, 
-                                    downloads=1)
+    transform = Web2Parquet(urls=["https://thealliance.ai/"], depth=1, downloads=1)
     table_list, metadata = transform.transform()
-    #print(f"\noutput table: {table_list}")
+    # print(f"\noutput table: {table_list}")
     print(f"output metadata : {metadata}")

@@ -30,6 +30,7 @@ base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:latest"
 # path to kfp component specifications files
 component_spec_path = "../../../../kfp/kfp_ray_components/"
 
+
 # compute execution parameters. Here different transforms might need different implementations. As
 # a result, instead of creating a component we are creating it in place here.
 def compute_exec_params_func(
@@ -119,7 +120,11 @@ def license_select(
     # orchestrator
     runtime_actor_options: dict = {"num_cpus": 0.7},
     runtime_pipeline_id: str = "runtime_pipeline_id",
-    runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
+    runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     # license select parameters
     lc_license_column_name: str = "license",
     lc_licenses_file: str = "test/license_select/sample_approved_licenses.json",

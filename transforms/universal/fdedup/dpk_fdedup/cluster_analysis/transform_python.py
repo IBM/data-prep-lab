@@ -14,11 +14,6 @@ import os
 import time
 from typing import Any
 
-from dpk_fdedup.cluster_analysis.transform import (
-    ClusterAnalysisTransformConfiguration,
-    num_bands_key,
-    num_segments_key,
-)
 from data_processing.data_access import DataAccess
 from data_processing.runtime.pure_python import (
     DefaultPythonTransformRuntime,
@@ -26,6 +21,11 @@ from data_processing.runtime.pure_python import (
     PythonTransformRuntimeConfiguration,
 )
 from data_processing.utils import get_logger
+from dpk_fdedup.cluster_analysis.transform import (
+    ClusterAnalysisTransformConfiguration,
+    num_bands_key,
+    num_segments_key,
+)
 
 
 logger = get_logger(__name__)

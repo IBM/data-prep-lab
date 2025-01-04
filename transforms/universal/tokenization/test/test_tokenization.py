@@ -41,7 +41,12 @@ table = pa.Table.from_pydict(
 """
 expected output table as per HF's `bigcode/starcoder` tokenizer:
 """
-tokens = pa.array([[1, 910, 2793, 338, 363, 1574, 29900, 29896], [1, 7280, 1842, 2793, 338, 363, 1574, 29900, 29941]])
+tokens = pa.array(
+    [
+        [1, 910, 2793, 338, 363, 1574, 29900, 29896],
+        [1, 7280, 1842, 2793, 338, 363, 1574, 29900, 29941],
+    ]
+)
 document_id = pa.array(["doc01", "doc03"])
 document_length = pa.array([25, 37])
 token_count = pa.array([8, 9])
@@ -62,7 +67,14 @@ expected_table = pa.Table.from_arrays([tokens, document_id, document_length, tok
 expected output metadata:
 """
 expected_metadata_list = [
-    {"num_files": 1, "num_rows": 3, "num_tokenized_rows": 2, "num_empty_rows": 1, "num_tokens": 17, "num_chars": 62},
+    {
+        "num_files": 1,
+        "num_rows": 3,
+        "num_tokenized_rows": 2,
+        "num_empty_rows": 1,
+        "num_tokens": 17,
+        "num_chars": 62,
+    },
     {},
 ]
 
@@ -88,6 +100,11 @@ class TestTokenizationTransform(AbstractTableTransformTest):
     def get_test_transform_fixtures(self) -> list[Tuple]:
 
         fixtures = [
-            (TokenizationTransform(config), [table], [expected_table], expected_metadata_list),
+            (
+                TokenizationTransform(config),
+                [table],
+                [expected_table],
+                expected_metadata_list,
+            ),
         ]
         return fixtures

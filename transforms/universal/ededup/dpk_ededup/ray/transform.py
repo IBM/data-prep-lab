@@ -109,7 +109,10 @@ class EdedupRayRuntime(DefaultRayTransformRuntime):
         self.logger = get_logger(__name__)
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: ActorHandle, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: ActorHandle,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Set environment for transform execution
@@ -199,7 +202,11 @@ class EdedupRayRuntime(DefaultRayTransformRuntime):
             # Wait for replies
             ready, not_ready = ray.wait(remote_replies)
             remote_replies = not_ready
-        return {"number of hashes": sum_hash, "hash memory, GB": sum_hash_mem, "de duplication %": dedup_prst} | stats
+        return {
+            "number of hashes": sum_hash,
+            "hash memory, GB": sum_hash_mem,
+            "de duplication %": dedup_prst,
+        } | stats
 
 
 class EdedupRayTransformConfiguration(EdedupTransformConfigurationBase):
@@ -216,8 +223,18 @@ class EdedupRayTransformConfiguration(EdedupTransformConfigurationBase):
         Add Transform-specific arguments to the given  parser.
         """
         super().add_input_params(parser)
-        parser.add_argument(f"--{hash_cpu_cli_params}", type=float, default=0.5, help="number of CPUs per hash")
-        parser.add_argument(f"--{num_hashes_cli_params}", type=int, default=0, help="number of hash actors to use")
+        parser.add_argument(
+            f"--{hash_cpu_cli_params}",
+            type=float,
+            default=0.5,
+            help="number of CPUs per hash",
+        )
+        parser.add_argument(
+            f"--{num_hashes_cli_params}",
+            type=int,
+            default=0,
+            help="number of hash actors to use",
+        )
 
     def apply_input_params(self, args: Namespace) -> bool:
         """
@@ -234,7 +251,10 @@ class EdedupRayTransformConfiguration(EdedupTransformConfigurationBase):
 
 class EdedupRayTransformRuntimeConfiguration(RayTransformRuntimeConfiguration):
     def __init__(self):
-        super().__init__(transform_config=EdedupRayTransformConfiguration(), runtime_class=EdedupRayRuntime)
+        super().__init__(
+            transform_config=EdedupRayTransformConfiguration(),
+            runtime_class=EdedupRayRuntime,
+        )
 
 
 # Class used by the notebooks to ingest binary files and create parquet files

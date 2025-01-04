@@ -11,13 +11,13 @@
 ################################################################################
 import os
 
-from data_processing.test_support import get_files_in_folder
 from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.test_support import get_files_in_folder
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from profiler_transform_python import ProfilerPythonTransformRuntimeConfiguration
 from profiler_transform_base import doc_column_name_cli_param
+from profiler_transform_python import ProfilerPythonTransformRuntimeConfiguration
 
 
 class TestPythonProfilerTransform(AbstractTransformLauncherTest):
@@ -49,4 +49,3 @@ class TestPythonProfilerTransform(AbstractTransformLauncherTest):
         f_set1 = get_files_in_folder(dir=produced, ext=".json", return_data=False)
         f_set2 = get_files_in_folder(dir=expected, ext=".json", return_data=False)
         assert len(f_set1) == len(f_set2)
-

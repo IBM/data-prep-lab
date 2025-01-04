@@ -56,7 +56,9 @@ class LangIdentificationTransform(AbstractTableTransform):
         # of LangIdentificationTransformConfiguration class
         super().__init__(config)
         self.nlp_langid = LangModelFactory.create_model(
-            config.get(model_kind_key), config.get(model_url_key), config.get(model_credential_key)
+            config.get(model_kind_key),
+            config.get(model_url_key),
+            config.get(model_credential_key),
         )
         self.content_column_name = config.get(content_column_name_key, default_content_column_name)
         self.output_lang_column_name = config.get(output_lang_column_name_key, default_output_lang_column_name)
@@ -89,7 +91,6 @@ class LangIdentificationTransform(AbstractTableTransform):
 
 
 class LangIdentificationTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.
@@ -116,8 +117,16 @@ class LangIdentificationTransformConfiguration(TransformConfiguration):
             required=True,
             help="Credential to access model for language detection placed in url",
         )
-        parser.add_argument(f"--{model_kind_cli_param}", required=True, help="Kind of model for language detection")
-        parser.add_argument(f"--{model_url_cli_param}", required=True, help="Url to model for language detection")
+        parser.add_argument(
+            f"--{model_kind_cli_param}",
+            required=True,
+            help="Kind of model for language detection",
+        )
+        parser.add_argument(
+            f"--{model_url_cli_param}",
+            required=True,
+            help="Url to model for language detection",
+        )
         parser.add_argument(
             f"--{content_column_name_cli_param}",
             default=default_content_column_name,

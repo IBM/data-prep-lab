@@ -28,13 +28,13 @@ similarity_params = {
     "es_endpoint": None,
     "es_index": "mydata",
     "annotation_column": "similarity_score",
-    "doc_text_column": "contents"
+    "doc_text_column": "contents",
 }
 
 if __name__ == "__main__":
     data_access = DataAccessLocal(local_conf)
     similarity_params["data_access"] = data_access
-    
+
     # Use the local data access to read a parquet table.
     table, _ = data_access.get_table(os.path.join(input_folder, "test1.parquet"))
     print(f"input table: {table}")

@@ -61,7 +61,9 @@ class PipelinesUtils:
                     return None
         try:
             pipeline = self.kfp_client.upload_pipeline(
-                pipeline_package_path=pipeline_package_path, pipeline_name=pipeline_name, description=description
+                pipeline_package_path=pipeline_package_path,
+                pipeline_name=pipeline_name,
+                description=description,
             )
         except Exception as e:
             logger.warning(f"Exception uploading pipeline {e}")
@@ -100,7 +102,10 @@ class PipelinesUtils:
         job_name = pipeline.name + " " + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         try:
             run_id = self.kfp_client.run_pipeline(
-                experiment_id=experiment.id, job_name=job_name, pipeline_id=pipeline.id, params=params
+                experiment_id=experiment.id,
+                job_name=job_name,
+                pipeline_id=pipeline.id,
+                params=params,
             )
             logger.info(f"Pipeline run {job_name} submitted")
             return run_id.id
@@ -156,7 +161,13 @@ class PipelinesUtils:
                 end = 2**63 - 1
             run_details = self.kfp_client.get_run(run_id=run_id)
             status = run_details.run.status
-            while status is None or status.lower() not in ["succeeded", "completed", "failed", "skipped", "error"]:
+            while status is None or status.lower() not in [
+                "succeeded",
+                "completed",
+                "failed",
+                "skipped",
+                "error",
+            ]:
                 time.sleep(wait)
                 if (end - time.time()) < 0:
                     return "failed", f"Execution is taking too long"

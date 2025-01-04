@@ -60,7 +60,10 @@ def test_sort_by_path():
         }
     )
     sort_by_path_ = get_sorting_func(
-        sorting_algo="SORT_BY_PATH", title_column_name="title", logger=logger, language_column_name="language"
+        sorting_algo="SORT_BY_PATH",
+        title_column_name="title",
+        logger=logger,
+        language_column_name="language",
     )
     table = sort_by_path_(input_table, "file")
     compare_tables(table, expected_table)
@@ -88,7 +91,10 @@ def test_semantic_sort_reverting_to_default():
         }
     )
     sort_by = get_sorting_func(
-        sorting_algo="SORT_SEMANTIC", title_column_name="title", logger=logger, language_column_name="language"
+        sorting_algo="SORT_SEMANTIC",
+        title_column_name="title",
+        logger=logger,
+        language_column_name="language",
     )
     table = sort_by(input_table, "file")
     compare_tables(table, expected_table)
@@ -108,7 +114,10 @@ def test_skip_sorting():
         }
     )
     sort_by = get_sorting_func(
-        sorting_algo="SORT_BY_PATH", title_column_name="title", logger=logger, language_column_name="language"
+        sorting_algo="SORT_BY_PATH",
+        title_column_name="title",
+        logger=logger,
+        language_column_name="language",
     )
     table = sort_by(input_table, "file")
     compare_tables(table, expected_table)

@@ -13,12 +13,12 @@
 import threading
 from typing import Any, Callable, Collection, Type, cast
 
+from dpk_connector.core.utils import validate_domain, validate_url
 from scrapy import Spider
 from scrapy.crawler import Crawler, CrawlerRunner
 from scrapy.settings import Settings
 from twisted.internet.defer import Deferred
 
-from dpk_connector.core.utils import validate_domain, validate_url
 
 _lock = threading.Lock()
 _reactor_initialized = False
@@ -61,9 +61,7 @@ class MultiThreadedCrawlerRunner(CrawlerRunner):
         with _lock:
             global _reactor_initialized
             init_reactor = not _reactor_initialized
-            crawler = Crawler(
-                cast(Type[Spider], spidercls), self.settings, init_reactor
-            )
+            crawler = Crawler(cast(Type[Spider], spidercls), self.settings, init_reactor)
             _reactor_initialized = True
         return crawler
 
@@ -140,9 +138,7 @@ def async_crawl(
     if concurrent_requests < 1:
         raise ValueError(f"Invalid concurrent requests {concurrent_requests}")
     if concurrent_requests_per_domain < 1:
-        raise ValueError(
-            f"Invalid concurrent reuqests per domain {concurrent_requests_per_domain}"
-        )
+        raise ValueError(f"Invalid concurrent reuqests per domain {concurrent_requests_per_domain}")
     if download_delay < 0:
         raise ValueError(f"Invalid download delay {download_delay}")
     if download_timeout < 0:
@@ -150,9 +146,7 @@ def async_crawl(
     if autothrottle_max_delay < 0:
         raise ValueError(f"Invalid autothrottle max delay {autothrottle_max_delay}")
     if autothrottle_target_concurrency < 1:
-        raise ValueError(
-            f"Invalid autothrottle target concurrency {autothrottle_target_concurrency}"
-        )
+        raise ValueError(f"Invalid autothrottle target concurrency {autothrottle_target_concurrency}")
     if robots_max_crawl_delay < 0:
         raise ValueError(f"Invalid robots max crawl delay {robots_max_crawl_delay}")
 
@@ -178,9 +172,7 @@ def async_crawl(
         priority="spider",
     )
     settings.set("DOWNLOAD_DELAY", download_delay, priority="spider")
-    settings.set(
-        "RANDOMIZE_DOWNLOAD_DELAY", randomize_download_delay, priority="spider"
-    )
+    settings.set("RANDOMIZE_DOWNLOAD_DELAY", randomize_download_delay, priority="spider")
     settings.set("DOWNLOAD_TIMEOUT", download_timeout, priority="spider")
     settings.set("AUTOTHROTTLE_ENABLED", autothrottle_enabled, priority="spider")
     settings.set("AUTOTHROTTLE_MAX_DELAY", autothrottle_max_delay, priority="spider")

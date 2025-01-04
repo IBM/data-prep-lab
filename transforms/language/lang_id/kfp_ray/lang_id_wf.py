@@ -126,7 +126,11 @@ def lang_id(
     # orchestrator
     runtime_actor_options: dict = {"num_cpus": 0.8},
     runtime_pipeline_id: str = "pipeline_id",
-    runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
+    runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     # lang_id parameters
     lang_id_model_credential: str = "PUT YOUR OWN HUGGINGFACE CREDENTIAL",
     lang_id_model_kind: str = "fasttext",
@@ -180,7 +184,10 @@ def lang_id(
     """
     # create clean_up task
     clean_up_task = cleanup_ray_op(
-        ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params
+        ray_name=ray_name,
+        run_id=run_id,
+        server_url=server_url,
+        additional_params=additional_params,
     )
     ComponentUtils.add_settings_to_component(clean_up_task, ONE_HOUR_SEC * 2)
     # pipeline definition

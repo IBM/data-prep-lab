@@ -18,7 +18,15 @@ def analyzer():
     """
     Fixture to initialize PIIAnalyzerEngine once per module.
     """
-    supported_entities = ["PERSON", "EMAIL_ADDRESS", "DATE_TIME", "URL", "CREDIT_CARD", "PHONE_NUMBER", "LOCATION"]
+    supported_entities = [
+        "PERSON",
+        "EMAIL_ADDRESS",
+        "DATE_TIME",
+        "URL",
+        "CREDIT_CARD",
+        "PHONE_NUMBER",
+        "LOCATION",
+    ]
     score_threshold = 0.6
     return PIIAnalyzerEngine(supported_entities=supported_entities, score_threshold=score_threshold)
 

@@ -28,7 +28,11 @@ def _verify_files(rootdir, expected_files, found_files):
 class AbstractDataAccessFactoryTests:
     def test_get_all(self):
         params = {}
-        expected_files = ["ds1/sample1.parquet", "ds1/sample2.parquet", "ds2/sample3.parquet"]
+        expected_files = [
+            "ds1/sample1.parquet",
+            "ds1/sample2.parquet",
+            "ds2/sample3.parquet",
+        ]
         self._run_test(params, expected_files)
 
     def test_nsamples(self):

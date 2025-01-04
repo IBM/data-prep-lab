@@ -142,7 +142,11 @@ def fuzzydedup(
     data_num_samples: int = -1,
     # orchestrator
     runtime_pipeline_id: str = "pipeline_id",
-    runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
+    runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     # columns used
     fdedup_contents_column: str = "contents",
     fdedup_document_id_column: str = "int_id_column",
@@ -209,7 +213,10 @@ def fuzzydedup(
     """
     # create clean_up task
     clean_up_task = cleanup_ray_op(
-        ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params
+        ray_name=ray_name,
+        run_id=run_id,
+        server_url=server_url,
+        additional_params=additional_params,
     )
     ComponentUtils.add_settings_to_component(clean_up_task, ONE_HOUR_SEC * 2)
     # pipeline definition

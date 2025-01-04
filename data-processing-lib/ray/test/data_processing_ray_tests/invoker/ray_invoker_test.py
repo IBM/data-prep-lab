@@ -32,10 +32,16 @@ def test_configuration():
 
 def test_execution():
     input_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../../transforms/universal/noop/ray/test-data/input")
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../transforms/universal/noop/ray/test-data/input",
+        )
     )
     output_dir = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../../../transforms/universal/noop/ray/output")
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../transforms/universal/noop/ray/output",
+        )
     )
     worker_options = {"num_cpus": 0.8}
     t_configuration = TransformsConfiguration()

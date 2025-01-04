@@ -81,7 +81,10 @@ class DocIDRuntime(DefaultPythonTransformRuntime):
         self.id_generator = None
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: TransformStatistics,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Get the dictionary of configuration that will be provided to the transform's initializer.

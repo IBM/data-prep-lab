@@ -14,14 +14,23 @@ import os
 import sys
 
 import polars as pl
-from dpk_fdedup.cluster_analysis.spark.transform import ClusterAnalysisSparkTransformConfiguration
 from data_processing.utils import ParamsUtils
 from data_processing_spark.runtime.spark import SparkTransformLauncher
+from dpk_fdedup.cluster_analysis.spark.transform import (
+    ClusterAnalysisSparkTransformConfiguration,
+)
 
 
 # create parameters
 input_folder = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "test-data", "expected", "signature_calc", "bands")
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "test-data",
+        "expected",
+        "signature_calc",
+        "bands",
+    )
 )
 output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output", "docs_to_remove"))
 local_conf = {

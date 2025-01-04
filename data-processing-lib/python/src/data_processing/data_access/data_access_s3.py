@@ -46,8 +46,14 @@ class DataAccessS3(DataAccess):
         :param files_to_use: files extensions of files to include
         :param files_to_checkpoint: files extensions of files to use for checkpointing
         """
-        super().__init__(d_sets=d_sets, checkpoint=checkpoint, m_files=m_files, n_samples=n_samples,
-                         files_to_use=files_to_use, files_to_checkpoint=files_to_checkpoint)
+        super().__init__(
+            d_sets=d_sets,
+            checkpoint=checkpoint,
+            m_files=m_files,
+            n_samples=n_samples,
+            files_to_use=files_to_use,
+            files_to_checkpoint=files_to_checkpoint,
+        )
         if (
             s3_credentials is None
             or s3_credentials.get("access_key", None) is None
@@ -164,7 +170,10 @@ class DataAccessS3(DataAccess):
             return None, 0
         metadata["source"] = {"name": self.input_folder, "type": "path"}
         metadata["target"] = {"name": self.output_folder, "type": "path"}
-        return self.save_file(path=f"{self.output_folder}metadata.json", data=json.dumps(metadata, indent=2).encode())
+        return self.save_file(
+            path=f"{self.output_folder}metadata.json",
+            data=json.dumps(metadata, indent=2).encode(),
+        )
 
     def get_file(self, path: str) -> tuple[bytes, int]:
         """

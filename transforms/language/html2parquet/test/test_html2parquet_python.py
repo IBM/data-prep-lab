@@ -19,6 +19,7 @@ from data_processing.test_support.launch.transform_test import (
 )
 from dpk_html2parquet.transform_python import Html2ParquetPythonTransformConfiguration
 
+
 class TestPythonHtml2ParquetTransform(AbstractTransformLauncherTest):
     """
     Extends the super-class to define the test data for the tests defined there.
@@ -44,8 +45,6 @@ class TestPythonHtml2ParquetTransform(AbstractTransformLauncherTest):
                 basedir + "/input",
                 basedir + "/expected",
                 ignore_columns,
-
             )
         )
         return fixtures
-

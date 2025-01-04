@@ -23,7 +23,10 @@ class TransformConfiguration(CLIArgumentProvider):
     """
 
     def __init__(
-        self, name: str, transform_class: type[AbstractTransform], remove_from_metadata: list[str] = []
+        self,
+        name: str,
+        transform_class: type[AbstractTransform],
+        remove_from_metadata: list[str] = [],
     ):
         """
         Initialization
@@ -72,7 +75,9 @@ class TransformConfiguration(CLIArgumentProvider):
 
 
 def get_transform_config(
-    transform_configuration: TransformConfiguration, argv: list[str], parser: ArgumentParser = None
+    transform_configuration: TransformConfiguration,
+    argv: list[str],
+    parser: ArgumentParser = None,
 ):
     """
     Create a transform configuration dictionary  using the given Configuration class and dictionary of

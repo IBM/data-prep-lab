@@ -15,12 +15,13 @@ import sys
 
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
+from dpk_filter.transform_python import FilterPythonTransformConfiguration
+
 from transforms.universal.filter.dpk_filter.transform import (
     filter_columns_to_drop_cli_param,
     filter_criteria_cli_param,
     filter_logical_operator_cli_param,
 )
-from dpk_filter.transform_python import FilterPythonTransformConfiguration
 
 
 # create parameters

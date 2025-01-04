@@ -43,7 +43,6 @@ class TestRayHtml2ParquetTransform(AbstractTransformLauncherTest):
                 basedir + "/expected",
                 # this is added as a fixture to remove these columns from comparison
                 ["date_acquired"],
-
             )
         )
         return fixtures

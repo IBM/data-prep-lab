@@ -61,16 +61,31 @@ def sample_code_ray_orchestrator(
     p1_orch_fuzzy_dedup_name: str = "fdedup_wf",
     p1_orch_tokenization_wf_name: str = "tokenization_wf",
     p2_pipeline_runtime_pipeline_id: str = "pipeline_id",
-    p2_pipeline_ray_head_options: dict = {"cpu": 1, "memory": 4, "image_pull_secret": ""},
-    p2_pipeline_ray_worker_options: dict = {"replicas": 2, "max_replicas": 2, "min_replicas": 2, "cpu": 2, "memory": 4, "image_pull_secret": ""},
+    p2_pipeline_ray_head_options: dict = {
+        "cpu": 1,
+        "memory": 4,
+        "image_pull_secret": "",
+    },
+    p2_pipeline_ray_worker_options: dict = {
+        "replicas": 2,
+        "max_replicas": 2,
+        "min_replicas": 2,
+        "cpu": 2,
+        "memory": 4,
+        "image_pull_secret": "",
+    },
     p2_pipeline_server_url: str = "http://kuberay-apiserver-service.kuberay.svc.cluster.local:8888",
     p2_pipeline_input_parent_path: str = "test/code2parquet/input/",
     p2_pipeline_output_parent_path: str = "test/super/output/",
     p2_pipeline_parent_path_suffix: str = "",
     p2_pipeline_additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 400, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
     p2_pipeline_data_s3_access_secret: str = "s3-secret",
-    p2_pipeline_runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
-    p2_pipeline_runtime_actor_options: dict = {'num_cpus': 0.7},
+    p2_pipeline_runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
+    p2_pipeline_runtime_actor_options: dict = {"num_cpus": 0.7},
     p2_pipeline_data_max_files: int = -1,
     p2_pipeline_data_num_samples: int = -1,
     # code to parquet step parameters
@@ -266,12 +281,20 @@ def sample_code_ray_orchestrator(
     _set_component(exact_dedup, "exact dedup", code_to_parquet)
     # document ID
     doc_id = run_doc_id_op(
-        name=p1_orch_doc_id_name, prefix="p5_", params=args, host=orch_host, input_folder=exact_dedup.output
+        name=p1_orch_doc_id_name,
+        prefix="p5_",
+        params=args,
+        host=orch_host,
+        input_folder=exact_dedup.output,
     )
     _set_component(doc_id, "doc ID", exact_dedup)
     # fuzzy deduplication
     fuzzy_dedup = run_fuzzy_dedup_op(
-        name=p1_orch_fuzzy_dedup_name, prefix="p6_", params=args, host=orch_host, input_folder=doc_id.output
+        name=p1_orch_fuzzy_dedup_name,
+        prefix="p6_",
+        params=args,
+        host=orch_host,
+        input_folder=doc_id.output,
     )
     _set_component(fuzzy_dedup, "fuzzy dedup", doc_id)
 
@@ -287,19 +310,31 @@ def sample_code_ray_orchestrator(
 
     # code_quality
     code_quality = run_code_quality_op(
-        name=p1_orch_code_quality_name, prefix="p8_", params=args, host=orch_host, input_folder=proglang_select.output
+        name=p1_orch_code_quality_name,
+        prefix="p8_",
+        params=args,
+        host=orch_host,
+        input_folder=proglang_select.output,
     )
     _set_component(code_quality, "code_quality", proglang_select)
 
     # malware
     malware = run_malware_op(
-        name=p1_orch_malware_name, prefix="p9_", params=args, host=orch_host, input_folder=code_quality.output
+        name=p1_orch_malware_name,
+        prefix="p9_",
+        params=args,
+        host=orch_host,
+        input_folder=code_quality.output,
     )
     _set_component(malware, "malware", code_quality)
 
     # license check
     license_select = run_license_select_op(
-        name=p1_orch_license_select_name, prefix="p10_", params=args, host=orch_host, input_folder=malware.output
+        name=p1_orch_license_select_name,
+        prefix="p10_",
+        params=args,
+        host=orch_host,
+        input_folder=malware.output,
     )
     _set_component(license_select, "license_select", malware)
 

@@ -45,7 +45,12 @@ class TransformExecutionConfiguration(CLIArgumentProvider):
         :param parser: parser
         :return:
         """
-        parser.add_argument(f"--{runtime_cli_prefix}pipeline_id", type=str, default="pipeline_id", help="pipeline id")
+        parser.add_argument(
+            f"--{runtime_cli_prefix}pipeline_id",
+            type=str,
+            default="pipeline_id",
+            help="pipeline id",
+        )
         parser.add_argument(f"--{runtime_cli_prefix}job_id", type=str, default="job_id", help="job id")
 
         help_example_dict = {

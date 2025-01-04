@@ -86,7 +86,9 @@ class ComponentUtils:
                 logger.warning(f"Exception while handling node_selector {e}")
 
         kubernetes.use_field_path_as_env(
-            task, env_name=RUN_NAME, field_path="metadata.annotations['pipelines.kubeflow.org/run_name']"
+            task,
+            env_name=RUN_NAME,
+            field_path="metadata.annotations['pipelines.kubeflow.org/run_name']",
         )
         # Set cashing
         task.set_caching_options(enable_caching=cache_strategy)
@@ -114,7 +116,11 @@ class ComponentUtils:
         :param prefix: prefix to add to env name
         """
         if env2key is None:
-            env2key = {"s3-key": "S3_KEY", "s3-secret": "S3_SECRET", "s3-endpoint": "ENDPOINT"}
+            env2key = {
+                "s3-key": "S3_KEY",
+                "s3-secret": "S3_SECRET",
+                "s3-endpoint": "ENDPOINT",
+            }
 
         if prefix is not None:
             for secret_key, _ in env2key.items():

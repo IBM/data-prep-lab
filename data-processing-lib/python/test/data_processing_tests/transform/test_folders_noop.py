@@ -12,11 +12,13 @@
 
 import os
 
+from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.test_support.transform import NOOPFolderPythonTransformConfiguration
+from data_processing.test_support.transform import (
+    NOOPFolderPythonTransformConfiguration,
+)
 
 
 class TestRayNOOPTransform(AbstractTransformLauncherTest):

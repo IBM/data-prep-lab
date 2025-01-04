@@ -87,7 +87,9 @@ def orchestrate(
             "data_access_factory": data_access_factory,
             "transform_class": runtime_config.get_transform_class(),
             "transform_params": runtime.get_transform_config(
-                data_access_factory=data_access_factory, statistics=statistics, files=files
+                data_access_factory=data_access_factory,
+                statistics=statistics,
+                files=files,
             ),
             "statistics": statistics,
             "is_folder": is_folder,
@@ -150,7 +152,11 @@ def orchestrate(
         metadata = {
             "pipeline": preprocessing_params.pipeline_id,
             "job details": preprocessing_params.job_details
-            | {"start_time": start_ts, "end_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "status": status},
+            | {
+                "start_time": start_ts,
+                "end_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "status": status,
+            },
             "code": preprocessing_params.code_location,
             "job_input_params": runtime_config.get_transform_metadata()
             | data_access_factory.get_input_params()

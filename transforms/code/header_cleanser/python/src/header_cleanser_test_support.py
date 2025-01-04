@@ -37,7 +37,10 @@ class AbstractPythonHeaderCleanserTransformTest(AbstractTransformLauncherTest):
         Returns: the launcher and any additional command line/configuration included in the
         list of args given as the 2nd element of the fixtures.
         """
-        return (PythonTransformLauncher(HeaderCleanserPythonTransformConfiguration()), {})
+        return (
+            PythonTransformLauncher(HeaderCleanserPythonTransformConfiguration()),
+            {},
+        )
 
     def _get_test_file_directory(self) -> str:
         raise NotImplemented

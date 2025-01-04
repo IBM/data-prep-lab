@@ -54,8 +54,7 @@ class TestRayAggregatorTransform(AbstractTransformLauncherTest):
             expected_len += os.path.getsize(f_set2[i])
         assert abs(produced_len - expected_len) < 500
 
-
-    # Compare metadata
+        # Compare metadata
         f_set1 = get_files_in_folder(dir=produced, ext=".json", return_data=False)
         f_set2 = get_files_in_folder(dir=expected, ext=".json", return_data=False)
         assert len(f_set1) == len(f_set2)

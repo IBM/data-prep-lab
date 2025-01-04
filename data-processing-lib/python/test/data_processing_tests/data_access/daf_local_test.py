@@ -28,10 +28,22 @@ class TestDataAccessFactory(AbstractDataAccessFactoryTests):
         """
         params = {}
         input_folder = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "../../../test-data", "data_processing", "daf", "input")
+            os.path.join(
+                os.path.dirname(__file__),
+                "../../../test-data",
+                "data_processing",
+                "daf",
+                "input",
+            )
         )
         output_folder = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "../../../test-data", "data_processing", "daf", "output")
+            os.path.join(
+                os.path.dirname(__file__),
+                "../../../test-data",
+                "data_processing",
+                "daf",
+                "output",
+            )
         )
         local_conf = {
             "input_folder": input_folder,

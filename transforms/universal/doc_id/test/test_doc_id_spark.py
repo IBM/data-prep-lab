@@ -41,5 +41,12 @@ class TestSparkDocIDTransform(AbstractTransformLauncherTest):
             int_column_name_cli_param: "int_id_column",
         }
 
-        fixtures.append((launcher, transform_config, basedir + "/input", basedir + "/expected-spark"))
+        fixtures.append(
+            (
+                launcher,
+                transform_config,
+                basedir + "/input",
+                basedir + "/expected-spark",
+            )
+        )
         return fixtures

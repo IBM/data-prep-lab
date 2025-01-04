@@ -31,10 +31,26 @@ class TestInit:
         "output_folder": os.path.join(os.sep, "tmp", "output_guf"),
     }
     dal = DataAccessLocal(path_dict, d_sets=["dset1", "dset2"], checkpoint=True, m_files=-1)
-    size_stat_dict_empty = {"max_file_size": 0.0, "min_file_size": float(GB), "total_file_size": 0.0}
-    size_stat_dict = {"max_file_size": 0.0, "min_file_size": 0.0, "total_file_size": 0.0}
-    size_stat_dict_1 = {"max_file_size": 1.0, "min_file_size": 0.0, "total_file_size": 1.0}
-    size_stat_dict_1_1 = {"max_file_size": 1.0, "min_file_size": 1.0, "total_file_size": 1.0}
+    size_stat_dict_empty = {
+        "max_file_size": 0.0,
+        "min_file_size": float(GB),
+        "total_file_size": 0.0,
+    }
+    size_stat_dict = {
+        "max_file_size": 0.0,
+        "min_file_size": 0.0,
+        "total_file_size": 0.0,
+    }
+    size_stat_dict_1 = {
+        "max_file_size": 1.0,
+        "min_file_size": 0.0,
+        "total_file_size": 1.0,
+    }
+    size_stat_dict_1_1 = {
+        "max_file_size": 1.0,
+        "min_file_size": 1.0,
+        "total_file_size": 1.0,
+    }
 
 
 class TestGetFilesFolder(TestInit):
@@ -59,7 +75,11 @@ class TestGetFilesFolder(TestInit):
         result = self.dal._get_files_folder(path=str(directory), files_to_use=None, cm_files=0)
         os.remove(file_path)
         os.rmdir(directory)
-        assert result == ([{'name': '/tmp/input_guf/empty_dir/file.parquet', 'size': 0}], self.size_stat_dict, 0)
+        assert result == (
+            [{"name": "/tmp/input_guf/empty_dir/file.parquet", "size": 0}],
+            self.size_stat_dict,
+            0,
+        )
 
     def test_multiple_files(self):
         """
@@ -75,7 +95,10 @@ class TestGetFilesFolder(TestInit):
 
         file_list, size_dict, retries = self.dal._get_files_folder(path=str(directory), files_to_use=None, cm_files=0)
         results = ([f["name"] for f in file_list], size_dict)
-        expected_results = ([str(file.absolute()) for file in files], self.size_stat_dict_1)
+        expected_results = (
+            [str(file.absolute()) for file in files],
+            self.size_stat_dict_1,
+        )
         for file in files:
             os.remove(file)
         os.rmdir(directory)
@@ -287,10 +310,26 @@ class TestGetFilesToProcess(TestInit):
             fp.write(" " * MB)
         file_list, size_dict, _ = self.dal.get_files_to_process()
         result = (file_list, size_dict)
-        return result, in_files_1, in_files_2, out_file_2, in_path_1, out_path_1, in_path_2, out_path_2
+        return (
+            result,
+            in_files_1,
+            in_files_2,
+            out_file_2,
+            in_path_1,
+            out_path_1,
+            in_path_2,
+            out_path_2,
+        )
 
     def multiple_missing_files_cleanup(
-        self, in_files_1, in_files_2, out_file_2, in_path_1, out_path_1, in_path_2, out_path_2
+        self,
+        in_files_1,
+        in_files_2,
+        out_file_2,
+        in_path_1,
+        out_path_1,
+        in_path_2,
+        out_path_2,
     ):
         files_to_remove = in_files_1 + in_files_2 + [out_file_2]
         directories_to_remove = [in_path_1, out_path_1, in_path_2, out_path_2]
@@ -317,7 +356,13 @@ class TestGetFilesToProcess(TestInit):
             self.size_stat_dict_1,
         )
         self.multiple_missing_files_cleanup(
-            in_files_1, in_files_2, out_file_2, in_path_1, out_path_1, in_path_2, out_path_2
+            in_files_1,
+            in_files_2,
+            out_file_2,
+            in_path_1,
+            out_path_1,
+            in_path_2,
+            out_path_2,
         )
 
         assert result == expected_result
@@ -338,7 +383,13 @@ class TestGetFilesToProcess(TestInit):
             self.size_stat_dict_1,
         )
         self.multiple_missing_files_cleanup(
-            in_files_1, in_files_2, out_file_2, in_path_1, out_path_1, in_path_2, out_path_2
+            in_files_1,
+            in_files_2,
+            out_file_2,
+            in_path_1,
+            out_path_1,
+            in_path_2,
+            out_path_2,
         )
         assert result == expected_result
 
@@ -356,7 +407,13 @@ class TestGetFilesToProcess(TestInit):
         expected_result = ([str(in_files_1[0].absolute())], self.size_stat_dict_1_1)
 
         self.multiple_missing_files_cleanup(
-            in_files_1, in_files_2, out_file_2, in_path_1, out_path_1, in_path_2, out_path_2
+            in_files_1,
+            in_files_2,
+            out_file_2,
+            in_path_1,
+            out_path_1,
+            in_path_2,
+            out_path_2,
         )
         assert result == expected_result
 
@@ -403,7 +460,12 @@ class TestReadPyarrowTable(TestInit):
     data = {"col1": [1, 2, 3], "col2": ["a", "b", "c"]}
 
     # Create PyArrow schema
-    schema = pyarrow.schema([pyarrow.field("col1", pyarrow.int32()), pyarrow.field("col2", pyarrow.string())])
+    schema = pyarrow.schema(
+        [
+            pyarrow.field("col1", pyarrow.int32()),
+            pyarrow.field("col2", pyarrow.string()),
+        ]
+    )
 
     # Create PyArrow table
     table = pyarrow.Table.from_pydict(mapping=data, schema=schema)
@@ -513,7 +575,8 @@ class TestSaveJobMetadata(TestInit):
         with open(metadata_file_path, "r") as fp:
             metadata_dict = json.load(fp)
         self.cleanup(
-            directories_to_remove=[self.dal.input_folder, self.dal.output_folder], files_to_remove=[metadata_file_path]
+            directories_to_remove=[self.dal.input_folder, self.dal.output_folder],
+            files_to_remove=[metadata_file_path],
         )
         assert metadata_file_path == os.path.join(self.dal.output_folder, "metadata.json")
         assert (
@@ -623,7 +686,10 @@ class TestSaveFile(TestInit):
 
     def test_successful_save(self):
         file_info, _ = self.dal.save_file(self.new_file_path, b"This is new data")
-        assert file_info == {"name": self.new_file_path, "size": os.path.getsize(self.new_file_path)}
+        assert file_info == {
+            "name": self.new_file_path,
+            "size": os.path.getsize(self.new_file_path),
+        }
         os.remove(self.new_file_path)
 
     def test_invalid_filename(self):

@@ -20,7 +20,13 @@ def compute_common_params(
     num_permutations: int,  # number of permutations (minhashes) per document
     n_samples: int,  # files to sample for number of documents estimation
 ) -> NamedTuple(
-    "fdedup_params", [("num_segments", int), ("num_actors", str), ("actor_cpu", float), ("actor_memory", int)]
+    "fdedup_params",
+    [
+        ("num_segments", int),
+        ("num_actors", str),
+        ("actor_cpu", float),
+        ("actor_memory", int),
+    ],
 ):
     """
     Compute fuzzy dedup execution parameters common to all the transforms
@@ -43,7 +49,13 @@ def compute_common_params(
     s3_creds = {"access_key": s3_key, "secret_key": s3_secret, "url": s3_endpoint}
     s3_config = KFPUtils.load_from_json(data_s3_config.replace("'", '"'))
     # because S3 is the only viable version for kfp-based implementation, we are here creating DataAccess S3 directly
-    data_access = DataAccessS3(s3_credentials=s3_creds, s3_config=s3_config, d_sets=None, checkpoint=False, m_files=-1)
+    data_access = DataAccessS3(
+        s3_credentials=s3_creds,
+        s3_config=s3_config,
+        d_sets=None,
+        checkpoint=False,
+        m_files=-1,
+    )
     # sample input data
     sampling: dict[str, Any]
     sampling, _ = data_access.sample_input_data(n_samples=n_samples)
@@ -108,7 +120,6 @@ def signature_calc_compute_execution_params(
     num_segments: int,  # number of segments
     seed: int,  # seed for the random number generator
 ) -> dict:
-
     """
     Compute fuzzy dedup execution parameters for signature calculation
     :param runtime_num_actors: number of actors computed by KFPUtils.default_compute_execution_params()
@@ -172,7 +183,6 @@ def cluster_analysis_compute_execution_params(
     threshold: float,  # threshold,
     num_segments: int,  # number of segments
 ) -> dict:
-
     """
     Compute fuzzy dedup execution parameters for cluster analysis
     :param runtime_num_actors: number of actors computed by KFPUtils.default_compute_execution_params()

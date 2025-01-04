@@ -14,17 +14,21 @@ import argparse
 import os
 import sys
 
-from dpk_fdedup.cluster_analysis.spark.transform import ClusterAnalysisSparkTransformConfiguration
-from dpk_fdedup.data_cleaning.spark.transform import DataCleaningSparkTransformConfiguration
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing_spark.runtime.spark import SparkTransformLauncher
-from dpk_fdedup.transform_python import ServiceOrchestrator, parse_args
+from dpk_fdedup.cluster_analysis.spark.transform import (
+    ClusterAnalysisSparkTransformConfiguration,
+)
+from dpk_fdedup.data_cleaning.spark.transform import (
+    DataCleaningSparkTransformConfiguration,
+)
 from dpk_fdedup.get_duplicate_list.transform_python import (
     GetDuplicateListPythonTransformConfiguration,
 )
 from dpk_fdedup.signature_calc.spark.transform import (
     SignatureCalculationSparkTransformConfiguration,
 )
+from dpk_fdedup.transform_python import ServiceOrchestrator, parse_args
 
 
 s3_creds = {

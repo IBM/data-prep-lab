@@ -17,7 +17,12 @@ from typing import Any
 import pyarrow as pa
 from data_processing.transform import AbstractTableTransform, TransformConfiguration
 from data_processing.utils import CLIArgumentProvider, TransformUtils, get_logger
-from dpk_doc_chunk.chunkers import ChunkingExecutor, DLJsonChunker, LIMarkdown, LITokenTextSplitter
+from dpk_doc_chunk.chunkers import (
+    ChunkingExecutor,
+    DLJsonChunker,
+    LIMarkdown,
+    LITokenTextSplitter,
+)
 
 
 short_name = "doc_chunk"
@@ -44,6 +49,7 @@ output_bbox_column_name_cli_param = f"{cli_prefix}{output_bbox_column_name_key}"
 chunk_size_tokens_cli_param = f"{cli_prefix}{chunk_size_tokens_key}"
 chunk_overlap_tokens_cli_param = f"{cli_prefix}{chunk_overlap_tokens_key}"
 
+
 class chunking_types(str, enum.Enum):
     LI_MARKDOWN = "li_markdown"
     DL_JSON = "dl_json"
@@ -64,6 +70,7 @@ default_output_pageno_column_name = "page_number"
 default_output_bbox_column_name = "bbox"
 default_chunk_size_tokens = 128
 default_chunk_overlap_tokens = 30
+
 
 class DocChunkTransform(AbstractTableTransform):
     """
@@ -88,7 +95,10 @@ class DocChunkTransform(AbstractTableTransform):
         self.doc_id_column_name = config.get(doc_id_column_name_key, default_doc_id_column_name)
         self.output_chunk_column_name = config.get(output_chunk_column_name_key, default_output_chunk_column_name)
         self.output_chunk_column_id = config.get(output_chunk_column_id_key, default_output_chunk_column_id)
-        self.output_source_doc_id_column_name = config.get(output_source_doc_id_column_name_key, default_output_source_doc_id_column_name)
+        self.output_source_doc_id_column_name = config.get(
+            output_source_doc_id_column_name_key,
+            default_output_source_doc_id_column_name,
+        )
 
         # Parameters for Docling JSON chunking
         self.output_jsonpath_column_name = config.get(
@@ -99,7 +109,7 @@ class DocChunkTransform(AbstractTableTransform):
         )
         self.output_bbox_column_name_key = config.get(output_bbox_column_name_key, default_output_bbox_column_name)
 
-        # Parameters for Fixed-size with overlap chunking 
+        # Parameters for Fixed-size with overlap chunking
         self.chunk_size_tokens = config.get(chunk_size_tokens_key, default_chunk_size_tokens)
         self.chunk_overlap_tokens = config.get(chunk_overlap_tokens_key, default_chunk_overlap_tokens)
 
@@ -122,7 +132,7 @@ class DocChunkTransform(AbstractTableTransform):
                 output_chunk_column_name=self.output_chunk_column_name,
                 output_chunk_column_id=self.output_chunk_column_id,
                 chunk_size_tokens=self.chunk_size_tokens,
-                chunk_overlap_tokens=self.chunk_overlap_tokens
+                chunk_overlap_tokens=self.chunk_overlap_tokens,
             )
         else:
             raise RuntimeError(f"{self.chunking_type=} is not valid.")
@@ -138,7 +148,9 @@ class DocChunkTransform(AbstractTableTransform):
         for batch in table.to_batches():
             for row in batch.to_pylist():
                 content: str = row[self.content_column_name]
-                new_row = {k: v for k, v in row.items() if k not in (self.content_column_name, self.doc_id_column_name)}
+                new_row = {
+                    k: v for k, v in row.items() if k not in (self.content_column_name, self.doc_id_column_name)
+                }
                 if self.doc_id_column_name in row:
                     new_row[self.output_source_doc_id_column_name] = row[self.doc_id_column_name]
                 for chunk in self.chunker.chunk(content):
@@ -159,7 +171,6 @@ class DocChunkTransform(AbstractTableTransform):
 
 
 class DocChunkTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.
@@ -249,6 +260,8 @@ class DocChunkTransformConfiguration(TransformConfiguration):
 
         self.params = self.params | captured
         if self.params.get("dl_min_chunk_len") is not None:
-            self.logger.warning("The `dl_min_chunk_len` option is deprecated and will be ignored. Please stop using it, it will not accepted anymore in future versions.")
+            self.logger.warning(
+                "The `dl_min_chunk_len` option is deprecated and will be ignored. Please stop using it, it will not accepted anymore in future versions."
+            )
         self.logger.info(f"doc_chunk parameters are : {self.params}")
         return True

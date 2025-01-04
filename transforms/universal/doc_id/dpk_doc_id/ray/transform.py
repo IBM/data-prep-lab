@@ -73,7 +73,10 @@ class DocIDRayRuntime(DefaultRayTransformRuntime):
         self.id_generator = None
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: ActorHandle, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: ActorHandle,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Set environment for filter execution
@@ -104,7 +107,10 @@ class DocIDRayTransformConfiguration(DocIDTransformConfigurationBase):
 
 class DocIDRayTransformRuntimeConfiguration(RayTransformRuntimeConfiguration):
     def __init__(self):
-        super().__init__(transform_config=DocIDRayTransformConfiguration(), runtime_class=DocIDRayRuntime)
+        super().__init__(
+            transform_config=DocIDRayTransformConfiguration(),
+            runtime_class=DocIDRayRuntime,
+        )
 
 
 # Class used by the notebooks to ingest binary files and create parquet files

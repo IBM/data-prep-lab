@@ -47,6 +47,11 @@ class TestHAPTransform(AbstractTableTransformTest):
         # table_list, metadata = transform.transform(table)
 
         fixtures = [
-            (HAPTransform(hap_params), input_tables, expected_tables, expected_metadata_list),
+            (
+                HAPTransform(hap_params),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            ),
         ]
         return fixtures

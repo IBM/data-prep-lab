@@ -66,7 +66,12 @@ class RayTransformExecutionConfiguration(TransformExecutionConfiguration):
             help="AST string defining worker resource requirements.\n"
             + ParamsUtils.get_ast_help_text(help_example_dict),
         )
-        parser.add_argument(f"--{cli_prefix}creation_delay", type=int, default=0, help="delay between actor' creation")
+        parser.add_argument(
+            f"--{cli_prefix}creation_delay",
+            type=int,
+            default=0,
+            help="delay between actor' creation",
+        )
         return TransformExecutionConfiguration.add_input_params(self, parser=parser)
 
     def apply_input_params(self, args: argparse.Namespace) -> bool:

@@ -35,7 +35,10 @@ class AbstractBinaryTransformTest(AbstractTest):
             # Let the sub-class define the specific tests and test data for the transform under test.
             f = self.get_test_transform_fixtures()
             # Install the fixture, matching the parameter names used by test_transform() method.
-            metafunc.parametrize("transform,in_binary_list,expected_binary_list,expected_metadata_list", f)
+            metafunc.parametrize(
+                "transform,in_binary_list,expected_binary_list,expected_metadata_list",
+                f,
+            )
 
     def test_transform(
         self,

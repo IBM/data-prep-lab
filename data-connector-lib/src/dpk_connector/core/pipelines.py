@@ -11,11 +11,11 @@
 ################################################################################
 
 from typing import Any
+
+from dpk_connector.core.item import ConnectorItem
 from scrapy import Spider
 from scrapy.crawler import Crawler
 from scrapy.exceptions import DropItem
-
-from dpk_connector.core.item import ConnectorItem
 
 
 class DropPipeline:

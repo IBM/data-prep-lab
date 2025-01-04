@@ -15,12 +15,13 @@ from typing import Any
 
 from data_processing.data_access import DataAccess
 from data_processing.runtime.pure_python import (
+    DefaultPythonTransformRuntime,
     PythonTransformLauncher,
     PythonTransformRuntimeConfiguration,
-    DefaultPythonTransformRuntime)
+)
+from data_processing.test_support.transform import NOOPTransformConfiguration
 from data_processing.transform import AbstractFolderTransform
 from data_processing.utils import get_logger
-from data_processing.test_support.transform import NOOPTransformConfiguration
 
 
 logger = get_logger(__name__)
@@ -94,8 +95,10 @@ class NOOPFolderPythonTransformConfiguration(PythonTransformRuntimeConfiguration
         """
         Initialization
         """
-        super().__init__(transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
-                         runtime_class=NOOPFolderPythonRuntime)
+        super().__init__(
+            transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
+            runtime_class=NOOPFolderPythonRuntime,
+        )
 
 
 if __name__ == "__main__":

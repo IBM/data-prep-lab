@@ -279,7 +279,8 @@ class RepoLevelOrderRuntime(DefaultRayTransformRuntime):
             self.logger.info("Output by language enabled.")
             mapper_function_params = mapper_function_params | {
                 "filename_func": get_dominant_language_func(
-                    language_column_name=self.language_column_name, title_column_name="title"
+                    language_column_name=self.language_column_name,
+                    title_column_name="title",
                 ),
             }
 

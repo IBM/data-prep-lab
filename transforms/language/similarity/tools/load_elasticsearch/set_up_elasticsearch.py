@@ -11,24 +11,26 @@
 ################################################################################
 
 import csv
-import requests
-from requests.auth import HTTPBasicAuth
 import json
 import os
 import sys
-from sentence_transformers import SentenceTransformer
+
+import requests
 from dotenv import load_dotenv
+from requests.auth import HTTPBasicAuth
+from sentence_transformers import SentenceTransformer
+
 
 # Load environment variables from .env if present
 load_dotenv()
 
 # Optional values for these may come from the .env file
-elastic_host = os.getenv('ELASTIC_HOST', '')
-elastic_user = os.getenv('ELASTIC_USER', 'elastic')
-elastic_password = os.getenv('ELASTIC_PASSWORD', 'elastic')
-index_name = os.getenv('INDEX_NAME', 'mydata')
-csv_path = os.getenv('CSV_PATH', os.path.join(os.path.dirname(os.path.realpath(__file__)), "mydata.csv"))
-CONTENTS_COLUMN = os.getenv('contents', 'contents')
+elastic_host = os.getenv("ELASTIC_HOST", "")
+elastic_user = os.getenv("ELASTIC_USER", "elastic")
+elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
+index_name = os.getenv("INDEX_NAME", "mydata")
+csv_path = os.getenv("CSV_PATH", os.path.join(os.path.dirname(os.path.realpath(__file__)), "mydata.csv"))
+CONTENTS_COLUMN = os.getenv("contents", "contents")
 
 CREATE_INDEX = False  # If True, attempt to create index if not exists
 BATCH_SIZE = 1000
@@ -37,15 +39,15 @@ if not elastic_host or not index_name or not csv_path:
     print("Error: Missing required configuration. Ensure elastic_host, index_name, and csv_path are set.")
     sys.exit(1)
 
-bulk_url = f'{elastic_host}/_bulk'
-headers = { 'Content-Type': 'application/x-ndjson' }
+bulk_url = f"{elastic_host}/_bulk"
+headers = {"Content-Type": "application/x-ndjson"}
 elastic_auth = HTTPBasicAuth(elastic_user, elastic_password)
 
 mapping_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "mapping.json")
 with open(mapping_file_path, "r") as f:
     mappings = json.load(f)
 
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
 csv.field_size_limit(sys.maxsize)
 
 
@@ -57,7 +59,13 @@ def index_exists(index):
 
 def create_index(index, mapping):
     """Create the Elasticsearch index with given mapping."""
-    r = requests.put(f"{elastic_host}/{index}", auth=elastic_auth, headers={'Content-Type': 'application/json'}, json=mapping, verify=False)
+    r = requests.put(
+        f"{elastic_host}/{index}",
+        auth=elastic_auth,
+        headers={"Content-Type": "application/json"},
+        json=mapping,
+        verify=False,
+    )
     if r.status_code not in [200, 201]:
         print(f"Error creating index {index}: {r.status_code} {r.text}")
         sys.exit(1)
@@ -81,7 +89,7 @@ def verify_and_setup_index(index):
 
 def read_csv(csv_file_path):
     """Read CSV and yield rows. Verify CONTENTS_COLUMN column."""
-    with open(csv_file_path, "r", encoding='utf-8') as csvfile:
+    with open(csv_file_path, "r", encoding="utf-8") as csvfile:
         reader = csv.DictReader(csvfile)
         if CONTENTS_COLUMN not in reader.fieldnames:
             print(f"Error: '{CONTENTS_COLUMN}' column not found in CSV. Exiting.")
@@ -102,7 +110,7 @@ def generate_embeddings_and_push(index, rows, batch_size):
         action = {"index": {"_index": index}}
         doc = {
             "contents": contents,
-            "sentence_transformers_384": sentence_transformers_384
+            "sentence_transformers_384": sentence_transformers_384,
         }
 
         buffer.append(json.dumps(action))
@@ -129,11 +137,11 @@ def push_batch(batch):
         print(f"Error pushing batch: {r.status_code}\n{r.text}")
         sys.exit(1)
     response_json = r.json()
-    if response_json.get('errors', False):
+    if response_json.get("errors", False):
         print("Bulk indexing encountered errors:")
-        for item in response_json.get('items', []):
-            if item.get('index', {}).get('error'):
-                print(item.get('index', {}).get('error'))
+        for item in response_json.get("items", []):
+            if item.get("index", {}).get("error"):
+                print(item.get("index", {}).get("error"))
         sys.exit(1)
 
 

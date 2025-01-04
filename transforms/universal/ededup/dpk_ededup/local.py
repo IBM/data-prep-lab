@@ -29,7 +29,11 @@ local_conf = {
     "output_folder": output_folder,
 }
 
-ededup_params = {doc_column_name_key: "contents", int_column_name_key: "document_id", "filter": HashFilter({})}
+ededup_params = {
+    doc_column_name_key: "contents",
+    int_column_name_key: "document_id",
+    "filter": HashFilter({}),
+}
 
 if __name__ == "__main__":
     # Here we show how to run outside of ray

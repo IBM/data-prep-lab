@@ -34,7 +34,10 @@ class TestRayPIIRedactorTransform(AbstractTransformLauncherTest):
         fixtures.append(
             (
                 launcher,
-                {doc_transformed_contents_cli_param: "new_contents", "run_locally": True},
+                {
+                    doc_transformed_contents_cli_param: "new_contents",
+                    "run_locally": True,
+                },
                 basedir + "/input",
                 basedir + "/expected",
             )

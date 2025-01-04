@@ -61,7 +61,12 @@ supported_exts = {
 
 
 @func_set_timeout(1800)
-def sort_sem(files_df: pd.DataFrame, logger: Logger, title_column_name="new_title", language_column_name="language"):
+def sort_sem(
+    files_df: pd.DataFrame,
+    logger: Logger,
+    title_column_name="new_title",
+    language_column_name="language",
+):
     received_shape = files_df.shape
     supported_bools = files_df.ext.isin(supported_exts)
 

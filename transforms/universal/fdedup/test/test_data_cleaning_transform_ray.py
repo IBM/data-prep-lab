@@ -12,16 +12,16 @@
 
 import os
 
+from data_processing.test_support.launch.transform_test import (
+    AbstractTransformLauncherTest,
+)
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_fdedup.data_cleaning.ray.transform import DataCleaningRayTransformConfiguration
 from dpk_fdedup.data_cleaning.transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
     operation_mode_cli_param,
 )
-from dpk_fdedup.data_cleaning.ray.transform import DataCleaningRayTransformConfiguration
-from data_processing.test_support.launch.transform_test import (
-    AbstractTransformLauncherTest,
-)
-from data_processing_ray.runtime.ray import RayTransformLauncher
 
 
 class TestRayDataCleaningTransform(AbstractTransformLauncherTest):

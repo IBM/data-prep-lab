@@ -41,7 +41,12 @@ class PythonTransformExecutionConfiguration(TransformExecutionConfiguration):
         :param parser: parser
         :return:
         """
-        parser.add_argument(f"--{cli_prefix}num_processors", type=int, default=0, help="size of multiprocessing pool")
+        parser.add_argument(
+            f"--{cli_prefix}num_processors",
+            type=int,
+            default=0,
+            help="size of multiprocessing pool",
+        )
 
         return TransformExecutionConfiguration.add_input_params(self, parser=parser)
 

@@ -20,7 +20,11 @@ from workflow_support.pipeline_utils import PipelinesUtils
 logger = get_logger(__name__)
 
 
-def run_test(pipeline_package_path: str, endpoint: str = "http://localhost:8080/", overwrite: bool = True):
+def run_test(
+    pipeline_package_path: str,
+    endpoint: str = "http://localhost:8080/",
+    overwrite: bool = True,
+):
     """
     Upload and run a single pipeline
 

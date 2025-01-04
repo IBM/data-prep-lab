@@ -13,11 +13,19 @@
 from typing import Any
 
 from data_processing.data_access import DataAccessFactoryBase
-from data_processing.utils import UnrecoverableException
 from data_processing.transform import TransformStatistics
-from data_processing_spark.runtime.spark import SparkTransformLauncher
-from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration, DefaultSparkTransformRuntime
-from profiler_transform_base import ProfilerTransformBase, ProfilerTransformConfigurationBase, DataAggregator
+from data_processing.utils import UnrecoverableException
+from data_processing_spark.runtime.spark import (
+    DefaultSparkTransformRuntime,
+    SparkTransformLauncher,
+    SparkTransformRuntimeConfiguration,
+)
+from profiler_transform_base import (
+    DataAggregator,
+    ProfilerTransformBase,
+    ProfilerTransformConfigurationBase,
+)
+
 
 class ProfilerSparkTransform(ProfilerTransformBase):
     """
@@ -62,12 +70,16 @@ class ProfilerRuntime(DefaultSparkTransformRuntime):
             num_aggregators - number of aggregators
         """
         from data_processing.utils import get_logger
+
         super().__init__(params=params)
         self.aggregator = None
         self.logger = get_logger(__name__)
 
     def get_transform_config(
-            self, partition: int, data_access_factory: DataAccessFactoryBase, statistics: TransformStatistics
+        self,
+        partition: int,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: TransformStatistics,
     ) -> dict[str, Any]:
         """
         Get the dictionary of configuration that will be provided to the transform's initializer.
@@ -81,7 +93,6 @@ class ProfilerRuntime(DefaultSparkTransformRuntime):
         """
         self.aggregator = DataAggregator({"data_access_factory": data_access_factory})
         return self.params | {"aggregator": self.aggregator}
-
 
     def compute_execution_stats(self, stats: TransformStatistics) -> None:
         """
@@ -99,8 +110,10 @@ class ProfilerRuntime(DefaultSparkTransformRuntime):
 
 class ProfilerSparkTransformRuntimeConfiguration(SparkTransformRuntimeConfiguration):
     def __init__(self):
-        super().__init__(transform_config=ProfilerTransformConfigurationBase(transform_class=ProfilerSparkTransform),
-                         runtime_class=ProfilerRuntime)
+        super().__init__(
+            transform_config=ProfilerTransformConfigurationBase(transform_class=ProfilerSparkTransform),
+            runtime_class=ProfilerRuntime,
+        )
 
 
 if __name__ == "__main__":

@@ -17,12 +17,14 @@ from data_processing.test_support.launch.transform_test import (
 )
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_fdedup.signature_calc.ray.transform import (
+    SignatureCalculationRayTransformConfiguration,
+)
 from dpk_fdedup.signature_calc.transform import (
     num_bands_cli_param,
     num_permutations_cli_param,
     num_segments_cli_param,
 )
-from dpk_fdedup.signature_calc.ray.transform import SignatureCalculationRayTransformConfiguration
 
 
 class TestRaySignatureCalcTransform(AbstractTransformLauncherTest):
@@ -41,6 +43,11 @@ class TestRaySignatureCalcTransform(AbstractTransformLauncherTest):
         }
         launcher = RayTransformLauncher(SignatureCalculationRayTransformConfiguration())
         fixtures = [
-            (launcher, config, os.path.join(basedir, "input"), os.path.join(basedir, "expected", "signature_calc"))
+            (
+                launcher,
+                config,
+                os.path.join(basedir, "input"),
+                os.path.join(basedir, "expected", "signature_calc"),
+            )
         ]
         return fixtures

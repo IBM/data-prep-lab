@@ -39,7 +39,11 @@ def test_ray_remote_jobs():
         "memory": 4,
         "image": "rayproject/ray:2.9.3-py310",
         # Ray start params, just to show
-        "ray_start_params": {"metrics-export-port": "8080", "num-cpus": "0", "dashboard-host": "0.0.0.0"},
+        "ray_start_params": {
+            "metrics-export-port": "8080",
+            "num-cpus": "0",
+            "dashboard-host": "0.0.0.0",
+        },
         "image_pull_policy": "Always",
     } | dct_volumes
 
@@ -61,7 +65,10 @@ def test_ray_remote_jobs():
     # create cluster
     remote_jobs = RayRemoteJobs(server_url=server_url)
     status, error = remote_jobs.create_ray_cluster(
-        name="job-test", namespace="default", head_node=head_node, worker_nodes=[worker_node]
+        name="job-test",
+        namespace="default",
+        head_node=head_node,
+        worker_nodes=[worker_node],
     )
     print(f"Created cluster - status: {status}, error: {error}")
     assert status == 200

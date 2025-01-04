@@ -361,7 +361,11 @@ class SignatureCalculationTransform(AbstractTableTransform):
 
     # define shingles generation function
     def _generate_word_shingles(
-        self, row: tuple, shingling_option: str, window_size: int = 5, delimiter: str = " "
+        self,
+        row: tuple,
+        shingling_option: str,
+        window_size: int = 5,
+        delimiter: str = " ",
     ) -> tuple[list, int, int]:
         text = row[0]
         # lower case
@@ -417,7 +421,6 @@ class SignatureCalculationTransform(AbstractTableTransform):
 
 
 class SignatureCalculationTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.

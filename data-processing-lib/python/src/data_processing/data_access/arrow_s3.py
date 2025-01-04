@@ -95,6 +95,7 @@ class ArrowS3:
         :param key: complete folder
         :return: list of folders within a given folder and number of retries
         """
+
         def _get_sub_folders(bck: str, p: str) -> tuple[list[str], int]:
             sub_folders = []
             # use paginator
@@ -113,6 +114,7 @@ class ArrowS3:
                     internal_retries += r
                     sub_folders.extend(sf)
             return sub_folders, internal_retries
+
         bucket, prefix = self._get_bucket_key(key)
         subs, retries = _get_sub_folders(bck=bucket, p=prefix)
         return [f"{bucket}/{f}" for f in subs], retries

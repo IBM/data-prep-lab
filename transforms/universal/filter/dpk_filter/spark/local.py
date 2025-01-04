@@ -15,12 +15,12 @@ import sys
 
 from data_processing.utils import ParamsUtils
 from data_processing_spark.runtime.spark import SparkTransformLauncher
+from dpk_filter.spark.transform import FilterSparkTransformConfiguration
 from dpk_filter.transform import (
     filter_columns_to_drop_cli_param,
     filter_criteria_cli_param,
     filter_logical_operator_cli_param,
 )
-from dpk_filter.spark.transform import FilterSparkTransformConfiguration
 
 
 # create parameters

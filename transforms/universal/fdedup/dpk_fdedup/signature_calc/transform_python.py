@@ -17,7 +17,9 @@ from data_processing.runtime.pure_python.runtime_configuration import (
     PythonTransformRuntimeConfiguration,
 )
 from data_processing.utils import get_logger
-from dpk_fdedup.signature_calc.transform import SignatureCalculationTransformConfiguration
+from dpk_fdedup.signature_calc.transform import (
+    SignatureCalculationTransformConfiguration,
+)
 
 
 logger = get_logger(__name__)

@@ -11,6 +11,7 @@
 ################################################################################
 
 import os
+
 from data_processing.data_access.data_access_local import DataAccessLocal
 from data_processing.test_support import get_files_in_folder
 from data_processing.test_support.transform import AbstractBinaryTransformTest
@@ -26,9 +27,7 @@ class TestHtml2ParquetTransform(AbstractBinaryTransformTest):
 
     def get_test_transform_fixtures(self) -> list[tuple]:
         dal = DataAccessLocal()
-        basedir = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "../test-data")
-        )
+        basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../test-data"))
         input_dir = os.path.join(basedir, "input")
         input_files = get_files_in_folder(input_dir, ".html")
         input_files = [(name, binary) for name, binary in input_files.items()]
@@ -37,13 +36,16 @@ class TestHtml2ParquetTransform(AbstractBinaryTransformTest):
         config = {}
 
         expected_files = [
-            os.path.join(basedir, "expected", TransformUtils.get_file_basename(input_file).replace(".html", ".parquet"))
+            os.path.join(
+                basedir,
+                "expected",
+                TransformUtils.get_file_basename(input_file).replace(".html", ".parquet"),
+            )
             for input_file, _ in input_files
         ]
 
         expected_files = [
-            (dal.get_file(name)[0], TransformUtils.get_file_extension(name)[1])
-            for name in expected_files
+            (dal.get_file(name)[0], TransformUtils.get_file_extension(name)[1]) for name in expected_files
         ]
         return [
             (

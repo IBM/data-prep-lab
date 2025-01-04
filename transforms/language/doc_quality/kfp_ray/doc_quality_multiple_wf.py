@@ -28,6 +28,7 @@ base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:0.2.3"
 # path to kfp component specifications files
 component_spec_path = "../../../../kfp/kfp_ray_components/"
 
+
 # compute execution parameters. Here different tranforms might need different implementations. As
 # a result, instead of creating a component we are creating it in place here.
 def compute_exec_params_func(
@@ -101,7 +102,12 @@ TASK_NAME: str = "doc_quality"
 def doc_quality(
     # Ray cluster
     ray_name: str = "doc_quality-kfp-ray",  # name of Ray cluster
-    ray_head_options: dict = {"cpu": 1, "memory": 4, "image": task_image, "image_pull_policy": "Always"},
+    ray_head_options: dict = {
+        "cpu": 1,
+        "memory": 4,
+        "image": task_image,
+        "image_pull_policy": "Always",
+    },
     ray_worker_options: dict = {
         "replicas": 2,
         "max_replicas": 2,
@@ -120,7 +126,11 @@ def doc_quality(
     # orchestrator
     runtime_actor_options: dict = {"num_cpus": 0.8},
     runtime_pipeline_id: str = "pipeline_id",
-    runtime_code_location: dict = {"github": "github", "commit_hash": "12345", "path": "path"},
+    runtime_code_location: dict = {
+        "github": "github",
+        "commit_hash": "12345",
+        "path": "path",
+    },
     # doc_quality parameters
     docq_text_lang: str = "en",
     docq_doc_content_column: str = "contents",
@@ -168,7 +178,10 @@ def doc_quality(
     """
     # create clean_up task
     clean_up_task = cleanup_ray_op(
-        ray_name=ray_name, run_id=run_id, server_url=server_url, additional_params=additional_params
+        ray_name=ray_name,
+        run_id=run_id,
+        server_url=server_url,
+        additional_params=additional_params,
     )
     ComponentUtils.add_settings_to_component(clean_up_task, ONE_HOUR_SEC * 2)
     # pipeline definition

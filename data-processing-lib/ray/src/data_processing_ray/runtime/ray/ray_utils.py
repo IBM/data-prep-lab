@@ -98,7 +98,11 @@ class RayUtils:
 
     @staticmethod
     def create_actors(
-        clazz: type, params: dict[str, Any], actor_options: dict[str, Any], n_actors: int, creation_delay: int = 0
+        clazz: type,
+        params: dict[str, Any],
+        actor_options: dict[str, Any],
+        n_actors: int,
+        creation_delay: int = 0,
     ) -> list[ActorHandle]:
         """
         Create a set of actors
@@ -120,7 +124,8 @@ class RayUtils:
         for i in range(120):
             time.sleep(1)
             alive = list_actors(
-                filters=[("class_name", "=", cls_name), ("state", "=", "ALIVE")], limit=RAY_MAX_ACTOR_LIMIT
+                filters=[("class_name", "=", cls_name), ("state", "=", "ALIVE")],
+                limit=RAY_MAX_ACTOR_LIMIT,
             )
             if len(actors) == len(alive):
                 return actors

@@ -21,7 +21,10 @@ from noop_transform import NOOPTransform, sleep_key
 
 table = pa.Table.from_pydict({"name": pa.array(["Tom"]), "age": pa.array([23])})
 expected_table = table  # We're a noop after all.
-expected_metadata_list = [{"nfiles": 1, "nrows": 1}, {}]  # transform() result  # flush() result
+expected_metadata_list = [
+    {"nfiles": 1, "nrows": 1},
+    {},
+]  # transform() result  # flush() result
 
 
 class TestNOOPTransform(AbstractTableTransformTest):
@@ -39,6 +42,11 @@ class TestNOOPTransform(AbstractTableTransformTest):
         expected_metadata_list = [{"nfiles": 1, "nrows": 7}, {}]
         config = {sleep_key: 0}
         fixtures = [
-            (NOOPTransform(config), input_tables, expected_tables, expected_metadata_list),
+            (
+                NOOPTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            ),
         ]
         return fixtures

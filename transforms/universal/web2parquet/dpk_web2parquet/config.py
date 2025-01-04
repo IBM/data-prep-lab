@@ -13,9 +13,9 @@
 from argparse import ArgumentParser, Namespace
 
 from data_processing.transform import TransformConfiguration
-from data_processing.utils import CLIArgumentProvider
-from data_processing.utils import get_logger
+from data_processing.utils import CLIArgumentProvider, get_logger
 from dpk_web2parquet.transform import Web2ParquetTransform
+
 
 short_name = "web2parquet"
 cli_prefix = f"{short_name}_"
@@ -25,20 +25,17 @@ downloads_cli_param = f"{cli_prefix}downloads"
 folder_cli_param = f"{cli_prefix}folder"
 
 
-logger = get_logger(__name__,"DEBUG")
-    
-class Web2ParquetTransformConfiguration(TransformConfiguration):
+logger = get_logger(__name__, "DEBUG")
 
+
+class Web2ParquetTransformConfiguration(TransformConfiguration):
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.
     """
 
     def __init__(self):
-        super().__init__(
-            name=short_name,
-            transform_class=Web2ParquetTransform
-        )
+        super().__init__(name=short_name, transform_class=Web2ParquetTransform)
 
     def add_input_params(self, parser: ArgumentParser) -> None:
         """
@@ -47,16 +44,28 @@ class Web2ParquetTransformConfiguration(TransformConfiguration):
         By convention a common prefix should be used for all transform-specific CLI args
         (e.g, noop_, pii_, etc.)
         """
-        parser.add_argument(f"--{depth_cli_param}", type=int, default=1,
+        parser.add_argument(
+            f"--{depth_cli_param}",
+            type=int,
+            default=1,
             help="maxumum depth relative to seed URL",
         )
-        parser.add_argument(f"--{downloads_cli_param}", type=int, default=1,
+        parser.add_argument(
+            f"--{downloads_cli_param}",
+            type=int,
+            default=1,
             help="maxumum number of downloaded URLs",
         )
-        parser.add_argument(f"--{folder_cli_param}", type=str, default=None,
+        parser.add_argument(
+            f"--{folder_cli_param}",
+            type=str,
+            default=None,
             help="Folder where to store downloaded files",
         )
-        parser.add_argument(f"--{urls_cli_param}", type=str, default=None,
+        parser.add_argument(
+            f"--{urls_cli_param}",
+            type=str,
+            default=None,
             help="List of Seed URLs for the crawler",
         )
 
@@ -74,8 +83,3 @@ class Web2ParquetTransformConfiguration(TransformConfiguration):
         self.params = self.params | captured
         logger.info(f"web2parquet parameters are : {self.params}")
         return True
-
-
-
-
-

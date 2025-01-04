@@ -15,7 +15,9 @@ import sys
 
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
-from dpk_fdedup.signature_calc.ray.transform import SignatureCalculationRayTransformConfiguration
+from dpk_fdedup.signature_calc.ray.transform import (
+    SignatureCalculationRayTransformConfiguration,
+)
 
 
 # create parameters

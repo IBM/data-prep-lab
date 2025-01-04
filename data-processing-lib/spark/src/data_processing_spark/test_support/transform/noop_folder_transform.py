@@ -10,11 +10,17 @@
 # limitations under the License.
 ################################################################################
 
-from data_processing.test_support.transform import NOOPFolderTransform, NOOPTransformConfiguration
-from data_processing.utils import get_logger
-from data_processing_spark.runtime.spark import SparkTransformLauncher
-from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration, DefaultSparkTransformRuntime
 from data_processing.data_access import DataAccess
+from data_processing.test_support.transform import (
+    NOOPFolderTransform,
+    NOOPTransformConfiguration,
+)
+from data_processing.utils import get_logger
+from data_processing_spark.runtime.spark import (
+    DefaultSparkTransformRuntime,
+    SparkTransformLauncher,
+    SparkTransformRuntimeConfiguration,
+)
 
 
 logger = get_logger(__name__)
@@ -41,8 +47,10 @@ class NOOPFolderSparkTransformConfiguration(SparkTransformRuntimeConfiguration):
         """
         Initialization
         """
-        super().__init__(transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
-                         runtime_class=NOOPFolderSparkRuntime)
+        super().__init__(
+            transform_config=NOOPTransformConfiguration(clazz=NOOPFolderTransform),
+            runtime_class=NOOPFolderSparkRuntime,
+        )
 
 
 if __name__ == "__main__":

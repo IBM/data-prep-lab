@@ -16,9 +16,9 @@ from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-
 from dpk_similarity.transform import ES_ENDPOINT_CLI_PARAM
 from dpk_similarity.transform_python import SimilarityPythonTransformConfiguration
+
 
 class TestPythonSimilarityTransform(AbstractTransformLauncherTest):
     """

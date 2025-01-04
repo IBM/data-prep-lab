@@ -34,5 +34,8 @@ class TestPythonEdedupTransform(AbstractTransformLauncherTest):
         fixtures = []
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../test-data"))
         launcher = PythonTransformLauncher(EdedupPythonTransformRuntimeConfiguration())
-        config = {doc_column_name_cli_param: "contents", int_column_name_cli_param: "document_id"}
+        config = {
+            doc_column_name_cli_param: "contents",
+            int_column_name_cli_param: "document_id",
+        }
         return [(launcher, config, basedir + "/input", basedir + "/expected")]

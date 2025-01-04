@@ -62,7 +62,10 @@ class DataAccessFactory(DataAccessFactoryBase):
         help_example_dict = {
             "access_key": ["access", "access key help text"],
             "secret_key": ["secret", "secret key help text"],
-            "url": ["https://s3.us-east.cloud-object-storage.appdomain.cloud", "optional s3 url"],
+            "url": [
+                "https://s3.us-east.cloud-object-storage.appdomain.cloud",
+                "optional s3 url",
+            ],
             "region": ["us-east-1", "optional s3 region"],
         }
         parser.add_argument(
@@ -94,8 +97,14 @@ class DataAccessFactory(DataAccessFactoryBase):
             help="AST string containing input/output paths.\n" + ParamsUtils.get_ast_help_text(help_example_dict),
         )
         help_example_dict = {
-            "input_folder": ["./input", "Path to input folder of files to be processed"],
-            "output_folder": ["/tmp/output", "Path to output folder of processed files"],
+            "input_folder": [
+                "./input",
+                "Path to input folder of files to be processed",
+            ],
+            "output_folder": [
+                "/tmp/output",
+                "Path to output folder of processed files",
+            ],
         }
         parser.add_argument(
             f"--{self.cli_arg_prefix}local_config",
@@ -105,7 +114,10 @@ class DataAccessFactory(DataAccessFactoryBase):
             + ParamsUtils.get_ast_help_text(help_example_dict),
         )
         parser.add_argument(
-            f"--{self.cli_arg_prefix}max_files", type=int, default=-1, help="Max amount of files to process"
+            f"--{self.cli_arg_prefix}max_files",
+            type=int,
+            default=-1,
+            help="Max amount of files to process",
         )
         parser.add_argument(
             f"--{self.cli_arg_prefix}checkpointing",
@@ -135,7 +147,10 @@ class DataAccessFactory(DataAccessFactoryBase):
             help="list of file extensions to choose for input.",
         )
         parser.add_argument(
-            f"--{self.cli_arg_prefix}num_samples", type=int, default=-1, help="number of random input files to process"
+            f"--{self.cli_arg_prefix}num_samples",
+            type=int,
+            default=-1,
+            help="number of random input files to process",
         )
 
     def apply_input_params(self, args: Union[dict, argparse.Namespace]) -> bool:

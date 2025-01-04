@@ -12,11 +12,11 @@
 import os
 import time
 import traceback
-import psutil
 from datetime import datetime
 from multiprocessing import Pool
 from typing import Any
 
+import psutil
 from data_processing.data_access import DataAccessFactoryBase
 from data_processing.runtime.pure_python import (
     PythonPoolTransformFileProcessor,
@@ -24,7 +24,11 @@ from data_processing.runtime.pure_python import (
     PythonTransformFileProcessor,
     PythonTransformRuntimeConfiguration,
 )
-from data_processing.transform import AbstractTransform, TransformStatistics, AbstractFolderTransform
+from data_processing.transform import (
+    AbstractFolderTransform,
+    AbstractTransform,
+    TransformStatistics,
+)
 from data_processing.utils import GB, get_logger
 
 
@@ -41,7 +45,7 @@ def _execution_resources() -> dict[str, Any]:
     # Getting memory used
     mused = round(psutil.virtual_memory()[3] / GB, 2)
     return {
-        "cpus": round((load15/os.cpu_count()) * 100, 1),
+        "cpus": round((load15 / os.cpu_count()) * 100, 1),
         "gpus": 0,
         "memory": mused,
         "object_store": 0,
@@ -100,7 +104,9 @@ def orchestrate(
                 data_access_factory=data_access_factory,
                 print_interval=print_interval,
                 transform_params=runtime.get_transform_config(
-                    data_access_factory=data_access_factory, statistics=statistics, files=files
+                    data_access_factory=data_access_factory,
+                    statistics=statistics,
+                    files=files,
                 ),
                 transform_class=runtime_config.get_transform_class(),
                 is_folder=is_folder,
@@ -113,7 +119,9 @@ def orchestrate(
                 print_interval=print_interval,
                 statistics=statistics,
                 transform_params=runtime.get_transform_config(
-                    data_access_factory=data_access_factory, statistics=statistics, files=files
+                    data_access_factory=data_access_factory,
+                    statistics=statistics,
+                    files=files,
                 ),
                 transform_class=runtime_config.get_transform_class(),
                 is_folder=is_folder,
@@ -145,8 +153,8 @@ def orchestrate(
             "job_input_params": input_params
             | data_access_factory.get_input_params()
             | execution_config.get_input_params(),
-            "execution_stats": _execution_resources() |
-                               {"execution time, min": round((time.time() - start_time) / 60.0, 3)},
+            "execution_stats": _execution_resources()
+            | {"execution time, min": round((time.time() - start_time) / 60.0, 3)},
             "job_output_stats": stats,
         }
         logger.debug(f"Saving job metadata: {metadata}.")
@@ -211,7 +219,7 @@ def _process_transforms_multiprocessor(
     data_access_factory: DataAccessFactoryBase,
     transform_params: dict[str, Any],
     transform_class: type[AbstractTransform],
-    is_folder: bool
+    is_folder: bool,
 ) -> TransformStatistics:
     """
     Process transforms using multiprocessing pool

@@ -13,12 +13,11 @@
 import os
 from typing import Tuple
 
+from data_processing.data_access import DataAccessFactory
 from data_processing.test_support import get_tables_in_folder
 from data_processing.test_support.transform import AbstractTableTransformTest
-from profiler_transform_base import DataAggregator
+from profiler_transform_base import DataAggregator, doc_column_name_key
 from profiler_transform_python import ProfilerTransform
-from profiler_transform_base import doc_column_name_key
-from data_processing.data_access import DataAccessFactory
 
 
 class TestProfilerTransform(AbstractTableTransformTest):
@@ -32,9 +31,16 @@ class TestProfilerTransform(AbstractTableTransformTest):
         input_dir = os.path.join(basedir, "input")
         input_tables = get_tables_in_folder(input_dir)
         expected_metadata_list = [{}, {}]
-        config = {doc_column_name_key: "contents",
-                  "aggregator": DataAggregator({"data_access_factory": DataAccessFactory()})}
+        config = {
+            doc_column_name_key: "contents",
+            "aggregator": DataAggregator({"data_access_factory": DataAccessFactory()}),
+        }
         expected_tables = []
         return [
-            (ProfilerTransform(config), input_tables, expected_tables, expected_metadata_list),
+            (
+                ProfilerTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            ),
         ]

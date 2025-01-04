@@ -17,9 +17,9 @@ from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from dpk_doc_chunk.transform import (
-    chunking_type_cli_param, 
+    chunking_type_cli_param,
+    chunking_types,
     output_chunk_column_name_cli_param,
-    chunking_types
 )
 from dpk_doc_chunk.transform_python import DocChunkPythonTransformConfiguration
 
@@ -66,7 +66,7 @@ class TestPythonDocChunkTransform(AbstractTransformLauncherTest):
                 launcher,
                 {
                     chunking_type_cli_param: chunking_types.LI_TOKEN_TEXT,
-                    output_chunk_column_name_cli_param: "chunk_text"
+                    output_chunk_column_name_cli_param: "chunk_text",
                 },
                 basedir + "/input_token_text",
                 basedir + "/expected_token_text",

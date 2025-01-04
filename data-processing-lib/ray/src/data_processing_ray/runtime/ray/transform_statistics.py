@@ -32,10 +32,12 @@ class TransformStatisticsRay(TransformStatistics):
         self.source_files_counter = Counter(name="source_files_processed", description="Total source files processed")
         self.result_files_counter = Counter(name="result_files_written", description="Total result files written")
         self.source_documents_counter = Counter(
-            name="source_documents_processed", description="Total source document processed"
+            name="source_documents_processed",
+            description="Total source document processed",
         )
         self.result_documents_counter = Counter(
-            name="result_documents_written", description="Total result documents written"
+            name="result_documents_written",
+            description="Total result documents written",
         )
         self.empty_table_counter = Counter(name="empty_tables", description="Total empty tables read")
         self.failed_read_counter = Counter(name="failed_read_files", description="Total read failed files")

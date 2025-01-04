@@ -13,26 +13,25 @@
 
 from urllib.parse import urlparse
 
-def get_file_info(url: str, headers: dict=None):
+
+def get_file_info(url: str, headers: dict = None):
     try:
-        file_size = int(headers['Content-Length'])
+        file_size = int(headers["Content-Length"])
     except:
-        file_size=0        
+        file_size = 0
     try:
-        content_type=headers.get('Content-Type')
+        content_type = headers.get("Content-Type")
     except:
-        content_type='text/html'
-        
-    url_parse=urlparse(url)
+        content_type = "text/html"
+
+    url_parse = urlparse(url)
     try:
-        filename = headers.get('Content-Disposition').split('filename=')[1].strip().strip('"')
+        filename = headers.get("Content-Disposition").split("filename=")[1].strip().strip('"')
     except:
-        filename='-'.join(url_parse.path.strip('/').split('/'))
-    # Prepend host name 
-    filename=url_parse.netloc.replace('.',"_")+'_'+filename
-    
+        filename = "-".join(url_parse.path.strip("/").split("/"))
+    # Prepend host name
+    filename = url_parse.netloc.replace(".", "_") + "_" + filename
+
     # append extension using content type
-    filename = filename+"_"+content_type.split(';')[0].replace("/", ".")
-    return {'filename':filename, 'content_type': content_type, 'file_size': file_size}
-
-
+    filename = filename + "_" + content_type.split(";")[0].replace("/", ".")
+    return {"filename": filename, "content_type": content_type, "file_size": file_size}

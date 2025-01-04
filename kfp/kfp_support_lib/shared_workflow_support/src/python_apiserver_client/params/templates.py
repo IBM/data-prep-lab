@@ -48,7 +48,13 @@ class Toleration:
     - to_dict() -> dict[str, Any] convert to dict
     """
 
-    def __init__(self, key: str, operator: TolerationOperation, effect: TolerationEffect, value: str = None):
+    def __init__(
+        self,
+        key: str,
+        operator: TolerationOperation,
+        effect: TolerationEffect,
+        value: str = None,
+    ):
         """
         Initialization
         :param key: key
@@ -77,7 +83,11 @@ class Toleration:
         Convert to string
         :return: string representation of toleration
         """
-        dct = {"key": self.key, "operator": self.operator.value, "effect": self.effect.value}
+        dct = {
+            "key": self.key,
+            "operator": self.operator.value,
+            "effect": self.effect.value,
+        }
         if self.value is not None:
             dct["value"] = self.value
         return dct
@@ -165,7 +175,12 @@ class Template:
         Convert to dictionary
         :return: dictionary representation of template
         """
-        dct = {"name": self.name, "namespace": self.namespace, "cpu": self.cpu, "memory": self.memory}
+        dct = {
+            "name": self.name,
+            "namespace": self.namespace,
+            "cpu": self.cpu,
+            "memory": self.memory,
+        }
         if self.gpu > 0:
             dct["gpu"] = self.gpu
         if self.gpu_accelerator is not None:

@@ -41,7 +41,8 @@ class Pdf2ParquetRayTransform(Pdf2ParquetTransform):
         self.doc_counter = Counter("worker_pdf_doc_count", "Number of PDF documents converted by the worker")
         self.page_counter = Counter("worker_pdf_pages_count", "Number of PDF pages converted by the worker")
         self.page_convert_gauge = Gauge(
-            "worker_pdf_page_avg_convert_time", "Average time for converting a single PDF page on each worker"
+            "worker_pdf_page_avg_convert_time",
+            "Average time for converting a single PDF page on each worker",
         )
         self.doc_convert_gauge = Gauge("worker_pdf_convert_time", "Time spent converting a single document")
 

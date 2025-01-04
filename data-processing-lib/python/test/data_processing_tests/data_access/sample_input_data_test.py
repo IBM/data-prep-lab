@@ -22,7 +22,10 @@ def test_table_sampling_data():
     """
 
     input_folder = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "../../../test-data/data_processing/input_multiple")
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../test-data/data_processing/input_multiple",
+        )
     )
     output_folder = "/tmp"
     print(input_folder)

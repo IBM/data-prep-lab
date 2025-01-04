@@ -19,7 +19,11 @@ from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.runtime.pure_python.runtime_configuration import (
     PythonTransformRuntimeConfiguration,
 )
-from data_processing.transform import AbstractTableTransform, TransformConfiguration, AbstractTransform
+from data_processing.transform import (
+    AbstractTableTransform,
+    AbstractTransform,
+    TransformConfiguration,
+)
 from data_processing.utils import CLIArgumentProvider, get_logger
 
 
@@ -69,7 +73,6 @@ class NOOPTransform(AbstractTableTransform):
 
 
 class NOOPTransformConfiguration(TransformConfiguration):
-
     """
     Provides support for configuring and using the associated Transform class include
     configuration with CLI args.

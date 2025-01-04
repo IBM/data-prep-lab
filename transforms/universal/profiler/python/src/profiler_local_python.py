@@ -15,8 +15,8 @@ import sys
 
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
-from profiler_transform_python import ProfilerPythonTransformRuntimeConfiguration
 from profiler_transform_base import doc_column_name_cli_param
+from profiler_transform_python import ProfilerPythonTransformRuntimeConfiguration
 
 
 # create launcher

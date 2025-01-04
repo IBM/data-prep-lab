@@ -29,4 +29,7 @@ class TestPythonHeaderCleanserTransform(AbstractPythonHeaderCleanserTransformTes
         return dir
 
     def _get_launcher(self) -> (AbstractTransformLauncher, dict):
-        return (RayTransformLauncher(HeaderCleanserRayTransformConfiguration()), {"run_locally": True})
+        return (
+            RayTransformLauncher(HeaderCleanserRayTransformConfiguration()),
+            {"run_locally": True},
+        )

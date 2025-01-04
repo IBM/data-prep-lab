@@ -12,12 +12,14 @@
 
 import os
 
-from dpk_fdedup.cluster_analysis.transform import sort_output_cli_param
-from dpk_fdedup.cluster_analysis.spark.transform import ClusterAnalysisSparkTransformConfiguration
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from data_processing_spark.runtime.spark import SparkTransformLauncher
+from dpk_fdedup.cluster_analysis.spark.transform import (
+    ClusterAnalysisSparkTransformConfiguration,
+)
+from dpk_fdedup.cluster_analysis.transform import sort_output_cli_param
 
 
 class TestSparkClusterAnalysisTransform(AbstractTransformLauncherTest):

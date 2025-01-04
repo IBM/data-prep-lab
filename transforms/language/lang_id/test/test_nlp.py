@@ -17,7 +17,9 @@ from dpk_lang_id.nlp import get_lang_ds_pa
 
 def test_language_identification():
     nlp_langid = LangModelFactory.create_model(
-        KIND_FASTTEXT, "facebook/fasttext-language-identification", "YOUR HUGGING FACE ACCOUNT TOKEN"
+        KIND_FASTTEXT,
+        "facebook/fasttext-language-identification",
+        "YOUR HUGGING FACE ACCOUNT TOKEN",
     )
     documents = pa.array(
         [

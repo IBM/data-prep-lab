@@ -64,7 +64,9 @@ class PipelinesUtils:
                 return None
         try:
             pipeline = self.kfp_client.upload_pipeline(
-                pipeline_package_path=pipeline_package_path, pipeline_name=pipeline_name, description=description
+                pipeline_package_path=pipeline_package_path,
+                pipeline_name=pipeline_name,
+                description=description,
             )
         except Exception as e:
             logger.warning(f"Exception uploading pipeline {e}")

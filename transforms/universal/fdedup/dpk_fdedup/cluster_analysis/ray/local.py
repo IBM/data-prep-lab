@@ -13,14 +13,23 @@
 import os
 import sys
 
-from dpk_fdedup.cluster_analysis.ray.transform import ClusterAnalysisRayTransformConfiguration
 from data_processing.utils import ParamsUtils
 from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_fdedup.cluster_analysis.ray.transform import (
+    ClusterAnalysisRayTransformConfiguration,
+)
 
 
 # create parameters
 input_folder = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "test-data", "expected", "signature_calc", "bands")
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "test-data",
+        "expected",
+        "signature_calc",
+        "bands",
+    )
 )
 output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output", "docs_to_remove"))
 local_conf = {

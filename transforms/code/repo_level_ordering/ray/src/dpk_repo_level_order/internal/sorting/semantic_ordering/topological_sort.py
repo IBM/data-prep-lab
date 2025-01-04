@@ -135,7 +135,10 @@ def topological_sort_on_df(input_graph, df, logger, title_column_name="new_title
             logger.debug("Found zero nodes without dependency")
     else:
         sorted_df_without_dep1, sorted_df_without_dep2 = sort_by_path(
-            df_without_dep, logger, split_by_filetype=True, title_column_name=title_column_name
+            df_without_dep,
+            logger,
+            split_by_filetype=True,
+            title_column_name=title_column_name,
         )
 
     if logger:

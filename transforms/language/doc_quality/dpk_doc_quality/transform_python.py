@@ -65,7 +65,11 @@ class DocQuality:
             self.params[text_lang_cli_param] = "en"
         if bad_word_filepath_cli_param not in self.params:
             self.params[bad_word_filepath_cli_param] = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), "ldnoobw", self.params[text_lang_cli_param])
+                os.path.join(
+                    os.path.dirname(__file__),
+                    "ldnoobw",
+                    self.params[text_lang_cli_param],
+                )
             )
 
     def transform(self):

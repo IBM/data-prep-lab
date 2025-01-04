@@ -12,12 +12,12 @@
 import os
 
 from data_processing.test_support import get_files_in_folder
-from data_processing_spark.runtime.spark import SparkTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
-from profiler_transform_spark import ProfilerSparkTransformRuntimeConfiguration
+from data_processing_spark.runtime.spark import SparkTransformLauncher
 from profiler_transform_base import doc_column_name_cli_param
+from profiler_transform_spark import ProfilerSparkTransformRuntimeConfiguration
 
 
 class TestPythonProfilerTransform(AbstractTransformLauncherTest):
@@ -44,9 +44,7 @@ class TestPythonProfilerTransform(AbstractTransformLauncherTest):
             expected_len += os.path.getsize(f_set2[i])
         assert abs(produced_len - expected_len) < 500
 
-
-    # Compare metadata
+        # Compare metadata
         f_set1 = get_files_in_folder(dir=produced, ext=".json", return_data=False)
         f_set2 = get_files_in_folder(dir=expected, ext=".json", return_data=False)
         assert len(f_set1) == len(f_set2)
-

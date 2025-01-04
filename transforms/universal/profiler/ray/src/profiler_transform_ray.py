@@ -15,7 +15,11 @@ from typing import Any
 
 import ray
 from data_processing.data_access import DataAccessFactoryBase
-from data_processing.utils import CLIArgumentProvider, TransformUtils, UnrecoverableException
+from data_processing.utils import (
+    CLIArgumentProvider,
+    TransformUtils,
+    UnrecoverableException,
+)
 from data_processing_ray.runtime.ray import (
     DefaultRayTransformRuntime,
     RayTransformLauncher,
@@ -24,13 +28,13 @@ from data_processing_ray.runtime.ray import (
 from data_processing_ray.runtime.ray.runtime_configuration import (
     RayTransformRuntimeConfiguration,
 )
-from ray.actor import ActorHandle
 from profiler_transform_base import (
     DataAggregator,
     ProfilerTransformBase,
     ProfilerTransformConfigurationBase,
-    cli_prefix
+    cli_prefix,
 )
+from ray.actor import ActorHandle
 
 
 class ProfilerTransform(ProfilerTransformBase):
@@ -95,7 +99,10 @@ class ProfilerRuntime(DefaultRayTransformRuntime):
         self.logger = get_logger(__name__)
 
     def get_transform_config(
-        self, data_access_factory: DataAccessFactoryBase, statistics: ActorHandle, files: list[str]
+        self,
+        data_access_factory: DataAccessFactoryBase,
+        statistics: ActorHandle,
+        files: list[str],
     ) -> dict[str, Any]:
         """
         Set environment for transform execution
@@ -148,7 +155,10 @@ class ProfilerRuntime(DefaultRayTransformRuntime):
             remote_replies = not_ready
         if retries > 0:
             stats["data access retries"] = stats.get("data access retries", 0) + retries
-        return {"unique words": sum_aggregators, "words memory, GB": sum_aggregator_mem} | stats
+        return {
+            "unique words": sum_aggregators,
+            "words memory, GB": sum_aggregator_mem,
+        } | stats
 
 
 class ProfilerRayTransformConfiguration(ProfilerTransformConfigurationBase):
@@ -172,13 +182,13 @@ class ProfilerRayTransformConfiguration(ProfilerTransformConfigurationBase):
             f"--{cli_prefix}aggregator_cpu",
             type=float,
             default=0.5,
-            help="number of CPUs per aggregator"
+            help="number of CPUs per aggregator",
         )
         parser.add_argument(
             f"--{cli_prefix}num_aggregators",
             type=int,
             default=0,
-            help="number of aggregator actors to use"
+            help="number of aggregator actors to use",
         )
 
     def apply_input_params(self, args: Namespace) -> bool:
@@ -201,7 +211,10 @@ class ProfilerRayTransformConfiguration(ProfilerTransformConfigurationBase):
 
 class ProfilerRayTransformRuntimeConfiguration(RayTransformRuntimeConfiguration):
     def __init__(self):
-        super().__init__(transform_config=ProfilerRayTransformConfiguration(), runtime_class=ProfilerRuntime)
+        super().__init__(
+            transform_config=ProfilerRayTransformConfiguration(),
+            runtime_class=ProfilerRuntime,
+        )
 
 
 if __name__ == "__main__":

@@ -85,7 +85,10 @@ class AbstractTransformLauncherTest(AbstractTest):
                     fixtures[fi] = f + ([],)
                 fi += 1
             # Install the fixture, matching the parameter names used by test_transform() method.
-            metafunc.parametrize("launcher,cli_params,in_table_path,expected_out_table_path,ignore_columns", fixtures)
+            metafunc.parametrize(
+                "launcher,cli_params,in_table_path,expected_out_table_path,ignore_columns",
+                fixtures,
+            )
 
     def get_test_transform_fixtures(self) -> list[tuple]:
         """

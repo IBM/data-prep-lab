@@ -14,14 +14,6 @@ import logging
 from typing import Any, Callable, Collection, Generator
 from urllib.parse import ParseResult
 
-from scrapy import Request
-from scrapy.http import Response
-from scrapy.link import Link
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import SitemapSpider
-from scrapy.spiders.sitemap import iterloc
-from scrapy.utils.sitemap import Sitemap, sitemap_urls_from_robots
-
 from dpk_connector.core.item import ConnectorItem
 from dpk_connector.core.utils import (
     get_base_url,
@@ -32,6 +24,13 @@ from dpk_connector.core.utils import (
     is_allowed_path,
     urlparse_cached,
 )
+from scrapy import Request
+from scrapy.http import Response
+from scrapy.link import Link
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import SitemapSpider
+from scrapy.spiders.sitemap import iterloc
+from scrapy.utils.sitemap import Sitemap, sitemap_urls_from_robots
 
 
 class BaseSitemapSpider(SitemapSpider):
@@ -99,13 +98,9 @@ class BaseSitemapSpider(SitemapSpider):
                     self.allowed_domains.add(fqdn)
         else:
             self.allowed_domains = set(get_etld1(url) for url in seed_urls)
-        self.allow_mime_types = set(
-            [m.lower() for m in allow_mime_types] if len(allow_mime_types) > 0 else ()
-        )
+        self.allow_mime_types = set([m.lower() for m in allow_mime_types] if len(allow_mime_types) > 0 else ())
         self.disallow_mime_types = set(
-            [m.lower() for m in disallow_mime_types]
-            if len(disallow_mime_types) > 0
-            else ()
+            [m.lower() for m in disallow_mime_types] if len(disallow_mime_types) > 0 else ()
         )
 
         # Link extraction from html
@@ -161,15 +156,11 @@ class BaseSitemapSpider(SitemapSpider):
             )
 
     def _parse_sitemap(self, response: Response):
-        yield ConnectorItem(
-            dropped=False, downloaded=False, system_request=True, sitemap=True
-        )
+        yield ConnectorItem(dropped=False, downloaded=False, system_request=True, sitemap=True)
 
         seed_url = response.meta["seed_url"]
 
-        if response.url.endswith("/robots.txt") or response.url.endswith(
-            "/robots.txt/"
-        ):
+        if response.url.endswith("/robots.txt") or response.url.endswith("/robots.txt/"):
             for url in sitemap_urls_from_robots(response.text, base_url=response.url):
                 yield Request(
                     url,
@@ -197,9 +188,7 @@ class BaseSitemapSpider(SitemapSpider):
 
             if s.type == "sitemapindex":
                 for loc in iterloc(it, self.sitemap_alternate_links):
-                    if any(
-                        x.search(loc) for x in self._follow
-                    ) and self._is_allowed_path(loc):
+                    if any(x.search(loc) for x in self._follow) and self._is_allowed_path(loc):
                         yield Request(
                             loc,
                             callback=self._parse_sitemap,
@@ -244,9 +233,7 @@ class BaseSitemapSpider(SitemapSpider):
             return not self._is_disallowed_content_type(ctype)
         if not self.disallow_mime_types:
             return self._is_allowed_content_type(ctype)
-        return (
-            not self._is_disallowed_content_type(ctype)
-        ) and self._is_allowed_content_type(ctype)
+        return (not self._is_disallowed_content_type(ctype)) and self._is_allowed_content_type(ctype)
 
     def _explore_sitemap(self, response: Response) -> Generator[Request, Any, None]:
         depth = response.meta.get("depth", 0)
@@ -255,9 +242,7 @@ class BaseSitemapSpider(SitemapSpider):
             parts = urlparse_cached(response)
             domain = parts.netloc
             if domain not in self.sitemaps_seen:
-                self.log(
-                    f"New domain {domain} found. Search for sitemap.", logging.INFO
-                )
+                self.log(f"New domain {domain} found. Search for sitemap.", logging.INFO)
                 self.sitemaps_seen.add(domain)
                 for sitemap in self._get_sitemap_urls(parts):
                     yield Request(
@@ -272,9 +257,7 @@ class BaseSitemapSpider(SitemapSpider):
                         },
                     )
 
-    def _explore_links(
-        self, response: Response, links: list[Link]
-    ) -> Generator[Request, Any, None]:
+    def _explore_links(self, response: Response, links: list[Link]) -> Generator[Request, Any, None]:
         depth = response.meta.get("depth", 0)
         depth_limit = self.depth_limit
         if depth_limit == 0 or depth < depth_limit:
@@ -303,9 +286,7 @@ class ConnectorSitemapSpider(BaseSitemapSpider):
 
         self.callback = callback
 
-    def parse(
-        self, response: Response, **kwargs: Any
-    ) -> Generator[Request | ConnectorItem, Any, None]:
+    def parse(self, response: Response, **kwargs: Any) -> Generator[Request | ConnectorItem, Any, None]:
         drop = False
         content_type = get_content_type(response)
         if not content_type:
@@ -315,24 +296,16 @@ class ConnectorSitemapSpider(BaseSitemapSpider):
         if not (is_html or should_download):
             drop = True
         if drop:
-            yield ConnectorItem(
-                dropped=True, downloaded=False, system_request=False, sitemap=False
-            )
+            yield ConnectorItem(dropped=True, downloaded=False, system_request=False, sitemap=False)
             return
 
         # Download contents
         if should_download:
-            self.callback(
-                str(response.url), response.body, response.headers.to_unicode_dict()
-            )
+            self.callback(str(response.url), response.body, response.headers.to_unicode_dict())
             # to count up downloaded pages and collect stats
-            yield ConnectorItem(
-                dropped=False, downloaded=True, system_request=False, sitemap=False
-            )
+            yield ConnectorItem(dropped=False, downloaded=True, system_request=False, sitemap=False)
         else:
-            yield ConnectorItem(
-                dropped=False, downloaded=False, system_request=False, sitemap=False
-            )
+            yield ConnectorItem(dropped=False, downloaded=False, system_request=False, sitemap=False)
 
         # Search for sitemap
         yield from self._explore_sitemap(response)

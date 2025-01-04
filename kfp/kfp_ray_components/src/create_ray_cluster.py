@@ -42,7 +42,11 @@ def start_ray_cluster(
     head_options = KFPUtils.load_from_json(ray_head_options.replace("'", '"'))
     worker_node = KFPUtils.load_from_json(ray_worker_options.replace("'", '"'))
     head_node = head_options | {
-        "ray_start_params": {"metrics-export-port": "8080", "num-cpus": "0", "dashboard-host": "0.0.0.0"}
+        "ray_start_params": {
+            "metrics-export-port": "8080",
+            "num-cpus": "0",
+            "dashboard-host": "0.0.0.0",
+        }
     }
     tolerations = os.getenv("KFP_TOLERATIONS", "")
     if tolerations != "":

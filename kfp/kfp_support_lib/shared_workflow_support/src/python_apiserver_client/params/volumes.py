@@ -115,7 +115,12 @@ class HostPathVolume(BaseVolume):
         Convert to dictionary
         :return: HostPathVolume dictionary representation
         """
-        dst = {"name": self.name, "mountPath": self.mount_path, "source": self.source, "volumeType": self.volume_type}
+        dst = {
+            "name": self.name,
+            "mountPath": self.mount_path,
+            "source": self.source,
+            "volumeType": self.volume_type,
+        }
         if self.mount_propagation is not None:
             dst["mountPropagationMode"] = self.mount_propagation.value
         if self.host_path_type is not None:
@@ -172,7 +177,12 @@ class PVCVolume(BaseVolume):
         Convert to dictionary
         :return: PVCVolume dictionary representation
         """
-        dst = {"name": self.name, "mountPath": self.mount_path, "source": self.source, "volumeType": self.volume_type}
+        dst = {
+            "name": self.name,
+            "mountPath": self.mount_path,
+            "source": self.source,
+            "volumeType": self.volume_type,
+        }
         if self.readonly:
             dst["readOnly"] = True
         if self.mount_propagation is not None:
@@ -282,7 +292,11 @@ class EmptyDirVolume(BaseVolume):
         return val
 
     def to_dict(self) -> dict[str, Any]:
-        dct = {"name": self.name, "mountPath": self.mount_path, "volumeType": self.volume_type}
+        dct = {
+            "name": self.name,
+            "mountPath": self.mount_path,
+            "volumeType": self.volume_type,
+        }
         if self.storage is not None:
             dct["storage"] = self.storage
         return dct
@@ -333,7 +347,12 @@ class ConfigMapVolume(BaseVolume):
         Convert to dictionary
         :return: ConfigMapVolume dictionary representation
         """
-        dct = {"name": self.name, "mountPath": self.mount_path, "source": self.source, "volumeType": self.volume_type}
+        dct = {
+            "name": self.name,
+            "mountPath": self.mount_path,
+            "source": self.source,
+            "volumeType": self.volume_type,
+        }
         if self.items is not None:
             dct["items"] = self.items
         return dct
@@ -367,7 +386,12 @@ class SecretVolume(BaseVolume):
         return val
 
     def to_dict(self) -> dict[str, Any]:
-        dct = {"name": self.name, "mountPath": self.mount_path, "source": self.source, "volumeType": self.volume_type}
+        dct = {
+            "name": self.name,
+            "mountPath": self.mount_path,
+            "source": self.source,
+            "volumeType": self.volume_type,
+        }
         if self.items is not None:
             dct["items"] = self.items
         return dct
@@ -443,7 +467,9 @@ def volume_decoder(dst: dict[str, Any]) -> BaseVolume:
         case 5:
             # Empty dir volume
             return EmptyDirVolume(
-                name=dst.get("name", ""), mount_path=dst.get("mountPath", ""), storage=dst.get("storage")
+                name=dst.get("name", ""),
+                mount_path=dst.get("mountPath", ""),
+                storage=dst.get("storage"),
             )
         case _:
             raise Exception(f"Unknown volume type in {dst}")

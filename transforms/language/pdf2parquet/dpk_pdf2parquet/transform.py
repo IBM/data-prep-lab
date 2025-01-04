@@ -23,12 +23,15 @@ from typing import Any, Optional
 
 import filetype
 import pandas as pd
+
+
 try:
     from pandas.io.json import ujson_dumps
 except:
     from pandas.io.json import dumps as ujson_dumps
-import pyarrow as pa
+
 import numpy as np
+import pyarrow as pa
 from data_processing.transform import AbstractBinaryTransform, TransformConfiguration
 from data_processing.utils import TransformUtils, get_logger, str2bool
 from data_processing.utils.cli_utils import CLIArgumentProvider
@@ -103,18 +106,12 @@ pdf2parquet_double_precision_default = 8
 pdf2parquet_batch_size_cli_param = f"{cli_prefix}{pdf2parquet_batch_size_key}"
 pdf2parquet_artifacts_path_cli_param = f"{cli_prefix}{pdf2parquet_artifacts_path_key}"
 pdf2parquet_contents_type_cli_param = f"{cli_prefix}{pdf2parquet_contents_type_key}"
-pdf2parquet_do_table_structure_cli_param = (
-    f"{cli_prefix}{pdf2parquet_do_table_structure_key}"
-)
+pdf2parquet_do_table_structure_cli_param = f"{cli_prefix}{pdf2parquet_do_table_structure_key}"
 pdf2parquet_do_ocr_cli_param = f"{cli_prefix}{pdf2parquet_do_ocr_key}"
-pdf2parquet_bitmap_area_threshold__cli_param = (
-    f"{cli_prefix}{pdf2parquet_bitmap_area_threshold_key}"
-)
+pdf2parquet_bitmap_area_threshold__cli_param = f"{cli_prefix}{pdf2parquet_bitmap_area_threshold_key}"
 pdf2parquet_ocr_engine_cli_param = f"{cli_prefix}{pdf2parquet_ocr_engine_key}"
 pdf2parquet_pdf_backend_cli_param = f"{cli_prefix}{pdf2parquet_pdf_backend_key}"
-pdf2parquet_double_precision_cli_param = (
-    f"{cli_prefix}{pdf2parquet_double_precision_key}"
-)
+pdf2parquet_double_precision_cli_param = f"{cli_prefix}{pdf2parquet_double_precision_key}"
 
 
 class Pdf2ParquetTransform(AbstractBinaryTransform):
@@ -134,32 +131,24 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
         self.artifacts_path = config.get(pdf2parquet_artifacts_path_key, None)
         if self.artifacts_path is not None:
             self.artifacts_path = Path(self.artifacts_path)
-        self.contents_type = config.get(
-            pdf2parquet_contents_type_key, pdf2parquet_contents_types.MARKDOWN
-        )
+        self.contents_type = config.get(pdf2parquet_contents_type_key, pdf2parquet_contents_types.MARKDOWN)
         if not isinstance(self.contents_type, pdf2parquet_contents_types):
             self.contents_type = pdf2parquet_contents_types[self.contents_type]
         self.do_table_structure = config.get(
             pdf2parquet_do_table_structure_key, pdf2parquet_do_table_structure_default
         )
         self.do_ocr = config.get(pdf2parquet_do_ocr_key, pdf2parquet_do_ocr_default)
-        self.ocr_engine_name = config.get(
-            pdf2parquet_ocr_engine_key, pdf2parquet_ocr_engine_default
-        )
+        self.ocr_engine_name = config.get(pdf2parquet_ocr_engine_key, pdf2parquet_ocr_engine_default)
         if not isinstance(self.ocr_engine_name, pdf2parquet_ocr_engine):
             self.ocr_engine_name = pdf2parquet_ocr_engine[self.ocr_engine_name]
         self.bitmap_area_threshold = config.get(
             pdf2parquet_bitmap_area_threshold_key,
             pdf2parquet_bitmap_area_threshold_default,
         )
-        self.pdf_backend_name = config.get(
-            pdf2parquet_pdf_backend_key, pdf2parquet_pdf_backend_default
-        )
+        self.pdf_backend_name = config.get(pdf2parquet_pdf_backend_key, pdf2parquet_pdf_backend_default)
         if not isinstance(self.pdf_backend_name, pdf2parquet_pdf_backend):
             self.pdf_backend_name = pdf2parquet_pdf_backend[self.pdf_backend_name]
-        self.double_precision = config.get(
-            pdf2parquet_double_precision_key, pdf2parquet_double_precision_default
-        )
+        self.double_precision = config.get(pdf2parquet_double_precision_key, pdf2parquet_double_precision_default)
 
         logger.info("Initializing models")
         pipeline_options = PdfPipelineOptions(
@@ -172,9 +161,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
 
         lock = MultiLock("dpk_pdf2parquet_init")
         try:
-            logger.debug(
-                f"Going to acquire lock {lock.lock_filename} for synchronizing global filesystem operations."
-            )
+            logger.debug(f"Going to acquire lock {lock.lock_filename} for synchronizing global filesystem operations.")
             locked = lock.acquire()
             logger.debug(f"Lock {lock.lock_filename} acquired.")
 
@@ -190,7 +177,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
         finally:
             lock.release()
             logger.debug(f"Lock {lock.lock_filename} released.")
-        
+
         self.buffer = []
 
     def _get_ocr_engine(self, engine_name: pdf2parquet_ocr_engine) -> OcrOptions:
@@ -217,9 +204,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
         # This is implemented in the ray version
         pass
 
-    def _convert_pdf2parquet(
-        self, doc_filename: str, ext: str, content_bytes: bytes
-    ) -> dict:
+    def _convert_pdf2parquet(self, doc_filename: str, ext: str, content_bytes: bytes) -> dict:
         # Convert PDF to Markdown
         start_time = time.time()
         buf = io.BytesIO(content_bytes)
@@ -234,15 +219,15 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
         elif self.contents_type == pdf2parquet_contents_types.TEXT:
             content_string = doc.export_to_text()
         elif self.contents_type == pdf2parquet_contents_types.JSON:
-            content_string = ujson_dumps(
-                doc.export_to_dict(), double_precision=self.double_precision
-            )
+            content_string = ujson_dumps(doc.export_to_dict(), double_precision=self.double_precision)
         else:
             raise RuntimeError(f"Uknown contents_type {self.contents_type}.")
         num_pages = len(doc.pages)
         num_tables = len(doc.tables)
         num_doc_elements = len(doc.texts)
-        document_hash = str(doc.origin.binary_hash)  # we turn the uint64 hash into str, because it is easier to handle for pyarrow
+        document_hash = str(
+            doc.origin.binary_hash
+        )  # we turn the uint64 hash into str, because it is easier to handle for pyarrow
 
         self._update_metrics(num_pages=num_pages, elapse_time=elapse_time)
 
@@ -263,9 +248,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
 
         return file_data
 
-    def transform_binary(
-        self, file_name: str, byte_array: bytes
-    ) -> tuple[list[tuple[bytes, str]], dict[str, Any]]:
+    def transform_binary(self, file_name: str, byte_array: bytes) -> tuple[list[tuple[bytes, str]], dict[str, Any]]:
         """
         If file_name is detected as a PDF file, it generates a pyarrow table with a single row
         containing the document converted in markdown format.
@@ -294,9 +277,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
                         doc_filename=file_name, ext=root_ext, content_bytes=byte_array
                     )
 
-                    file_data["source_filename"] = TransformUtils.get_file_basename(
-                        file_name
-                    )
+                    file_data["source_filename"] = TransformUtils.get_file_basename(file_name)
 
                     data.append(file_data)
                     number_of_rows += 1
@@ -304,15 +285,11 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
 
                 except Exception as e:
                     failed_doc_id.append(file_name)
-                    logger.warning(
-                        f"Exception {str(e)} processing file {file_name}, skipping"
-                    )
+                    logger.warning(f"Exception {str(e)} processing file {file_name}, skipping")
 
             # Process ZIP archive of documents
             elif root_kind is not None and root_kind.mime == "application/zip":
-                logger.debug(
-                    f"Detected root file {file_name=} as ZIP. Iterating through the archive content."
-                )
+                logger.debug(f"Detected root file {file_name=} as ZIP. Iterating through the archive content.")
 
                 with zipfile.ZipFile(io.BytesIO(byte_array)) as opened_zip:
                     zip_namelist = opened_zip.namelist()
@@ -342,9 +319,7 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
                                     ext=ext,
                                     content_bytes=content_bytes,
                                 )
-                                file_data["source_filename"] = (
-                                    TransformUtils.get_file_basename(file_name)
-                                )
+                                file_data["source_filename"] = TransformUtils.get_file_basename(file_name)
 
                                 data.append(file_data)
                                 success_doc_id.append(archive_doc_filename)
@@ -352,16 +327,13 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
 
                             except Exception as e:
                                 failed_doc_id.append(archive_doc_filename)
-                                logger.warning(
-                                    f"Exception {str(e)} processing file {archive_doc_filename}, skipping"
-                                )
+                                logger.warning(f"Exception {str(e)} processing file {archive_doc_filename}, skipping")
 
             else:
                 logger.warning(
                     f"File {file_name=} is not detected as a supported type nor as ZIP but {kind=}. Skipping."
                 )
 
-            
             metadata = {
                 "nrows": number_of_rows,
                 "nsuccess": len(success_doc_id),
@@ -380,12 +352,17 @@ class Pdf2ParquetTransform(AbstractBinaryTransform):
                 num_left = len(data)
                 start_row = 0
                 while num_left >= self.batch_size:
-                    table = pa.Table.from_pylist(data[start_row:self.batch_size])
-                    batch_results.append((TransformUtils.convert_arrow_to_binary(table=table), ".parquet"))
-                    
+                    table = pa.Table.from_pylist(data[start_row : self.batch_size])
+                    batch_results.append(
+                        (
+                            TransformUtils.convert_arrow_to_binary(table=table),
+                            ".parquet",
+                        )
+                    )
+
                     start_row += self.batch_size
                     num_left = num_left - self.batch_size
-                
+
                 if num_left >= 0:
                     self.buffer = data[start_row:]
 
@@ -412,9 +389,7 @@ class Pdf2ParquetTransformConfiguration(TransformConfiguration):
     configuration with CLI args and combining of metadata.
     """
 
-    def __init__(
-        self, transform_class: type[AbstractBinaryTransform] = Pdf2ParquetTransform
-    ):
+    def __init__(self, transform_class: type[AbstractBinaryTransform] = Pdf2ParquetTransform):
         super().__init__(
             name=shortname,
             transform_class=transform_class,

@@ -16,8 +16,10 @@ from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
 )
 from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_fdedup.get_duplicate_list.ray.transform import (
+    GetDuplicateListRayTransformConfiguration,
+)
 from dpk_fdedup.get_duplicate_list.transform import sort_output_cli_param
-from dpk_fdedup.get_duplicate_list.ray.transform import GetDuplicateListRayTransformConfiguration
 
 
 class TestPythonGetDuplicateListTransform(AbstractTransformLauncherTest):

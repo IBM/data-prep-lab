@@ -13,13 +13,16 @@
 import os
 import sys
 
+from data_processing.utils import ParamsUtils
+from data_processing_ray.runtime.ray import RayTransformLauncher
 from dpk_fdedup.data_cleaning.transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
 )
-from transforms.universal.fdedup.dpk_fdedup.data_cleaning.ray.transform import DataCleaningRayTransformConfiguration
-from data_processing.utils import ParamsUtils
-from data_processing_ray.runtime.ray import RayTransformLauncher
+
+from transforms.universal.fdedup.dpk_fdedup.data_cleaning.ray.transform import (
+    DataCleaningRayTransformConfiguration,
+)
 
 
 # create parameters

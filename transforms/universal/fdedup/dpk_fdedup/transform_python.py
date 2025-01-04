@@ -19,12 +19,14 @@ import dpk_fdedup.cluster_analysis.transform
 import dpk_fdedup.data_cleaning.transform
 import dpk_fdedup.get_duplicate_list.transform
 import dpk_fdedup.signature_calc.transform
+from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.utils import ParamsUtils, get_logger, str2bool
 from dpk_fdedup.cluster_analysis.transform_python import (
     ClusterAnalysisPythonTransformConfiguration,
 )
-from dpk_fdedup.data_cleaning.transform_python import DataCleaningPythonTransformConfiguration
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.utils import ParamsUtils, get_logger, str2bool
+from dpk_fdedup.data_cleaning.transform_python import (
+    DataCleaningPythonTransformConfiguration,
+)
 from dpk_fdedup.get_duplicate_list.transform_python import (
     GetDuplicateListPythonTransformConfiguration,
 )
@@ -183,23 +185,41 @@ def parse_args() -> argparse.Namespace:
         help="operation mode for data cleanup: filter out duplicates/non-duplicates, or annotate duplicate documents",
     )
     parser.add_argument(
-        "--contents_column", type=str, required=False, help="name of the column that stores document text"
+        "--contents_column",
+        type=str,
+        required=False,
+        help="name of the column that stores document text",
     )
     parser.add_argument(
-        "--document_id_column", type=str, required=False, help="name of the column that stores document ID"
+        "--document_id_column",
+        type=str,
+        required=False,
+        help="name of the column that stores document ID",
     )
     parser.add_argument("--seed", type=int, required=False, help="seed of the random number generator")
     parser.add_argument(
-        "--num_permutations", type=int, required=False, help="number of permutations to use for minhash calculation"
+        "--num_permutations",
+        type=int,
+        required=False,
+        help="number of permutations to use for minhash calculation",
     )
     parser.add_argument(
-        "--num_bands", type=int, required=False, help="number of bands to use for band hash calculation"
+        "--num_bands",
+        type=int,
+        required=False,
+        help="number of bands to use for band hash calculation",
     )
     parser.add_argument(
-        "--num_minhashes_per_band", type=int, required=False, help="number of minhashes to use in each band"
+        "--num_minhashes_per_band",
+        type=int,
+        required=False,
+        help="number of minhashes to use in each band",
     )
     parser.add_argument(
-        "--word_shingle_size", type=int, required=False, help="number of words included in one shingle"
+        "--word_shingle_size",
+        type=int,
+        required=False,
+        help="number of words included in one shingle",
     )
     parser.add_argument(
         "--jaccard_similarity_threshold",
@@ -259,8 +279,6 @@ def parse_args() -> argparse.Namespace:
     )
 
     return parser.parse_args()
-
-
 
 
 # Class used by the notebooks to ingest binary files and create parquet files

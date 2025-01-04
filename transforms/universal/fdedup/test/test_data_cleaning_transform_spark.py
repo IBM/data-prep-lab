@@ -12,16 +12,18 @@
 
 import os
 
+from data_processing.test_support.launch.transform_test import (
+    AbstractTransformLauncherTest,
+)
+from data_processing_spark.runtime.spark import SparkTransformLauncher
+from dpk_fdedup.data_cleaning.spark.transform import (
+    DataCleaningSparkTransformConfiguration,
+)
 from dpk_fdedup.data_cleaning.transform import (
     document_id_column_cli_param,
     duplicate_list_location_cli_param,
     operation_mode_cli_param,
 )
-from dpk_fdedup.data_cleaning.spark.transform import DataCleaningSparkTransformConfiguration
-from data_processing.test_support.launch.transform_test import (
-    AbstractTransformLauncherTest,
-)
-from data_processing_spark.runtime.spark import SparkTransformLauncher
 
 
 class TestSparkDataCleaningTransform(AbstractTransformLauncherTest):

@@ -34,28 +34,70 @@ class TestResizeTransform(AbstractTableTransformTest):
 
         config = {"max_rows_per_table": 300}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-rows-300"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         config = {"max_rows_per_table": 125}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-rows-125"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         config = {"max_mbytes_per_table": 0.05}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-mbytes-0.05"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         config = {"max_mbytes_per_table": 1}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-mbytes-1"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         # # Merge the 1st 2 and some of the 2nd with the 3rd
         config = {"max_mbytes_per_table": 0.05}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-mbytes-0.05"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         # Split into 4 or so files
         config = {"max_mbytes_per_table": 0.02}
         expected_tables = get_tables_in_folder(os.path.join(basedir, "expected-mbytes-0.02"))
-        fixtures.append((ResizeTransform(config), input_tables, expected_tables, expected_metadata_list))
+        fixtures.append(
+            (
+                ResizeTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            )
+        )
 
         return fixtures

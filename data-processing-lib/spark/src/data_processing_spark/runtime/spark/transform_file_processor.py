@@ -15,8 +15,8 @@ from typing import Any
 from data_processing.data_access import DataAccessFactoryBase
 from data_processing.runtime import AbstractTransformFileProcessor
 from data_processing.transform import TransformStatistics
-from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration
 from data_processing.utils import UnrecoverableException
+from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration
 
 
 class SparkTransformFileProcessor(AbstractTransformFileProcessor):

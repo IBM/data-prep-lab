@@ -60,7 +60,11 @@ def validate_store_params(store_params):
             raise ValueError(f"{store_backend_dir_key} not set for {store_type}")
         if store_type is store_type_value_s3:
             # s3 creds are required
-            for required in [store_s3_keyid_key, store_s3_endpoint_key, store_s3_secret_key]:
+            for required in [
+                store_s3_keyid_key,
+                store_s3_endpoint_key,
+                store_s3_secret_key,
+            ]:
                 if required not in store_params.keys():
                     raise ValueError(f"Required key: {required} not set for {store_type}")
     if store_type in [store_type_value_ray]:

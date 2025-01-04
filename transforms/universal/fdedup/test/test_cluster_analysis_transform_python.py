@@ -12,13 +12,13 @@
 
 import os
 
-from dpk_fdedup.cluster_analysis.transform import sort_output_cli_param
-from dpk_fdedup.cluster_analysis.transform_python import (
-    ClusterAnalysisPythonTransformConfiguration,
-)
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.test_support.launch.transform_test import (
     AbstractTransformLauncherTest,
+)
+from dpk_fdedup.cluster_analysis.transform import sort_output_cli_param
+from dpk_fdedup.cluster_analysis.transform_python import (
+    ClusterAnalysisPythonTransformConfiguration,
 )
 
 

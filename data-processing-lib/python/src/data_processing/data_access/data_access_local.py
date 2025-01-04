@@ -50,8 +50,14 @@ class DataAccessLocal(DataAccess):
         :param files_to_use: files extensions of files to include
         :param files_to_checkpoint: files extensions of files to use for checkpointing
         """
-        super().__init__(d_sets=d_sets, checkpoint=checkpoint, m_files=m_files, n_samples=n_samples,
-                         files_to_use=files_to_use, files_to_checkpoint=files_to_checkpoint)
+        super().__init__(
+            d_sets=d_sets,
+            checkpoint=checkpoint,
+            m_files=m_files,
+            n_samples=n_samples,
+            files_to_use=files_to_use,
+            files_to_checkpoint=files_to_checkpoint,
+        )
         if local_config is None:
             self.input_folder = None
             self.output_folder = None

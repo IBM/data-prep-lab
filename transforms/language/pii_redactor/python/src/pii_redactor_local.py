@@ -22,7 +22,10 @@ from pii_redactor_transform import (
 # create parameters
 input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
 
-pii_config = {supported_entities_key: ["PERSON"], doc_transformed_contents_key: "new_contents"}
+pii_config = {
+    supported_entities_key: ["PERSON"],
+    doc_transformed_contents_key: "new_contents",
+}
 if __name__ == "__main__":
     # Here we show how to run outside of the runtime
     # Create and configure the transform.

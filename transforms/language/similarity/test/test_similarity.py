@@ -16,7 +16,8 @@ from data_processing.test_support import get_tables_in_folder
 from data_processing.test_support.transform.table_transform_test import (
     AbstractTableTransformTest,
 )
-from dpk_similarity.transform import SimilarityTransform, ES_ENDPOINT_KEY
+from dpk_similarity.transform import ES_ENDPOINT_KEY, SimilarityTransform
+
 
 # table = pa.Table.from_pydict({"name": pa.array(["Tom"]), "age": pa.array([23])})
 # expected_table = table
@@ -38,6 +39,11 @@ class TestSimilarityTransform(AbstractTableTransformTest):
         expected_metadata_list = [{"nrows": 8}, {}]
         config = {ES_ENDPOINT_KEY: None}
         fixtures = [
-            (SimilarityTransform(config), input_tables, expected_tables, expected_metadata_list),
+            (
+                SimilarityTransform(config),
+                input_tables,
+                expected_tables,
+                expected_metadata_list,
+            ),
         ]
         return fixtures

@@ -49,7 +49,12 @@ class TestHeaderCleanserTransform(AbstractTableTransformTest):
         with open(os.path.join(expected_output_dir, "metadata.json"), "r") as meta_file:
             expected_metadata = json.load(meta_file)
         expected_metadata_list = [expected_metadata, {}]
-        return HeaderCleanserTransform(config), [input_df], [expected_output_df], expected_metadata_list
+        return (
+            HeaderCleanserTransform(config),
+            [input_df],
+            [expected_output_df],
+            expected_metadata_list,
+        )
 
     def get_test_transform_fixtures(self) -> list[tuple]:
         fixtures = []

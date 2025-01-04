@@ -18,7 +18,7 @@ from datetime import datetime
 
 import yaml
 from data_processing.data_access import DataAccessFactoryBase
-from data_processing.transform import TransformStatistics, AbstractFolderTransform
+from data_processing.transform import AbstractFolderTransform, TransformStatistics
 from data_processing.utils import GB, get_logger
 from data_processing_spark.runtime.spark import (
     SparkTransformExecutionConfiguration,
@@ -130,7 +130,9 @@ def orchestrate(
                 # add additional parameters
                 transform_params = (
                     runtime.get_transform_config(
-                        partition=int(f[1]), data_access_factory=d_access_factory, statistics=statistics
+                        partition=int(f[1]),
+                        data_access_factory=d_access_factory,
+                        statistics=statistics,
                     )
                     | bcast_params
                 )
@@ -153,7 +155,7 @@ def orchestrate(
             # folder transform
             runtime = runtime_config.create_transform_runtime()
             files = runtime.get_folders(data_access=data_access)
-            logger.info(f"Number of folders is {len(files)}")        # Get files to process
+            logger.info(f"Number of folders is {len(files)}")  # Get files to process
         else:
             # Get files to process
             files, profile, retries = data_access.get_files_to_process()
@@ -190,7 +192,12 @@ def orchestrate(
         memory = 0.0
         for i in range(executors.size()):
             memory += executors.toList().apply(i)._2()._1()
-        resources = {"cpus": cpus, "gpus": 0, "memory": round(memory / GB, 2), "object_store": 0}
+        resources = {
+            "cpus": cpus,
+            "gpus": 0,
+            "memory": round(memory / GB, 2),
+            "object_store": 0,
+        }
         input_params = runtime_config.get_transform_metadata() | execution_configuration.get_input_params()
         metadata = {
             "pipeline": execution_configuration.pipeline_id,

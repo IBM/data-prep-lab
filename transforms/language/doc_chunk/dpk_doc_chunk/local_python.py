@@ -16,8 +16,9 @@ import sys
 
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.utils import ParamsUtils
-from dpk_doc_chunk.transform_python import DocChunkPythonTransformConfiguration
 from dpk_doc_chunk.transform import chunking_types
+from dpk_doc_chunk.transform_python import DocChunkPythonTransformConfiguration
+
 
 # create parameters
 input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
@@ -41,7 +42,7 @@ params = {
     # "doc_chunk_dl_min_chunk_len": 10,  # for testing the usage of the deprecated argument
     # "doc_chunk_chunking_type": "li_markdown",
     "doc_chunk_chunking_type": "dl_json",
-    # "doc_chunk_chunking_type": chunking_types.LI_TOKEN_TEXT, 
+    # "doc_chunk_chunking_type": chunking_types.LI_TOKEN_TEXT,
     # fixed-size params
     # "doc_chunk_output_chunk_column_name": "chunk_text",
     # "doc_chunk_chunk_size_tokens": 128,

@@ -21,7 +21,11 @@ from python_apiserver_client.params import (
 )
 
 
-DEFAULT_HEAD_START_PARAMS = {"dashboard-host": "0.0.0.0", "metrics-export-port": "8080", "num-cpus": "0"}
+DEFAULT_HEAD_START_PARAMS = {
+    "dashboard-host": "0.0.0.0",
+    "metrics-export-port": "8080",
+    "num-cpus": "0",
+}
 
 
 class ServiceType(enum.Enum):
@@ -141,7 +145,10 @@ class HeadNodeSpec:
         Convert to dictionary
         :return: dictionary representation of the head node
         """
-        dct = {"computeTemplate": self.compute_template, "rayStartParams": self.ray_start_params}
+        dct = {
+            "computeTemplate": self.compute_template,
+            "rayStartParams": self.ray_start_params,
+        }
         if self.image is not None:
             dct["image"] = self.image
         if self.service_type is not None:

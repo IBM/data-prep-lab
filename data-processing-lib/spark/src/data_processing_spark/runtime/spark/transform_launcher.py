@@ -16,9 +16,9 @@ from data_processing.runtime.transform_launcher import AbstractTransformLauncher
 from data_processing.utils import get_logger
 from data_processing_spark.runtime.spark import (
     SparkTransformExecutionConfiguration,
+    SparkTransformRuntimeConfiguration,
     orchestrate,
 )
-from data_processing_spark.runtime.spark import SparkTransformRuntimeConfiguration
 
 
 logger = get_logger(__name__)
@@ -54,7 +54,7 @@ class SparkTransformLauncher(AbstractTransformLauncher):
             res = orchestrate(
                 data_access_factory=self.data_access_factory,
                 runtime_config=self.runtime_config,
-                execution_configuration=self.execution_config
+                execution_configuration=self.execution_config,
             )
             logger.debug("Completed orchestrator")
         except Exception as e:

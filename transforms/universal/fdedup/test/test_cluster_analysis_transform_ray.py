@@ -12,17 +12,19 @@
 
 import os
 
+from data_processing.test_support.launch.transform_test import (
+    AbstractTransformLauncherTest,
+)
+from data_processing_ray.runtime.ray import RayTransformLauncher
+from dpk_fdedup.cluster_analysis.ray.transform import (
+    ClusterAnalysisRayTransformConfiguration,
+)
 from dpk_fdedup.cluster_analysis.transform import (
     jaccard_similarity_threshold_cli_param,
     num_bands_cli_param,
     num_segments_cli_param,
     sort_output_cli_param,
 )
-from dpk_fdedup.cluster_analysis.ray.transform import ClusterAnalysisRayTransformConfiguration
-from data_processing.test_support.launch.transform_test import (
-    AbstractTransformLauncherTest,
-)
-from data_processing_ray.runtime.ray import RayTransformLauncher
 
 
 class TestRayClusterAnalysisTransform(AbstractTransformLauncherTest):

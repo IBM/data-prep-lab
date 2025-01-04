@@ -107,7 +107,8 @@ class HashFilter:
             b_doc = pickle.dumps(self.hashes)
             # Save it
             self.data_access.save_file(
-                f"{SnapshotUtils.get_snapshot_folder(self.data_access)}hash_collector_{self.actor_id}", b_doc
+                f"{SnapshotUtils.get_snapshot_folder(self.data_access)}hash_collector_{self.actor_id}",
+                b_doc,
             )
         except Exception as e:
             self.logger.warning(f"Failed to snapshot doc collector {self.actor_id} with exception {e}")
@@ -181,7 +182,10 @@ class EdedupTransformBase(AbstractTableTransform):
             removed_column[0] = removed
             out_table = TransformUtils.add_column(table=out_table, name="removed", content=removed_column)
         # report statistics
-        stats = {"source_documents": table.num_rows, "result_documents": out_table.num_rows}
+        stats = {
+            "source_documents": table.num_rows,
+            "result_documents": out_table.num_rows,
+        }
         return [out_table], stats
 
     def _process_cached_hashes(self, hd: dict[str, str]) -> list[str]:
@@ -233,7 +237,10 @@ class EdedupTransformConfigurationBase(TransformConfiguration):
         # by default, snapshot file is from the output directory. This parameter can overwrite
         # default location by explicitly defining the snapshot directory
         parser.add_argument(
-            f"--{snapshot_directory_cli_param}", type=str, default=None, help="location of snapshot files"
+            f"--{snapshot_directory_cli_param}",
+            type=str,
+            default=None,
+            help="location of snapshot files",
         )
 
     def apply_input_params(self, args: Namespace) -> bool:

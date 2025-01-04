@@ -13,16 +13,23 @@
 import os
 import sys
 
+from data_processing.runtime.pure_python import PythonTransformLauncher
+from data_processing.utils import ParamsUtils
 from dpk_fdedup.cluster_analysis.transform_python import (
     ClusterAnalysisPythonTransformConfiguration,
 )
-from data_processing.runtime.pure_python import PythonTransformLauncher
-from data_processing.utils import ParamsUtils
 
 
 # create parameters
 input_folder = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "test-data", "expected", "signature_calc", "bands")
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "test-data",
+        "expected",
+        "signature_calc",
+        "bands",
+    )
 )
 output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "output", "docs_to_remove"))
 local_conf = {

@@ -30,8 +30,12 @@ class TestPythonNOOPTransform(AbstractTransformLauncherTest):
         basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), basedir))
         fixtures = []
         launcher = PythonTransformLauncher(NOOPPythonTransformConfiguration())
-        fixtures.append((
-            launcher,
-            {"noop_sleep_sec": 0, "runtime_num_processors": 2},
-            basedir + "/input", basedir + "/expected"))
+        fixtures.append(
+            (
+                launcher,
+                {"noop_sleep_sec": 0, "runtime_num_processors": 2},
+                basedir + "/input",
+                basedir + "/expected",
+            )
+        )
         return fixtures

@@ -1,28 +1,27 @@
-import os
-import requests
-from humanfriendly import format_size
-import pandas as pd
 import glob
-import magic
-from dpk_connector.core.utils import (
-    urlparse_cached
-)
+import os
 from urllib.parse import unquote
+
+import magic
+import pandas as pd
+import requests
+from dpk_connector.core.utils import urlparse_cached
+from humanfriendly import format_size
 
 
 ## Reads parquet files in a folder into a pandas dataframe
-def read_parquet_files_as_df (parquet_dir):
-    parquet_files = glob.glob(f'{parquet_dir}/*.parquet')
+def read_parquet_files_as_df(parquet_dir):
+    parquet_files = glob.glob(f"{parquet_dir}/*.parquet")
 
     # read each parquet file into a DataFrame and store in a list
-    dfs = [pd.read_parquet (f) for f in parquet_files]
+    dfs = [pd.read_parquet(f) for f in parquet_files]
 
     # Concatenate all DataFrames into a single DataFrame
     data_df = pd.concat(dfs, ignore_index=True)
     return data_df
 
 
-def download_file(url, local_file, chunk_size=1024*1024):
+def download_file(url, local_file, chunk_size=1024 * 1024):
     """
     Downloads a remote URL to a local file.
 
@@ -33,7 +32,7 @@ def download_file(url, local_file, chunk_size=1024*1024):
 
     Returns:
         None
-        
+
     Example usage:
         download_file('http://example.com/file.txt', 'file.txt', chunk_size=1024*1024)  # Download in chunks of 1MB
     """
@@ -49,14 +48,17 @@ def download_file(url, local_file, chunk_size=1024*1024):
     # Stream the file download
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
-        with open(local_file, 'wb') as f:
+        with open(local_file, "wb") as f:
             for chunk in r.iter_content(chunk_size=chunk_size):
-                if chunk: # filter out keep-alive new chunks
+                if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
         print()
         file_size = format_size(os.path.getsize(local_file))
         print(f"{local_file} ({file_size}) downloaded successfully.")
+
+
 ## --- end: download_file ------
+
 
 def get_mime_type(byte_data: bytes) -> str:
     """
@@ -64,16 +66,16 @@ def get_mime_type(byte_data: bytes) -> str:
 
     Args:
         byte_data: bytes: Bytes data to identify mimetype for.
-        
+
     Returns:
         str: Mimetype for given bytes data.
-        
+
     Example:
         >>> byte_data = b'<!DOCTYPE html>\n...'
         >>> get_mime_type(byte_data)
         'text/html'
     """
-    
+
     # Validate input type
     if not isinstance(byte_data, bytes):
         raise TypeError("Input must be of type 'bytes'")

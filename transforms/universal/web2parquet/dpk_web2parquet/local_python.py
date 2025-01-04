@@ -1,4 +1,4 @@
-#(C) Copyright IBM Corp. 2024.
+# (C) Copyright IBM Corp. 2024.
 # Licensed under the Apache License, Version 2.0 (the “License”);
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,7 +19,7 @@ from dpk_web2parquet.python_runtime import Web2ParquetPythonTransformConfigurati
 
 
 # create parameters
-input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..","test-data","input"))
+input_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "input"))
 output_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "test-data", "output"))
 local_conf = {
     "input_folder": input_folder,
@@ -34,7 +34,7 @@ params = {
     "runtime_job_id": "job_id",
     "runtime_code_location": ParamsUtils.convert_to_ast(code_location),
     # web2parquet params
-    "web2parquet_urls": 'https://thealliance.ai/',
+    "web2parquet_urls": "https://thealliance.ai/",
     "web2parquet_depth": 1,
     "web2parquet_downloads": 1,
 }

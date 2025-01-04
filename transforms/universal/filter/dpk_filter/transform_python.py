@@ -10,12 +10,12 @@
 # limitations under the License.
 ################################################################################
 import sys
+
 from data_processing.runtime.pure_python import PythonTransformLauncher
 from data_processing.runtime.pure_python.runtime_configuration import (
     PythonTransformRuntimeConfiguration,
 )
-from data_processing.utils import get_logger, ParamsUtils
-
+from data_processing.utils import ParamsUtils, get_logger
 from dpk_filter.transform import FilterTransformConfiguration
 
 

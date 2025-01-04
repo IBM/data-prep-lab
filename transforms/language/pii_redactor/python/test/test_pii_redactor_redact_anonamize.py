@@ -30,7 +30,10 @@ class TestPIIRedactTransform(AbstractTableTransformTest):
         fixtures = [
             (
                 PIIRedactorTransform(
-                    {doc_transformed_contents_key: doc_transformed_contents_key, redaction_operator_key: "redact"}
+                    {
+                        doc_transformed_contents_key: doc_transformed_contents_key,
+                        redaction_operator_key: "redact",
+                    }
                 ),
                 [table],
                 [redacted_expected_table],

@@ -122,7 +122,7 @@ class MultiLock(abc.ABC):
         """
         if self.fd is not None:
             self.thread_lock.acquire()
-            if self.fd is not None: # Retest now that we have the thread lock.
+            if self.fd is not None:  # Retest now that we have the thread lock.
                 os.close(self.fd)
                 self.fd = None
             self.thread_lock.release()

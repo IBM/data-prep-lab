@@ -50,7 +50,11 @@ class HAPTransform(AbstractTableTransform):
             if start_idx >= end_idx:
                 continue
             inputs = self.tokenizer(
-                data[start_idx:end_idx], max_length=self.max_length, padding=True, truncation=True, return_tensors="pt"
+                data[start_idx:end_idx],
+                max_length=self.max_length,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
             ).to(device)
             with torch.no_grad():
                 logits = self.model(**inputs).logits

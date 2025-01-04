@@ -36,5 +36,12 @@ class TestPythonDocQualityTransform(AbstractTransformLauncherTest):
         basedir = os.path.abspath(os.path.join(basedir, "test-data"))
         fixtures = []
         launcher = PythonTransformLauncher(DocQualityPythonTransformConfiguration())
-        fixtures.append((launcher, cli_params, os.path.join(basedir, "input"), os.path.join(basedir, "expected")))
+        fixtures.append(
+            (
+                launcher,
+                cli_params,
+                os.path.join(basedir, "input"),
+                os.path.join(basedir, "expected"),
+            )
+        )
         return fixtures

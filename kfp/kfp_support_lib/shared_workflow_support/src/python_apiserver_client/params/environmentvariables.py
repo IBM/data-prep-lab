@@ -137,7 +137,11 @@ def env_var_from_decoder(dct: dict[str, Any]) -> EnvVarFrom:
     :param dct: dictionary representations of environment from
     :return: environment from
     """
-    return EnvVarFrom(name=dct.get("name", ""), source=EnvVarSource(int(dct.get("source", 0))), key=dct.get("key", ""))
+    return EnvVarFrom(
+        name=dct.get("name", ""),
+        source=EnvVarSource(int(dct.get("source", 0))),
+        key=dct.get("key", ""),
+    )
 
 
 def environment_variables_decoder(dct: dict[str, Any]) -> EnvironmentVariables:

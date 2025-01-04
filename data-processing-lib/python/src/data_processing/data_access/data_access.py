@@ -14,21 +14,22 @@ import random
 from typing import Any
 
 import pyarrow as pa
-from data_processing.utils import KB, MB, GB, TransformUtils, get_logger
+from data_processing.utils import GB, KB, MB, TransformUtils, get_logger
 
 
 class DataAccess:
     """
     Base class for data access (interface), defining all the methods
     """
+
     def __init__(
-            self,
-            d_sets: list[str],
-            checkpoint: bool,
-            m_files: int,
-            n_samples: int,
-            files_to_use: list[str],
-            files_to_checkpoint: list[str],
+        self,
+        d_sets: list[str],
+        checkpoint: bool,
+        m_files: int,
+        n_samples: int,
+        files_to_use: list[str],
+        files_to_checkpoint: list[str],
     ):
         """
         Create data access class for folder based configuration
@@ -118,7 +119,11 @@ class DataAccess:
         if self.d_sets is not None:
             # get folders for the input
             folders_to_use, retries = self._get_folders_to_use()
-            profile = {"max_file_size": 0.0, "min_file_size": 0.0, "total_file_size": 0.0}
+            profile = {
+                "max_file_size": 0.0,
+                "min_file_size": 0.0,
+                "total_file_size": 0.0,
+            }
             if len(folders_to_use) > 0:
                 # if we have valid folders
                 path_list = []
@@ -163,12 +168,12 @@ class DataAccess:
         raise NotImplementedError("Subclasses should implement this!")
 
     def _get_files_folder(
-            self,
-            path: str,
-            files_to_use: list[str],
-            cm_files: int,
-            max_file_size: int = 0,
-            min_file_size: int = MB * GB
+        self,
+        path: str,
+        files_to_use: list[str],
+        cm_files: int,
+        max_file_size: int = 0,
+        min_file_size: int = MB * GB,
     ) -> tuple[list[dict[str, Any]], dict[str, float], int]:
         """
         Support method to get list input files and their profile
@@ -212,12 +217,12 @@ class DataAccess:
         )
 
     def _get_input_files(
-            self,
-            input_path: str,
-            output_path: str,
-            cm_files: int,
-            max_file_size: int = 0,
-            min_file_size: int = MB * GB,
+        self,
+        input_path: str,
+        output_path: str,
+        cm_files: int,
+        max_file_size: int = 0,
+        min_file_size: int = MB * GB,
     ) -> tuple[list[str], dict[str, float], int]:
         """
         Get list and size of files from input path, that do not exist in the output path
@@ -240,17 +245,16 @@ class DataAccess:
         pout_list, _, retries1 = self._get_files_folder(
             path=output_path, files_to_use=self.files_to_checkpoint, cm_files=-1
         )
-        output_base_names_ext = [file["name"].replace(self.get_output_folder(), self.get_input_folder())
-                                 for file in pout_list]
+        output_base_names_ext = [
+            file["name"].replace(self.get_output_folder(), self.get_input_folder()) for file in pout_list
+        ]
         # In the case of binary transforms, an extension can be different, so just use the file names.
         # Also remove duplicates
         output_base_names = list(set([TransformUtils.get_file_extension(file)[0] for file in output_base_names_ext]))
         p_list = []
         total_input_file_size = 0
         i = 0
-        files, _, retries = self._get_files_folder(
-            path=input_path, files_to_use=self.files_to_use, cm_files=-1
-        )
+        files, _, retries = self._get_files_folder(path=input_path, files_to_use=self.files_to_use, cm_files=-1)
         retries += retries1
         for file in files:
             if i >= cm_files > 0:
@@ -318,6 +322,7 @@ class DataAccess:
                             directory is returned (False)
         :return: A dictionary of file names/binary content will be returned
         """
+
         def _get_file_content(name: str, dt: bool) -> tuple[bytes, int]:
             """
             return file content
@@ -330,9 +335,7 @@ class DataAccess:
             return None, 0
 
         result = {}
-        files, _, retries = self._get_files_folder(
-            path=path, files_to_use=extensions, cm_files=-1
-        )
+        files, _, retries = self._get_files_folder(path=path, files_to_use=extensions, cm_files=-1)
         for file in files:
             f_name = str(file["name"])
             b, retries1 = _get_file_content(f_name, return_data)

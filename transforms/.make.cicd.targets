@@ -51,63 +51,78 @@ publish:
 
 test-image-sequence:: .defaults.lib-whl-image .transforms.test-image-help .transforms.clean
 
+test-image-python:
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=python test-image
+
+test-image-ray:
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=ray test-image
+
+test-image-spark:
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=spark test-image
+
 test-image:: .default.build-lib-wheel
-	@if [ -e Dockerfile.python ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.python \
-				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_PYTHON_SRC) \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
-				test-image-sequence ; \
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "python" ]; then \
+		if [ -e Dockerfile.python ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.python \
+					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_PYTHON_SRC) \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
+					test-image-sequence ; \
+		fi ;\
 	fi
-	@if [ -e Dockerfile.ray ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.ray \
-				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_RAY_SRC) \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
-				BASE_IMAGE=$(RAY_BASE_IMAGE)  \
-				test-image-sequence ; \
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "ray" ]; then \
+		if [ -e Dockerfile.ray ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.ray \
+					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_RAY_SRC) \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
+					BASE_IMAGE=$(RAY_BASE_IMAGE)  \
+					test-image-sequence ; \
+		fi ;\
 	fi
-	@if [ -e Dockerfile.spark ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.spark \
-				TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_SPARK_SRC) \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
-				BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
-				test-image-sequence ; \
+	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "spark" ]; then \
+		if [ -e Dockerfile.spark ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.spark \
+					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_SPARK_SRC) \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
+					BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
+					test-image-sequence ; \
+		fi ;\
 	fi
 	-rm -rf data-processing-dist
 
 
 image-python:
-	@if [ -e Dockerfile.python ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.python \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
-				.defaults.lib-whl-image ; \
-	fi
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=python image
 
 image-ray:
-	@if [ -e Dockerfile.ray ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.ray \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
-				BASE_IMAGE=$(RAY_BASE_IMAGE)  \
-				.defaults.lib-whl-image ; \
-	fi
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=ray image
 
 image-spark:
-	@if [ -e Dockerfile.spark ]; then \
-		$(MAKE) DOCKER_FILE=Dockerfile.spark \
-				DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
-				BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
-				.defaults.lib-whl-image ; \
-	fi
+	$(MAKE) BUILD_SPECIFIC_RUNTIME=spark image
 
 image:: .default.build-lib-wheel
 	## Build all possible images unless a specific runtime is specified
 	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "python" ]; then \
-		$(MAKE) image-python ; \
+		if [ -e Dockerfile.python ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.python \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
+					.defaults.lib-whl-image ; \
+		fi ; \
 	fi
 	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "ray" ]; then \
-		$(MAKE) image-ray ; \
+		if [ -e Dockerfile.ray ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.ray \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
+					BASE_IMAGE=$(RAY_BASE_IMAGE)  \
+					.defaults.lib-whl-image ; \
+		fi ; \
 	fi
 	@if [ -z "$(BUILD_SPECIFIC_RUNTIME)" ] || [ "$(BUILD_SPECIFIC_RUNTIME)" == "spark" ]; then \
-		$(MAKE) image-spark ; \
+		if [ -e Dockerfile.spark ]; then \
+			$(MAKE) DOCKER_FILE=Dockerfile.spark \
+					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
+					BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
+					.defaults.lib-whl-image ; \
+		fi ; \
 	fi
 	-rm -rf data-processing-dist
 

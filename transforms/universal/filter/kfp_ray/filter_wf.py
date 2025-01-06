@@ -18,7 +18,7 @@ from workflow_support.compile_utils import ONE_HOUR_SEC, ONE_WEEK_SEC, Component
 
 
 # the name of the job script
-EXEC_SCRIPT_NAME: str = "filter_transform_ray.py"
+EXEC_SCRIPT_NAME: str = "-m dpk_filter.ray.transform"
 PREFIX: str = ""
 
 task_image = "quay.io/dataprep1/data-prep-kit/filter-ray:latest"

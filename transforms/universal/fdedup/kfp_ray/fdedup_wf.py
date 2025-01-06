@@ -28,10 +28,10 @@ task_image = os.getenv("FDEDUP_IMAGE_LOCATION", "quay.io/dataprep1/data-prep-kit
 image_pull_secret = os.getenv("FDEDUP_IMAGE_PULL_SECRET", "my_secret")
 
 # the name of the job script
-SIGNATURE_CALC_EXEC_SCRIPT_NAME: str = "signature_calc_transform_ray.py"
-CLUSTER_ANALYSIS_EXEC_SCRIPT_NAME: str = "cluster_analysis_transform_ray.py"
-GET_DUPLICATE_LIST_EXEC_SCRIPT_NAME: str = "get_duplicate_list_transform_ray.py"
-DATA_CLEANING_EXEC_SCRIPT_NAME: str = "data_cleaning_transform_ray.py"
+SIGNATURE_CALC_EXEC_SCRIPT_NAME: str = "-m dpk_fdedup.signature_calc.ray.transform"
+CLUSTER_ANALYSIS_EXEC_SCRIPT_NAME: str = "-m dpk_fdedup.cluster_analysis.ray.transform"
+GET_DUPLICATE_LIST_EXEC_SCRIPT_NAME: str = "-m dpk_fdedup.get_duplicate_list.ray.transform"
+DATA_CLEANING_EXEC_SCRIPT_NAME: str = "-m dpk_fdedup.data_cleaning.ray.transform"
 
 # components
 base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:latest"

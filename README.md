@@ -79,8 +79,8 @@ conda install gxx_linux-64
 Next, install the data prep toolkit library. This library installs both the python and ray versions of the transforms. For better management of dependencies, it is recommended to install the same tagged version of both the library and the transform. 
 
 ```bash
-pip3 install  'data-prep-toolkit[ray]==0.2.3.dev0'
-pip3 install  'data-prep-toolkit-transforms[ray,all]==0.2.3.dev1'
+pip3 install  'data-prep-toolkit[ray]==0.2.3'
+pip3 install  'data-prep-toolkit-transforms[all]==0.2.3'
 pip3 install jupyterlab   ipykernel  ipywidgets
 
 ## install custom kernel
@@ -134,7 +134,7 @@ The matrix below shows the combination of modules and supported runtimes. All th
 | [Header cleanser](transforms/code/header_cleanser/python/README.md)                  | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Semantic file ordering](transforms/code/repo_level_ordering/ray/README.md)          |                    | :white_check_mark: |                    |                    |
 | [License Select Annotation](transforms/code/license_select/python/README.md)         | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-
+| [Code profiler](transforms/code/code_profiler/README.md)                             | :white_check_mark: | :white_check_mark: |                    |  |
 
 Contributors are welcome to add new modules to expand to other data modalities as well as add runtime support for existing modules!
 

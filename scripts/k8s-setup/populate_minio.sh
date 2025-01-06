@@ -30,19 +30,19 @@ mc cp --recursive ${REPOROOT}/transforms/code/repo_level_ordering/ray/test-data/
 mc cp --recursive ${REPOROOT}/transforms/code/license_select/ray/test-data/input/ kfp/test/license_select/input
 mc cp --recursive ${REPOROOT}/transforms/code/license_select/ray/test-data/sample_approved_licenses.json kfp/test/license_select/
 # language
-mc cp --recursive ${REPOROOT}/transforms/language/lang_id/ray/test-data/input/ kfp/test/lang_id/input
-mc cp --recursive ${REPOROOT}/transforms/language/doc_quality/ray/test-data/input/ kfp/test/doc_quality/input
-mc cp --recursive ${REPOROOT}/transforms/language/pdf2parquet/ray/test-data/input/2206.01062.pdf kfp/test/pdf2parquet/input
-mc cp --recursive ${REPOROOT}/transforms/language/text_encoder/ray/test-data/input/ kfp/test/text_encoder/input
-mc cp --recursive ${REPOROOT}/transforms/language/doc_chunk/ray/test-data/input/ kfp/test/doc_chunk/input
-mc cp --recursive ${REPOROOT}/transforms/language/html2parquet/ray/test-data/input/test1.html kfp/test/html2parquet/input
+mc cp --recursive ${REPOROOT}/transforms/language/lang_id/test-data/input/ kfp/test/lang_id/input
+mc cp --recursive ${REPOROOT}/transforms/language/doc_quality/test-data/input/ kfp/test/doc_quality/input
+mc cp --recursive ${REPOROOT}/transforms/language/pdf2parquet/test-data/input/2206.01062.pdf kfp/test/pdf2parquet/input
+mc cp --recursive ${REPOROOT}/transforms/language/text_encoder/test-data/input/ kfp/test/text_encoder/input
+mc cp --recursive ${REPOROOT}/transforms/language/doc_chunk/test-data/input/ kfp/test/doc_chunk/input
+mc cp --recursive ${REPOROOT}/transforms/language/html2parquet/test-data/input/test1.html kfp/test/html2parquet/input
 # universal
-mc cp --recursive ${REPOROOT}/transforms/universal/doc_id/ray/test-data/input/ kfp/test/doc_id/input
-mc cp --recursive ${REPOROOT}/transforms/universal/ededup/ray/test-data/input/ kfp/test/ededup/input
+mc cp --recursive ${REPOROOT}/transforms/universal/doc_id/test-data/input/ kfp/test/doc_id/input
+mc cp --recursive ${REPOROOT}/transforms/universal/ededup/test-data/input/ kfp/test/ededup/input
 mc cp --recursive ${REPOROOT}/transforms/universal/fdedup/ray/test-data/input/ kfp/test/fdedup/input
 mc cp --recursive ${REPOROOT}/transforms/universal/filter/ray/test-data/input/ kfp/test/filter/input
 mc cp --recursive ${REPOROOT}/transforms/universal/noop/ray/test-data/input/ kfp/test/noop/input
-mc cp --recursive ${REPOROOT}/transforms/universal/tokenization/ray/test-data/ds01/input/ kfp/test/tokenization/ds01/input
+mc cp --recursive ${REPOROOT}/transforms/universal/tokenization/test-data/ds01/input/ kfp/test/tokenization/ds01/input
 mc cp --recursive ${REPOROOT}/transforms/universal/profiler/ray/test-data/input/ kfp/test/profiler/input
 mc cp --recursive ${REPOROOT}/transforms/universal/resize/ray/test-data/input/ kfp/test/resize/input
-mc cp --recursive ${REPOROOT}/transforms/universal/hap/ray/test-data/input/ kfp/test/hap/input
+mc cp --recursive ${REPOROOT}/transforms/universal/hap/test-data/input/ kfp/test/hap/input

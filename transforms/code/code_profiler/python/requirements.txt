@@ -1,4 +1,4 @@
-data-prep-toolkit>=0.2.3.dev0
+data-prep-toolkit>=0.2.3
 parameterized
 pandas
 aiolimiter==1.1.0
@@ -49,10 +49,10 @@ nest-asyncio==1.6.0
 networkx==3.3
 numpy==1.26.4
 packaging==24.0
-pandas==2.2.2
+pandas
 parso==0.8.4
 pexpect==4.9.0
-pillow==10.3.0
+pillow>=10.3.0
 platformdirs==4.2.2
 prompt_toolkit==3.0.45
 protobuf==5.27.2
@@ -70,7 +70,7 @@ pytz==2024.1
 pyzmq==26.0.3
 referencing==0.35.1
 regex==2024.5.15
-requests==2.32.3
+requests
 rich==13.7.1
 rpds-py==0.18.1
 seaborn==0.13.2

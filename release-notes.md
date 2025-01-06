@@ -1,5 +1,21 @@
 # Data Prep Kit Release notes
 
+## Release 0.2.3 - 12/15/2024
+
+## General
+
+New algorithm for Fuzzy dedup transform
+Sample notebooks for some of the language transforms
+Integrate Semantic profiler and report generation for code profiler transform
+
+### data-prep-toolkit libraries (python, ray, spark) 
+
+1. Increase ray agent limit to 10,000 (default was 100) 
+
+### Transforms
+
+1. Fuzzy dedup new algorithm for Python, Ray and Spark
+
 ## Release 0.2.2 - 11/25/2024
 
 ### General 

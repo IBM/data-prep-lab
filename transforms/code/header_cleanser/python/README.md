@@ -28,8 +28,13 @@ When running the transform with the Ray launcher (i.e. TransformLauncher),
 the following command line arguments are available in addition to 
 the [python launcher](../../../../data-processing-lib/doc/python-launcher-options.md).
 * --header_cleanser_contents_column_name - set the contents_column_name configuration key.
+* --header_cleanser_document_id_column_name - set the document_id_column_name configuration key.
 * --header_cleanser_license - set the license configuration key.
 * --header_cleanser_copyright - set the copyright configuration key. 
+* --header_cleanser_n_processes - set the n_processes configuration key. 
+* --header_cleanser_tmp_dir - set the tmp_dir configuration key. 
+* --header_cleanser_timeout - set the timeout configuration key. 
+* --header_cleanser_skip_timeout - set the skip_timeout configuration key. 
 
 ### Running the samples
 To run the samples, use the following `make` targets

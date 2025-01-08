@@ -53,52 +53,34 @@ Data modalities supported _today_: Code and Natural Language.
 
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
 
-### Fastest way to experience Data Prep Kit
-
-With no setup necessary, let's use a Google Colab friendly notebook to try Data Prep Kit. This is a simple transform to extract content from PDF files: [examples/notebooks/Run_your_first_transform_colab.ipynb](examples/notebooks/Run_your_first_transform_colab.ipynb)  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). ([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
-
-### Create a Virtual Environment
-
-To run on a local machine, follow these steps to quickly set up and deploy the Data Prep Kit in your virtual Python environment.
-
-```bash
-conda create -n data-prep-kit -y python=3.11
-conda activate data-prep-kit
-python --version
+### Run a transform at the command line
+First we tall DPK
+```shell
+pip install wheel    # Required for fasttext in lang_id transform
+pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
+```
+Next we run the `pdf2parquet` transform on its input data to import pdf content into 
+rows of a parquet file.
+In this case, we use data from the repo, but you can use any files with the supported extensions. 
+```shell
+DPK_REPO_DIR=.../data-prep-kit
+INPUT_FOLDER=$DPK_REPO_DIR/transforms/language/pdf2parquet/test-data/input
+python -m dpk_pdf2parquet.transform_python \
+    --data_local_config "{ 'input_folder': '"$INPUT_FOLDER"', 'output_folder': 'output'}" \
+    --data_files_to_use "['.pdf', '.docx', '.pptx', '.zip']"
+```
+Parquet files are generated in the designated `output` folder:
+```shell
+% ls output
+archive1.parquet        metadata.json           redp5110-ch1.parquet
 ```
 
-Check if the python version is 3.11. 
+### Fastest way to experience Data Prep Kit in a Notebook
 
-If you are using a linux system, install gcc using the below commands:
+With no setup necessary, let's use a Google Colab friendly notebook to try Data Prep Kit. 
+This is a simple transform to extract content from PDF files: 
+[examples/notebooks/Run_your_first_transform_colab.ipynb](examples/notebooks/Run_your_first_transform_colab.ipynb)  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). ([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
 
-```bash
-conda install gcc_linux-64
-conda install gxx_linux-64
-```
-
-Next, install the data prep toolkit library. This library installs both the python and ray versions of the transforms. For better management of dependencies, it is recommended to install the same tagged version of both the library and the transform. 
-
-```bash
-pip3 install  'data-prep-toolkit[ray]==0.2.3'
-pip3 install  'data-prep-toolkit-transforms[all]==0.2.3'
-pip3 install jupyterlab   ipykernel  ipywidgets
-
-## install custom kernel
-python -m ipykernel install --user --name=data-prep-kit --display-name "dataprepkit"
-```
-
-Test, your installation. If you are able to import these data-prep-kit libraries successfully in python, your installation has succeeded. 
-
-```bash
-## start python interpreter
-$   python
-
-# import DPK libraries
->>> from data_processing_ray.runtime.ray import RayTransformLauncher
->>> from data_processing.runtime.pure_python import PythonTransformLauncher
-```
-
-If there are no errors, you are good to go!
 
 
 ### Current list of transforms 

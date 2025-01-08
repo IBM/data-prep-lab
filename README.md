@@ -3,7 +3,6 @@
 <h1 align="center">Data Prep Kit</h1>
 
 <div align="center"> 
-
 <?  [![Status](https://img.shields.io/badge/status-active-success.svg)]() ?>
 <?  [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/IBM/data-prep-kit/issues) ?>
 <?  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/IBM/data-prep-kit/pulls) ?>
@@ -54,20 +53,20 @@ Data modalities supported _today_: Code and Natural Language.
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
 
 ### Run a transform at the command line
-First we tall DPK
+Here we run the `pdf2parquet` transform on its input data to 
+import pdf content into rows of a parquet file.
 ```shell
+# Install DPK
 pip install wheel    # Required for fasttext in lang_id transform
 pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
-```
-Next we run the `pdf2parquet` transform on its input data to import pdf content into 
-rows of a parquet file.
-In this case, we use data from the repo, but you can use any files with the supported extensions. 
-```shell
+# Point to some input data (from the repo)
 DPK_REPO_DIR=.../data-prep-kit
 INPUT_FOLDER=$DPK_REPO_DIR/transforms/language/pdf2parquet/test-data/input
+# Run the pdf2parquet transform using python multi-processing
 python -m dpk_pdf2parquet.transform_python \
     --data_local_config "{ 'input_folder': '"$INPUT_FOLDER"', 'output_folder': 'output'}" \
-    --data_files_to_use "['.pdf', '.docx', '.pptx', '.zip']"
+    --data_files_to_use "['.pdf', '.docx', '.pptx', '.zip']"  \
+    --runtime_num_processors 2
 ```
 Parquet files are generated in the designated `output` folder:
 ```shell
@@ -119,6 +118,21 @@ The matrix below shows the combination of modules and supported runtimes. All th
 | [Code profiler](transforms/code/code_profiler/README.md)                             | :white_check_mark: | :white_check_mark: |                    |  |
 
 Contributors are welcome to add new modules to expand to other data modalities as well as add runtime support for existing modules!
+### Terminology
+* **transform** - is the fundamental unit of operation that modifies 
+one input data object to create 0 or more new output objects (usually PyArrow tables from a .parquet file).
+Transforms fall into one of the following categories:
+  * _import_ - reads data of one format to convert to another, often a .parquet file.
+  * _filter_ - adds/removes/reorganizes data in an input object. For example, removes rows and/or columns from .parquet file.
+  * _annotator_ - computes and appends additional data to a given input data object.
+For example, adds a column to a .parquet file to indicate if the row contains personally identifiable information (PII).
+* **runtime** - provides scaling of the transform execution and manages the data I/O for most transforms. 
+Three runtimes are currently available:
+  * _pure python_ - runs the transform in a base python environment with support for multi-processing.
+  * _ray_ - runs the transform in a local or remote [Ray](https://docs.ray.io/en/latest/index.html) cluster.
+  * _spark_ - runs the transform in a local or remote [Spark](https://spark.apache.org/) cluster.
+* **launcher** - this is a python component that starts a given runtime.  Each runtime has an associated launcher.
+* **pipeline** - sequence of steps to run a transform in a KFP cluster environment.
 
 ### Add your own transform
 

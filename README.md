@@ -52,27 +52,33 @@ Data modalities supported _today_: Code and Natural Language.
 
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
 
-### Fastest way to experience Data Prep Kit in a Notebook
+### Setup the python environment 
 
-With no setup necessary, we can use a Google 
-Colab-friendly 
-[notebook](examples/notebooks/Run_your_first_transform_colab.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). 
+```shell
+pip install wheel    # Required for fasttext in lang_id transform
+pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
+pip install jupyterlab # Needed only if you want to run notebooks.
+```
+
+### Run a transform in a notebook 
+
+With no setup necessary, we can use a Google Colab-friendly 
+[notebook](run-transform.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/run-transform.ipynb). 
 to import pdf content into rows of a parquet file.
-([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
+([Here](doc/google-colab.md) 
+are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
 
 ### Run a transform at the command line
 Here we run the `pdf2parquet` transform on its input data to 
 import pdf content into rows of a parquet file.
+First, we load some data for the transform to run on.
 ```shell
-# Install DPK
-pip install wheel    # Required for fasttext in lang_id transform
-pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
-
-# Create some local data in directory named input for pdf2parquet to run on.
 wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
 wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
-
+```
+Next we run `pdf2parquet` on the input folder.
+```shell
 # Run the pdf2parquet transform 
 python -m dpk_pdf2parquet.transform_python \
     --data_local_config "{ 'input_folder': 'input', 'output_folder': 'output'}" \

@@ -51,12 +51,13 @@ Features of the toolkit:
 Data modalities supported _today_: Code and Natural Language.
 
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
-
+Here we show two ways to run the `pdf2parquet` transform which reads
+PDF and .zip files to create parquet files containing the PDF contents,
+one file per row.
 ### Setup the python environment 
 
 ```shell
-pip install wheel    # Required for fasttext in lang_id transform
-pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
+pip install data-prep-toolkit-transforms[pdf2parquet]==1.0.0a2 # Or later version
 pip install jupyterlab # Needed only if you want to run notebooks.
 ```
 

@@ -64,7 +64,7 @@ pip install jupyterlab # Needed only if you want to run notebooks.
 
 With no setup necessary, we can use a Google Colab-friendly 
 [notebook](run-transform.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/run-transform.ipynb). 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/https://github.com/IBM/data-prep-kit/blob/readme-david/run-transform.ipynb/run-transform.ipynb). 
 to import pdf content into rows of a parquet file.
 ([Here](doc/google-colab.md) 
 are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)

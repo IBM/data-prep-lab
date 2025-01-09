@@ -52,6 +52,15 @@ Data modalities supported _today_: Code and Natural Language.
 
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
 
+### Fastest way to experience Data Prep Kit in a Notebook
+
+With no setup necessary, we can use a Google 
+Colab-friendly 
+[notebook](examples/notebooks/Run_your_first_transform_colab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). 
+to import pdf content into rows of a parquet file.
+([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
+
 ### Run a transform at the command line
 Here we run the `pdf2parquet` transform on its input data to 
 import pdf content into rows of a parquet file.
@@ -59,26 +68,21 @@ import pdf content into rows of a parquet file.
 # Install DPK
 pip install wheel    # Required for fasttext in lang_id transform
 pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
-# Point to some input data (from the repo)
-DPK_REPO_DIR=.../data-prep-kit
-INPUT_FOLDER=$DPK_REPO_DIR/transforms/language/pdf2parquet/test-data/input
-# Run the pdf2parquet transform using python multi-processing
+
+# Create some local data in directory named input for pdf2parquet to run on.
+wget -P input https://github.com/IBM/data-prep-kit/raw/refs/heads/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
+wget -P input https://github.com/IBM/data-prep-kit/raw/refs/heads/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
+
+# Run the pdf2parquet transform 
 python -m dpk_pdf2parquet.transform_python \
-    --data_local_config "{ 'input_folder': '"$INPUT_FOLDER"', 'output_folder': 'output'}" \
-    --data_files_to_use "['.pdf', '.docx', '.pptx', '.zip']"  \
-    --runtime_num_processors 2
+    --data_local_config "{ 'input_folder': 'input', 'output_folder': 'output'}" \
+    --data_files_to_use "['.pdf', '.zip']" 
 ```
 Parquet files are generated in the designated `output` folder:
 ```shell
 % ls output
 archive1.parquet        metadata.json           redp5110-ch1.parquet
 ```
-
-### Fastest way to experience Data Prep Kit in a Notebook
-
-With no setup necessary, let's use a Google Colab friendly notebook to try Data Prep Kit. 
-This is a simple transform to extract content from PDF files: 
-[examples/notebooks/Run_your_first_transform_colab.ipynb](examples/notebooks/Run_your_first_transform_colab.ipynb)  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). ([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
 
 
 

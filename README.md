@@ -70,8 +70,8 @@ pip install wheel    # Required for fasttext in lang_id transform
 pip install data-prep-toolkit-transforms[all]==1.0.0a2 # Or later version
 
 # Create some local data in directory named input for pdf2parquet to run on.
-wget -P input https://github.com/IBM/data-prep-kit/raw/refs/heads/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
-wget -P input https://github.com/IBM/data-prep-kit/raw/refs/heads/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
+wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
+wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
 
 # Run the pdf2parquet transform 
 python -m dpk_pdf2parquet.transform_python \

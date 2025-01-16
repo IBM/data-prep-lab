@@ -202,7 +202,7 @@ python ./dpk_html2parquet/transform_python.py \
 
 ### Sample Notebook
 
-See the [sample notebook](./notebooks/html2parquet.ipynb)
+See the [sample notebook](.html2parquet.ipynb)
 ) for an example.
 
 

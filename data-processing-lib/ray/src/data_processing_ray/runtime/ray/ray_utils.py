@@ -15,7 +15,7 @@ import time
 from typing import Any
 
 import ray
-from data_processing.utils import GB, UnrecoverableException, get_logger
+from data_processing.utils import GB, UnrecoverableException
 from ray.actor import ActorHandle
 from ray.exceptions import RayError
 from ray.experimental.state.api import list_actors
@@ -37,10 +37,10 @@ class RayUtils:
 
     @staticmethod
     def get_available_resources(
-        available_cpus_gauge: Gauge = None,
-        available_gpus_gauge: Gauge = None,
-        available_memory_gauge: Gauge = None,
-        object_memory_gauge: Gauge = None,
+            available_cpus_gauge: Gauge = None,
+            available_gpus_gauge: Gauge = None,
+            available_memory_gauge: Gauge = None,
+            object_memory_gauge: Gauge = None,
     ) -> dict[str, Any]:
         """
         Get currently available cluster resources
@@ -94,13 +94,11 @@ class RayUtils:
         for node in nodes:
             if node["Alive"]:
                 nnodes += 1
-        if available_nodes_gauge is not None:
-            available_nodes_gauge.set(nnodes)
         return nnodes
 
     @staticmethod
     def create_actors(
-        clazz: type, params: dict[str, Any], actor_options: dict[str, Any], n_actors: int, creation_delay: int = 0
+            clazz: type, params: dict[str, Any], actor_options: dict[str, Any], n_actors: int, creation_delay: int = 0
     ) -> list[ActorHandle]:
         """
         Create a set of actors
@@ -117,60 +115,31 @@ class RayUtils:
             time.sleep(creation_delay)
             return clazz.options(**actor_options).remote(params)
 
-        logger = get_logger(__name__)
-        # Get class name
         cls_name = clazz.__class__.__name__.replace("ActorClass(", "").replace(")", "")
-        # Get currently existing actors of type
-        current = list_actors(
-            filters=[("class_name", "=", cls_name), ("state", "=", "ALIVE")], limit=RAY_MAX_ACTOR_LIMIT
-        )
-        c_len = len(current)
-        # compute desired number of actors
-        overall = c_len + n_actors
-        # RAY_MAX_ACTOR_LIMIT is the hard limit on the amount of actors returned by list_actors function
-        if overall < RAY_MAX_ACTOR_LIMIT:
-            # create actors
-            actors = [operator() for _ in range(n_actors)]
-            # get the amount of actors to list
-            n_list = min(overall + 10, RAY_MAX_ACTOR_LIMIT)
-            # waiting for all actors to become ready
-            alive = []
-            for i in range(120):
-                time.sleep(1)
-                alive = list_actors(filters=[("class_name", "=", cls_name), ("state", "=", "ALIVE")], limit=n_list)
-                if len(alive) >= n_actors + c_len:
-                    return actors
-            # failed
-            if len(alive) >= n_actors / 2 + c_len:
-                # At least half of the actors were created
-                logger.info(f"created {n_actors}, alive {len(alive)} Running with less actors")
-                created_ids = [item.actor_id for item in alive if item not in current]
-                return [
-                    actor
-                    for actor in actors
-                    if (str(actor._ray_actor_id).replace("ActorID(", "").replace(")", "") in created_ids)
-                ]
-            else:
-                # too few actors created
-                raise UnrecoverableException(f"Created {n_actors}, alive {len(alive)}. Too few actors were created")
-        else:
-            raise UnrecoverableException(
-                f"Overall number of actors of class {cls_name} is {overall}. "
-                f"Too many actors to create, greater then {RAY_MAX_ACTOR_LIMIT}"
+        actors = [operator() for _ in range(n_actors)]
+        for i in range(120):
+            time.sleep(1)
+            alive = list_actors(
+                filters=[("class_name", "=", cls_name), ("state", "=", "ALIVE")], limit=RAY_MAX_ACTOR_LIMIT
             )
+            if len(actors) == len(alive):
+                return actors
+        # failed - raise an exception
+        print(f"created {actors}, alive {alive}")
+        raise UnrecoverableException(f"out of {len(actors)} created actors only {len(alive)} alive")
 
     @staticmethod
     def process_files(
-        executors: ActorPool,
-        files: list[str],
-        print_interval: int,
-        files_in_progress_gauge: Gauge,
-        files_completed_gauge: Gauge,
-        available_cpus_gauge: Gauge,
-        available_gpus_gauge: Gauge,
-        available_memory_gauge: Gauge,
-        object_memory_gauge: Gauge,
-        logger: logging.Logger,
+            executors: ActorPool,
+            files: list[str],
+            print_interval: int,
+            files_in_progress_gauge: Gauge,
+            files_completed_gauge: Gauge,
+            available_cpus_gauge: Gauge,
+            available_gpus_gauge: Gauge,
+            available_memory_gauge: Gauge,
+            object_memory_gauge: Gauge,
+            logger: logging.Logger,
     ) -> int:
         """
         Process files
@@ -207,7 +176,7 @@ class RayUtils:
                 while True:
                     # we can have several workers fail here
                     try:
-                        _ = executors.get_next_unordered()
+                        res = executors.get_next_unordered()
                         break
                     except Exception as e:
                         if isinstance(e, RayError):

@@ -33,7 +33,6 @@ class DataAccessHF(DataAccess):
     def __init__(
         self,
         hf_config: dict[str, str] = None,
-        hf_token: str = None,
         d_sets: list[str] = None,
         checkpoint: bool = False,
         m_files: int = -1,
@@ -44,7 +43,6 @@ class DataAccessHF(DataAccess):
         """
         Create data access class for folder based configuration
         :param hf_config: dictionary of path info
-        :param hf_token: hugging face token
         :param d_sets list of the data sets to use
         :param checkpoint: flag to return only files that do not exist in the output directory
         :param m_files: max amount of files to return
@@ -64,7 +62,7 @@ class DataAccessHF(DataAccess):
             self.output_folder = hf_config["output_folder"]
             if self.output_folder[-1] == "/":
                 self.output_folder = self.output_folder[:-1]
-        self.fs = HfFileSystem(token=hf_token)
+        self.fs = HfFileSystem(token=hf_config["hf_token"])
 
         logger.debug(f"hf input folder: {self.input_folder}")
         logger.debug(f"hf output folder: {self.output_folder}")
@@ -116,10 +114,10 @@ class DataAccessHF(DataAccess):
         files = self.fs.ls(path=self.input_folder)
         dirs = [f['name'] for f in files if f['type'] == 'directory']
 
-        for file in files:
+        for file in dirs:
             for s_name in self.d_sets:
                 if file.endswith(s_name):
-                    folders_to_use.append(folder)
+                    folders_to_use.append(file)
                     break
         return folders_to_use, 0
 

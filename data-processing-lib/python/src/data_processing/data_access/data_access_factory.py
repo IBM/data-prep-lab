@@ -209,12 +209,11 @@ class DataAccessFactory(DataAccessFactoryBase):
                 f'output path - {self.s3_config["output_folder"]}'
             )
         elif hf_config_specified == 1:
-            if not self._validate_hf_config(local_config=hf_config):
+            if not self._validate_hf_config(hf_config=hf_config):
                 return False
             self.hf_config = hf_config
             self.logger.info(
-                f"data factory {self.cli_arg_prefix} is using HF data access: "
-                f"hf_token - {self.hf_config['hf_token']} "                
+                f"data factory {self.cli_arg_prefix} is using HF data access: "               
                 f"input_folder - {self.hf_config['input_folder']} "
                 f"output_folder - {self.hf_config['output_folder']}"
             )

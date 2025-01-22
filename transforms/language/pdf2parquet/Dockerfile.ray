@@ -2,6 +2,11 @@ ARG BASE_IMAGE=docker.io/rayproject/ray:2.24.0-py310
 
 FROM ${BASE_IMAGE}
 
+# see https://docs.openshift.com/container-platform/4.17/openshift_images/create-images.html#use-uid_create-images
+USER root
+RUN chown ray:root /home/ray && chmod 775 /home/ray
+USER ray
+
 RUN pip install --upgrade --no-cache-dir pip 
 
 # install pytest
@@ -18,13 +23,13 @@ RUN \
 
 # Copy and install data processing libraries 
 # These are expected to be placed in the docker context before this is run (see the make image).
-COPY --chown=ray:users data-processing-dist data-processing-dist
+COPY --chmod=775 --chown=ray:root data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
     
 
 ## Copy the python version of the tansform
-COPY --chown=ray:users dpk_pdf2parquet/ dpk_pdf2parquet/
-COPY --chown=ray:users requirements.txt requirements.txt
+COPY --chmod=775 --chown=ray:root dpk_pdf2parquet/ dpk_pdf2parquet/
+COPY --chmod=775 --chown=ray:root requirements.txt requirements.txt
 RUN pip install ${PIP_INSTALL_EXTRA_ARGS} -r requirements.txt
 
 
@@ -33,10 +38,6 @@ RUN pip install ${PIP_INSTALL_EXTRA_ARGS} -r requirements.txt
 RUN python -c 'from deepsearch_glm.utils.load_pretrained_models import load_pretrained_nlp_models; load_pretrained_nlp_models(verbose=True);'
 # RUN python -c 'from docling.document_converter import DocumentConverter; from pathlib import Path; DocumentConverter.download_models_hf(local_dir=Path("./artifacts/"));'
 RUN python -c 'from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline; s=StandardPdfPipeline.download_models_hf(); print(f"Models cached in {s}")'
-
-
-# Grant non-root users the necessary permissions to the ray directory
-RUN chmod 755 /home/ray
 
 # Set environment
 ENV PYTHONPATH /home/ray

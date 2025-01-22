@@ -3,19 +3,21 @@ Here we provided short examples of various uses of the Data Prep Kit. Most users
 
 When setting up a __virtual environment__ it is recommended to use __python3.11__ as in the example below using conda. 
 
-**setup a virtual environment (example using conda)**
+## Create a Virtual Environment <a name = "conda"></a>
+**setup a virtual environment using conda**
 
 ```shell
 conda create -n data-prep-kit-1 -y python=3.11
 ```
 
-**Install the gcc/g++ that is required while building fastext:**
+**Linux system only: Install the gcc/g++ that is required while building fastext:**
+If you are using a linux system, install gcc using the below commands, as it will be required to compile and install [fasttext](https://fasttext.cc/) currently used by some of the transforms.
+
 
 ```shell
 conda install gcc_linux-64
 conda install gxx_linux-64
 ```
-
 
 **activate the new conda environment**
 
@@ -30,48 +32,61 @@ python --version
 The command above should say: 3.11
 ```
 
-**install jupyter lab**
+**install data prep toolkit**
 
 ```shell
-pip3 install jupyterlab
-``` 
+pip3 install 'data-prep-toolkit-transforms[ray,all]'
+```
+the command above install the complete library with all the tansforms. In certain situations, it may be desirable to install a specific transform with or without the ray runtime. In that case, the command can specify the name of the transform in the \[extra\] value such as:
 
-then
-
-**Deploy the latest release of the data prep toolkit library**
+To install the lang_id transform, use the following command:
 
 ```shell
-pip3 install data-prep-toolkit
+pip3 install 'data-prep-toolit-tranforms[lang_id]' 
 ```
 
-or 
-
-
-**Deploy the latest releases of the data prep toolkit library and all python transforms**
+to install the lang_id transform with the ray runtime, use the following command:
 
 ```shell
-pip3 install data-prep-toolkit-transforms
+pip3 install 'data-prep-toolit-tranforms[ray,lang_id]' 
 ```
 
-or 
 
 
-**Deploy the latest releases of the data prep toolkit library, all python transforms and all ray transforms**
+## Setting up Jupyter lab for local experimentation with transform notebooks <a name = "jupyter"></a>
 
-```shell
-pip3 install data-prep-toolkit-transforms[ray]
+```bash
+pip install jupyterlab ipykernel ipywidgets
+python -m ipykernel install --user --name=data-prep-kit --display-name "dataprepkit"
 ```
+
+
 
 ## Running transforms 
 
 * Notebooks
-    * [Example data processing pipelines](../../examples/notebooks/README.md) - Use these to quickly process your data. A notebook structure allows a user to select/de-select transforms and change the order of processing as desired. 
+    * There is a [simple notebook](../../examples/notebooks/Run_your_first_transform_colab.ipynb) for running a single transform that can be run from either Google Colab or the local environment by downloading the file.  
+    * In most indidividual transform folders, we have included one (Python), two (Python and Ray), or three (Python, Ray and Spark) notebooks for running that transform. In order to run all these notebooks in the local environment, we clone the repo as: 
+    ```bash
+    git clone git@github.com:IBM/data-prep-kit.git 
+    ```
+    Then we go to an indvidual transformer folder, where we find the corresponding notebooks. As an example:
+
+    ```bash
+    cd data-prep-kit/transforms/universal/fdedup
+    make venv
+    source venv/bin/activate 
+    pip install jupyterlab
+    jupyter lab
+    ```
+    You can now run the [Python version](../../transforms/universal/fdedup/fdedup_python.ipynb), [Ray version](../../transforms/universal/fdedup/fdedup_ray.ipynb) or [Spark version](../../transforms/universal/fdedup/fdedup_spark.ipynb) of the three notebooks for this transform. 
+
+
 * Command line  
     * [Using a docker image](run-transform-image.md) - runs a transform in a docker transform image 
     * [Using a virtual environment](run-transform-venv.md) - runs a transform on the local host 
     
 ## Creating transforms
 
-* [Outside of the repository](new-transform-outside.md) - shows how to use pypi dependencies to create a transform independent of this repository.
-* [Adding to this repository](new-transform-inside.md) - shows how to add a transform to this repository, including repository conventions and ci/cd. 
+* [Tutorial](contribute-your-own-transform.md) - shows how to use the library to add a new transform.
 

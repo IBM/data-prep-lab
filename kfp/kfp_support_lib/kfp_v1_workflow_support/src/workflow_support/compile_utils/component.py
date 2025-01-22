@@ -28,6 +28,9 @@ from kubernetes.client import (
 
 logger = get_logger(__name__)
 
+# Default path for KFP component specification files
+DEFAULT_KFP_COMPONENT_SPEC_PATH = "../../../../kfp/kfp_ray_components/"
+
 ONE_HOUR_SEC = 60 * 60
 ONE_DAY_SEC = ONE_HOUR_SEC * 24
 ONE_WEEK_SEC = ONE_DAY_SEC * 7

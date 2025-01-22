@@ -14,7 +14,12 @@ import os
 import kfp.compiler as compiler
 import kfp.components as comp
 import kfp.dsl as dsl
-from workflow_support.compile_utils import ONE_HOUR_SEC, ONE_WEEK_SEC, ComponentUtils
+from workflow_support.compile_utils import (
+    DEFAULT_KFP_COMPONENT_SPEC_PATH,
+    ONE_HOUR_SEC,
+    ONE_WEEK_SEC,
+    ComponentUtils,
+)
 
 
 # the name of the job script
@@ -27,7 +32,8 @@ task_image = "quay.io/dataprep1/data-prep-kit/header_cleanser-ray:latest"
 base_kfp_image = "quay.io/dataprep1/data-prep-kit/kfp-data-processing:latest"
 
 # path to kfp component specifications files
-component_spec_path = "../../../../kfp/kfp_ray_components/"
+component_spec_path = os.getenv("KFP_COMPONENT_SPEC_PATH", DEFAULT_KFP_COMPONENT_SPEC_PATH)
+
 
 # compute execution parameters. Here different transforms might need different implementations. As
 # a result, instead of creating a component we are creating it in place here.
@@ -41,8 +47,13 @@ def compute_exec_params_func(
     runtime_job_id: str,
     runtime_code_location: dict,
     header_cleanser_contents_column_name: str,
+    header_cleanser_document_id_column_name: str,
     header_cleanser_license: bool,
     header_cleanser_copyright: bool,
+    header_cleanser_n_processes: int,
+    header_cleanser_tmp_dir: str,
+    header_cleanser_timeout: int,
+    header_cleanser_skip_timeout: bool,
 ) -> dict:
     from runtime_utils import KFPUtils
 
@@ -56,8 +67,13 @@ def compute_exec_params_func(
         "runtime_job_id": runtime_job_id,
         "runtime_code_location": str(runtime_code_location),
         "header_cleanser_contents_column_name": header_cleanser_contents_column_name,
+        "header_cleanser_document_id_column_name": header_cleanser_document_id_column_name,
         "header_cleanser_license": header_cleanser_license,
         "header_cleanser_copyright": header_cleanser_copyright,
+        "header_cleanser_n_processes": header_cleanser_n_processes,
+        "header_cleanser_tmp_dir": header_cleanser_tmp_dir,
+        "header_cleanser_timeout": header_cleanser_timeout,
+        "header_cleanser_skip_timeout": header_cleanser_skip_timeout,
     }
 
 
@@ -119,8 +135,13 @@ def header_cleanser(
     runtime_code_location: dict = {'github': 'github', 'commit_hash': '12345', 'path': 'path'},
     # header cleanser parameters
     header_cleanser_contents_column_name: str = "contents",
+    header_cleanser_document_id_column_name: str = "document_id",
     header_cleanser_license: bool = True,
     header_cleanser_copyright: bool = True,
+    header_cleanser_n_processes: int = 5,
+    header_cleanser_tmp_dir: str = "",
+    header_cleanser_timeout: int = 300,
+    header_cleanser_skip_timeout: bool = False,
     # additional parameters
     additional_params: str = '{"wait_interval": 2, "wait_cluster_ready_tmout": 800, "wait_cluster_up_tmout": 300, "wait_job_ready_tmout": 400, "wait_print_tmout": 30, "http_retries": 5, "delete_cluster_delay_minutes": 0}',
 ):
@@ -157,8 +178,13 @@ def header_cleanser(
     :param runtime_actor_options - actor options
     :param runtime_pipeline_id - pipeline id
     :param contents_column_name - Name of the column holds the data to process
+    :param document_id_column_name - Name of the column holds the document id
     :param license - Hold value true or false to delete/remove license or not.
     :param copyright - Hold value true or false to delete/remove copyright or not.
+    :param n_processes - num processes to scan codes in parallel
+    :param tmp_dir - Path to tmp dir for codes
+    :param timeout - Value of timeout to scan codes
+    :param skip_timeout - Hold value true or false to skip removing copyright/header or not when scaning timeout.
     :return: None
     """
     # create clean_up task
@@ -177,8 +203,13 @@ def header_cleanser(
             runtime_job_id=run_id,
             runtime_code_location=runtime_code_location,
             header_cleanser_contents_column_name=header_cleanser_contents_column_name,
+            header_cleanser_document_id_column_name=header_cleanser_document_id_column_name,
             header_cleanser_license=header_cleanser_license,
             header_cleanser_copyright=header_cleanser_copyright,
+            header_cleanser_n_processes=header_cleanser_n_processes,
+            header_cleanser_tmp_dir=header_cleanser_tmp_dir,
+            header_cleanser_timeout=header_cleanser_timeout,
+            header_cleanser_skip_timeout=header_cleanser_skip_timeout,
         )
 
         ComponentUtils.add_settings_to_component(compute_exec_params, ONE_HOUR_SEC * 2)

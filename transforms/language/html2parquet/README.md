@@ -75,6 +75,11 @@ The table below provides the parameters that are enabled by default to ensure a 
 
 ## Example
 
+### Sample Notebook
+
+See the [sample notebook](html2parquet.ipynb) for an example.
+
+
 ### Sample HTML 
 ```
 <!DOCTYPE html>
@@ -199,11 +204,6 @@ python ./dpk_html2parquet/transform_python.py \
 
 - When invoking the CLI, use the following syntax for these parameters: `--html2parquet_<parameter_name>`. For example: `--html2parquet_output_format='markdown'`.
 
-
-### Sample Notebook
-
-See the [sample notebook](./notebooks/html2parquet.ipynb)
-) for an example.
 
 
 ## Further Resources

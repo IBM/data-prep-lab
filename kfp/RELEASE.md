@@ -17,8 +17,6 @@ The KFP package build uses the following variables from the file:
 - DPK_LIB_KFP_VERSION - the version of `kfp_v1_workflow_support`
 - DPK_LIB_KFP_VERSION_v2 - the version of `kfp_v2_workflow_support`
 - DPK_LIB_KFP_SHARED - the version of `kfp_shared_workflow_support`
-- KFP_DOCKER_VERSION - the docker image version of KFP components for KFPv1
-- KFP_DOCKER_VERSION_v2 - the docker image version of KFP components for KFPv2
 
 **Note:** The docker images are dependent on the libraries but use the python source code from the repository, so inorder 
 to build docker images, the python modules (libraries) do not have to be deployed. 

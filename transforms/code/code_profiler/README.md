@@ -39,20 +39,13 @@ As shown in Table 2, the framework standardizes code representation by categoriz
 |                                                    | **Ocaml**                                                                                         | Yes         | NA           | Yes         |
 
 
-* [python](python/README.md) - provides the base python-based syntactic concept extractor
-implementation.
-* [ray](ray/README.md) - provides the base ray-based syntactic concept extractor
-implementation.
-
-
-
 **Offline Path for Syntactic Rule Generation**
 
 The offline path is critical for expanding and refining the syntactic rule database, enabling the UBSR framework to adapt to new languages and syntactic constructs. This process leverages LLMs to generate syntactic rules for languages that are not yet included in the rule database. To achieve this, we utilize a Few-shot Chain of Thought prompting technique, guiding the LLM through a step-by-step rule generation process. By providing carefully curated training exemplars and detailed instructions, this method ensures the LLM can accurately generalize from these examples to produce effective syntactic rules for a wide range of languages. This structured approach enhances the flexibility of the UBSR framework, allowing it to seamlessly handle evolving language constructs.
 
-The implementation for UI-based offline customization tool is present [here](python/src/offline-customizations). To run the tool, use the following command.
+The implementation for UI-based offline customization tool is present [here](dpk_code_profiler/offline-customizations). To run the tool, use the following command.
 
-`streamlit run LLM_runner_app.py`
+`streamlit run generic_LLM_runner_app.py`
 
 The high-level system design is as follows:
 
@@ -62,12 +55,99 @@ For each new target language, the offline phase is utilized to create determinis
 
 In the online phase, the system dynamically generates profiling outputs for any incoming code snippets. This is achieved by extracting concepts from the snippets using the rules in the database and storing these extractions in a tabular format. The structured tabular format allows for generating additional concept columns, which are then utilized to create comprehensive profiling reports.
 
-The following runtimes are available:
-* [python](python/README.md) - provides the base python-based transformation 
-implementation and python runtime.
-* [ray](ray/README.md) - enables the running of the base python transformation
-in a Ray runtime
 
-Please refer to the playbook at `transforms/code/code_profiler/notebook_example/code-profiler.ipynb` to run the pythonic code profiler
+## Configuration and command line Options
+
+The set of dictionary keys holding [code_profiler_transform](dpk_code_profiler/transform.py) 
+configuration for values are as follows:
+
+* content - specifies the column name in the dataframe that has the code snippet
+* language - specifies the programming languages of the code snippet
+
+## Running
+
+Copy your input parquet file to `transforms/code/code_profiler/test-data/input`, the output will be created in a directory `transforms/code/code_profiler/output`
+
+### Running the samples
+
+The code profiler can be run on mach-arm64 and x86_64 host architecture.
+Depending on your host architecture, please change the `RUNTIME_HOST_ARCH` in the Makefile.
+```
+# values possible mach-arm64, x86_64
+export RUNTIME_HOST_ARCH=x86_64
+```
+If you are using mac, you may need to permit your Mac to load the .so from the security settings. Generally, you get the pop-up under the tab security while running the transform.
+
+![alt text](image.png)
+
+To run the samples, use the following `make` target
+
+* `run-cli-sample` - runs dpk_code_profiler/transform.py using command line args
+
+This target will activate the virtual environment and sets up any configuration needed.
+Use the `-n` option of `make` to see the detail of what is done to run the sample.
+
+For example, 
+```shell
+make run-cli-sample
+...
+```
+Then 
+```shell
+ls output
+```
+To see results of the transform.
+
+## Testing
+
+Following [the testing strategy of data-processing-lib](../../../data-processing-lib/doc/transform-testing.md)
+
+Currently we have:
+- [Unit test](test/test_code_profiler_python.py)
+- [Integration test](test/test_code_profiler.py)
 
 
+## Document Quality Ray Transform 
+Please see the set of
+[transform project conventions](../../README.md#transform-project-conventions)
+for details on general project conventions, transform configuration,
+testing and IDE set up.
+
+
+### Configuration and command line Options
+
+Document Quality configuration and command line options are the same as for the base python transform. 
+
+### Running
+
+#### Launched Command Line Options 
+When running the transform with the Ray launcher (i.e., TransformLauncher),
+In addition to those available to the transform as defined here,
+the set of 
+[ray launcher](../../../data-processing-lib/doc/ray-launcher-options.md) are available.
+
+#### Running the samples
+To run the samples, use the following `make` target
+
+* `run-ray-cli-sample` - runs dpk_code_profiler/ray/transform.py using command line args
+
+This target will activate the virtual environment and sets up any configuration needed.
+Use the `-n` option of `make` to see the detail of what is done to run the sample.
+
+For example, 
+```shell
+make run-ray-cli-sample
+...
+```
+Then 
+```shell
+ls output
+```
+To see results of the transform.
+
+
+### Transforming data using the transform image
+
+To use the transform image to transform your data, please refer to the 
+[running images quickstart](../../../doc/quick-start/run-transform-image.md),
+substituting the name of this transform image and runtime as appropriate.

@@ -27,21 +27,6 @@ clean:
 	@# Help: Clean up the virtual environment.
 	rm -rf ${REPOROOT}/transforms/venv
 
-venv::
-
-build::
-
-test::
-
-test-src::
-
-test-image::
-
-publish::
-
-image::
-
-load-image::
 
 .PHONY: workflow-build
 workflow-build: workflow-venv
@@ -53,8 +38,7 @@ workflow-test: workflow-build
 		TRANSFORM_RUNTIME=$(TRANSFORM_RUNTIME) \
 		TRANSFORM_NAME=$(TRANSFORM_NAME) \
 		BUILD_SPECIFIC_RUNTIME=$(BUILD_SPECIFIC_RUNTIME) \
-		DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) \
-		PIPELINE_FILE=html2parquet_wf.yaml .workflows.test-pipeline
+		PIPELINE_FILE=$(TRANSFORM_NAME)_wf.yaml .workflows.test-pipeline
 
 .PHONY: workflow-upload
 workflow-upload:

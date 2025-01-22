@@ -10,14 +10,18 @@
 # limitations under the License.
 ################################################################################
 
-import pyarrow as pa
-from data_processing.utils import get_logger
+import sys, os
+from data_processing.utils import ParamsUtils, get_logger
 from data_processing_ray.runtime.ray import RayTransformLauncher
 from data_processing_ray.runtime.ray.runtime_configuration import (
     RayTransformRuntimeConfiguration,
 )
-from dpk_doc_quality.transform import DocQualityTransformConfiguration
 
+from dpk_doc_quality.transform import (
+    DocQualityTransformConfiguration,
+    bad_word_filepath_cli_param,
+    text_lang_cli_param,
+)
 
 logger = get_logger(__name__)
 
@@ -35,6 +39,43 @@ class DocQualityRayTransformConfiguration(RayTransformRuntimeConfiguration):
         :param base_configuration - base configuration class
         """
         super().__init__(transform_config=DocQualityTransformConfiguration())
+
+
+# Class used by the notebooks to ingest binary files and create parquet files
+class DocQuality:
+    def __init__(self, **kwargs):
+        self.params = {}
+        for key in kwargs:
+            self.params[key] = kwargs[key]
+        # if input_folder and output_folder are specified, then assume it is represent data_local_config
+        try:
+            local_conf = {k: self.params[k] for k in ("input_folder", "output_folder")}
+            self.params["data_local_config"] = ParamsUtils.convert_to_ast(local_conf)
+            del self.params["input_folder"]
+            del self.params["output_folder"]
+        except:
+            pass
+        try:
+            worker_options = {k: self.params[k] for k in ("num_cpus", "memory")}
+            self.params["runtime_worker_options"] = ParamsUtils.convert_to_ast(worker_options)
+            del self.params["num_cpus"]
+            del self.params["memory"]
+        except:
+            pass
+
+        if text_lang_cli_param not in self.params:
+            self.params[text_lang_cli_param] = "en"
+        if bad_word_filepath_cli_param not in self.params:
+            self.params[bad_word_filepath_cli_param] = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "../ldnoobw", self.params[text_lang_cli_param])
+            )
+
+
+    def transform(self):
+        sys.argv = ParamsUtils.dict_to_req(d=(self.params))
+        launcher = RayTransformLauncher(DocQualityRayTransformConfiguration())
+        return_code = launcher.launch()
+        return return_code
 
 
 if __name__ == "__main__":

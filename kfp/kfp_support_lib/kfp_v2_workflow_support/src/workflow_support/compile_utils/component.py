@@ -25,6 +25,9 @@ logger = get_logger(__name__)
 
 RUN_NAME = "KFP_RUN_NAME"
 
+# Default path for KFP component specification files
+DEFAULT_KFP_COMPONENT_SPEC_PATH = "../../../../kfp/kfp_ray_components/"
+
 ONE_HOUR_SEC = 60 * 60
 ONE_DAY_SEC = ONE_HOUR_SEC * 24
 ONE_WEEK_SEC = ONE_DAY_SEC * 7
@@ -40,6 +43,7 @@ class ComponentUtils:
         task: dsl.PipelineTask,
         timeout: int,
         image_pull_policy: str = "IfNotPresent",
+        image_pull_secrets: list = [],
         cache_strategy: bool = False,
     ) -> None:
         """
@@ -47,6 +51,7 @@ class ComponentUtils:
         :param task: kfp task
         :param timeout: timeout to set to the component in seconds
         :param image_pull_policy: pull policy to set to the component
+        :param image_pull_secrets: list of secrets containing the credentials to pull the task image.
         :param cache_strategy: cache strategy
         """
 
@@ -92,6 +97,10 @@ class ComponentUtils:
         task.set_caching_options(enable_caching=cache_strategy)
         # image pull policy
         kubernetes.set_image_pull_policy(task, image_pull_policy)
+        # image pull secret can only be set at the component level in kfp v2
+        # see: https://github.com/kubeflow/pipelines/issues/11498
+        if len(image_pull_secrets) != 0:
+            kubernetes.set_image_pull_secrets(task, image_pull_secrets)
         # Set the timeout for the task to one day (in seconds)
         kubernetes.set_timeout(task, seconds=timeout)
         # Add tolerations if specified

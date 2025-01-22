@@ -160,5 +160,5 @@ To see results of the transform.
 
 ### Code example
 
-TBD (link to the notebook will be provided)
+See the [sample notebook](similarity.ipynb) for an example
 

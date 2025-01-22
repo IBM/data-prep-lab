@@ -114,7 +114,7 @@ build-pkg-dist:
 		fi \
 	done
 	# Only needs to build the whl
-	git show --no-patch > src/data/gitshow.txt
+	git show --no-patch > src/gitshow.txt
 	$(MAKE) BUILD_WHEEL_EXTRA_ARG=-w .defaults.build-dist
 	-rm -fr src
 

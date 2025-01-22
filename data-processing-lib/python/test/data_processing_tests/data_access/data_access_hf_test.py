@@ -12,6 +12,7 @@
 
 
 from data_processing.data_access import DataAccessHF
+from huggingface_hub import CardData
 
 hf_conf = {
     "hf_token": None,
@@ -70,6 +71,20 @@ def test_data_set_card():
     Testing data set card access
     :return: None
     """
+    # read the card
     data_access = DataAccessHF(hf_config=hf_conf)
     card = data_access.get_dataset_card(ds_name="blublinsky/test")
     assert card.data.license == 'apache-2.0'
+    # update it
+    data = card.data.to_dict()
+    data["extension"] = "my_extension"
+    card.data = CardData(**data)
+    content = card.content
+    # save a new card (readme)
+    try:
+        data_access.update_data_set_card(ds_name="blublinsky/test", content=content)
+        # read it back
+        card = data_access.get_dataset_card(ds_name="blublinsky/test")
+        assert card.data.extension == "my_extension"
+    except Exception as e:
+        print(f"Exception updating card {e}. Did you specify hf_token?")

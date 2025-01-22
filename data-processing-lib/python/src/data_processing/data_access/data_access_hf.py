@@ -18,6 +18,7 @@ from typing import Any
 
 import pyarrow as pa
 from huggingface_hub import HfFileSystem, RepoCard
+from huggingface_hub.errors import EntryNotFoundError
 from data_processing.data_access import DataAccess
 from data_processing.utils import TransformUtils, get_logger
 
@@ -62,6 +63,7 @@ class DataAccessHF(DataAccess):
             self.output_folder = hf_config["output_folder"]
             if self.output_folder[-1] == "/":
                 self.output_folder = self.output_folder[:-1]
+        self.hf_config = hf_config
         self.fs = HfFileSystem(token=hf_config["hf_token"])
 
         logger.debug(f"hf input folder: {self.input_folder}")
@@ -248,3 +250,31 @@ class DataAccessHF(DataAccess):
         with self.fs.open(path=path, mode="r", newline="", encoding="utf-8") as f:
             data = f.read()
         return RepoCard(content=data)
+
+    def update_data_set_card(self, ds_name: str, content: str) -> None:
+        """
+        Update Repo card
+        :param ds_name: data set name in the format owner/ds_name
+        :param content: new readme content
+        :return: None
+        """
+        # make sure that token is defined
+        if self.hf_config["hf_token"] is None:
+            raise Exception("Update data set card is only supported when HF_TOKEN is defined")
+        # get file location
+        if ds_name[-1] == "/":
+            path = f"datasets/{ds_name[:-1]}/README.md"
+        else:
+            path = f"datasets/{ds_name}/README.md"
+        # delete current Readme file
+        try:
+            self.fs.rm(path=path)
+        except EntryNotFoundError:
+            logger.warning(f"Data set {ds_name} does not have README file")
+        except Exception as e:
+            logger.warning(f"Failted to delete README file {e}")
+            raise e
+        # write new Readme file
+        with self.fs.open(path=path, mode="w", newline="", encoding="utf-8") as f:
+            f.write(content)
+

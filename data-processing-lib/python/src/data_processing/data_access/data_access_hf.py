@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 import pyarrow as pa
-from huggingface_hub import HfFileSystem
+from huggingface_hub import HfFileSystem, RepoCard
 from data_processing.data_access import DataAccess
 from data_processing.utils import TransformUtils, get_logger
 
@@ -232,3 +232,19 @@ class DataAccessHF(DataAccess):
         except Exception as e:
             logger.error(f"Error saving bytes to file {path}: {e}")
             return None, 0
+
+    def get_dataset_card(self, ds_name: str) -> RepoCard:
+        """
+        Get the Repo card for the data set
+        :param ds_name: data set name in the format owner/ds_name
+        :return: DS card object
+        """
+        # get file location
+        if ds_name[-1] == "/":
+            path = f"datasets/{ds_name[:-1]}/README.md"
+        else:
+            path = f"datasets/{ds_name}/README.md"
+        # read README file
+        with self.fs.open(path=path, mode="r", newline="", encoding="utf-8") as f:
+            data = f.read()
+        return RepoCard(content=data)

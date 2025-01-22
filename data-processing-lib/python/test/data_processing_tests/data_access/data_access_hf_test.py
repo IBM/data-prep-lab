@@ -63,3 +63,13 @@ def test_hf_data_access_sets():
     assert profile['max_file_size'] >= 0.501188278198242
     assert profile['min_file_size'] >= 0.00965785980224609
     assert profile['total_file_size'] >= 0.620627403259277
+
+
+def test_data_set_card():
+    """
+    Testing data set card access
+    :return: None
+    """
+    data_access = DataAccessHF(hf_config=hf_conf)
+    card = data_access.get_dataset_card(ds_name="blublinsky/test")
+    assert card.data.license == 'apache-2.0'

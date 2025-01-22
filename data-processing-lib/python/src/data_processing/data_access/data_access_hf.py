@@ -19,7 +19,7 @@ from typing import Any
 import pyarrow as pa
 from huggingface_hub import HfFileSystem
 from data_processing.data_access import DataAccess
-from data_processing.utils import get_logger
+from data_processing.utils import TransformUtils, get_logger
 
 
 logger = get_logger(__name__)
@@ -133,8 +133,8 @@ class DataAccessHF(DataAccess):
         """
 
         try:
-            data = self.get_file(path=path)
-            return TransformUtils.convert_binary_to_arrow(data=data), 0
+            data, retries = self.get_file(path=path)
+            return TransformUtils.convert_binary_to_arrow(data=data), retries
         except Exception as e:
             logger.error(f"Error reading table from {path}: {e}")
             return None, 0
@@ -159,10 +159,8 @@ class DataAccessHF(DataAccess):
         try:
             # Write the table to parquet format
             data = TransformUtils.convert_arrow_to_binary(table=table)
-            self.save_file(path=path, data=data)
-            # Get file size and create file_info
-            file_info = {"name": os.path.basename(path), "size": self._get_file_size(path)}
-            return size_in_memory, file_info, 0
+            finfo, retries = self.save_file(path=path, data=data)
+            return len(data), finfo, retries
 
         except Exception as e:
             logger.error(f"Error saving table to {path}: {e}")
@@ -208,7 +206,7 @@ class DataAccessHF(DataAccess):
         """
 
         try:
-            with self.fs.open(path=files[0], mode="rb") as f:
+            with self.fs.open(path=path, mode="rb") as f:
                 return f.read(), 0
         except Exception as e:
             logger.error(f"Error reading file {path}: {e}")
@@ -227,9 +225,9 @@ class DataAccessHF(DataAccess):
                         or None if saving fails.
         """
         try:
-            with self.fs.open(path=files[0], mode="wb") as f:
+            with self.fs.open(path=path, mode="wb") as f:
                 f.write(data)
-            file_info = {"name": file, "size": self.fs.info(file)['size']}
+            file_info = {"name": path, "size": self.fs.info(path=path)['size']}
             return file_info, 0
         except Exception as e:
             logger.error(f"Error saving bytes to file {path}: {e}")

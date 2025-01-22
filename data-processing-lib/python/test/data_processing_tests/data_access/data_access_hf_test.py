@@ -33,8 +33,23 @@ def test_hf_data_access():
     assert profile['min_file_size'] >= 0.00743961334228515
     assert profile['total_file_size'] >= 269.3791465759277
 
+    # read tables
+    t_stats = [
+        {"n_rows": 8, "n_columns": 11},
+        {"n_rows": 424, "n_columns": 11},
+        {"n_rows": 9336, "n_columns": 12},
+        {"n_rows": 7, "n_columns": 11},
+        {"n_rows": 1353, "n_columns": 11},
+    ]
+    for i in range(5):
+        table, retries = data_access.get_table(path=files[i])
+        assert table.num_rows == t_stats[i]["n_rows"]
+        assert table.num_columns == t_stats[i]["n_columns"]
+
+    # get random set of files
     random = data_access.get_random_file_set(n_samples=5, files=files)
     assert len(random) == 5
+
 
 def test_hf_data_access_sets():
     """

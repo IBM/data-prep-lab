@@ -251,8 +251,13 @@ class DataAccessHF(DataAccess):
         else:
             path = f"datasets/{ds_name}/README.md"
         # read README file
-        with self.fs.open(path=path, mode="r", newline="", encoding="utf-8") as f:
-            data = f.read()
+        try:
+            with self.fs.open(path=path, mode="r", newline="", encoding="utf-8") as f:
+                data = f.read()
+        except Exception as e:
+            logger.warning(f"Failted to read README file {e}")
+            return None
+        # convert README to Repo card
         return RepoCard(content=data)
 
     def update_data_set_card(self, ds_name: str, content: str) -> None:
@@ -274,11 +279,16 @@ class DataAccessHF(DataAccess):
         try:
             self.fs.rm(path=path)
         except EntryNotFoundError:
+            # If the README file does not exist, ignore
             logger.warning(f"Data set {ds_name} does not have README file")
         except Exception as e:
             logger.warning(f"Failted to delete README file {e}")
             raise e
         # write new Readme file
-        with self.fs.open(path=path, mode="w", newline="", encoding="utf-8") as f:
-            f.write(content)
+        try:
+            with self.fs.open(path=path, mode="w", newline="", encoding="utf-8") as f:
+                f.write(content)
+        except Exception as e:
+            logger.warning(f"Failted to save README file {e}")
+            raise e
 

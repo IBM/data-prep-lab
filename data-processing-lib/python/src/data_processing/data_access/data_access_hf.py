@@ -226,6 +226,10 @@ class DataAccessHF(DataAccess):
             dict or None: A dictionary with "name" and "size" keys if successful,
                         or None if saving fails.
         """
+        # make sure that token is defined
+        if self.hf_config["hf_token"] is None:
+            logger.warning("Writing file is only supported when HF_TOKEN is defined")
+            return None, 0
         try:
             with self.fs.open(path=path, mode="wb") as f:
                 f.write(data)

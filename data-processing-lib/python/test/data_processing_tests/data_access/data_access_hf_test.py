@@ -46,6 +46,12 @@ def test_hf_data_access():
         table, retries = data_access.get_table(path=files[i])
         assert table.num_rows == t_stats[i]["n_rows"]
         assert table.num_columns == t_stats[i]["n_columns"]
+        if i == 0:
+            data, _ = data_access.get_file(path=files[i])
+            # write to data set
+            output_file = data_access.get_output_location(files[i])
+            res, _ = data_access.save_file(path=output_file, data=data)
+            assert res is None
 
     # get random set of files
     random = data_access.get_random_file_set(n_samples=5, files=files)

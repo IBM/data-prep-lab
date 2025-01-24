@@ -73,6 +73,32 @@ pip install 'data-prep-toolkit-transforms[pdf2parquet]'
 ```
 For additional guidance on creating the virtual environment for installing the data prep kit, click [here](doc/quick-start/quick-start.md#conda).
 
+### Run a transform at the command line
+Here we run the `pdf2parquet` transform on its input data to 
+import pdf content into rows of a parquet file.
+First, we load some data for the transform to run on.
+```shell
+wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
+wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
+```
+```shell 
+% ls input
+archive1.zip		redp5110-ch1.pdf
+```
+
+Next we run `pdf2parquet` on the data in the `input` folder.
+```shell
+python -m dpk_pdf2parquet.transform_python \
+    --data_local_config "{ 'input_folder': 'input', 'output_folder': 'output'}" \
+    --data_files_to_use "['.pdf', '.zip']" 
+```
+Parquet files are generated in the designated `output` folder:
+```shell
+% ls output
+archive1.parquet        metadata.json           redp5110-ch1.parquet
+```
+All transforms are runnable from the command line in the manner above.
+
 ### Run your first data prep pipeline
 
 Now that you have run a single transform, the next step is to explore how to put these transforms 
@@ -81,6 +107,7 @@ a RAG application.
 This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of 
 how to build an end to end data prep pipeline for fine tuning for code LLMs. 
 You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
+Pipelines can also be defined using multiple transform invocations from the command line.
 
 ### Current list of transforms 
 The matrix below shows the the combination of modules and supported runtimes. All the modules can be accessed [here](transforms) and can be combined to form data processing pipelines, as shown in the [examples](examples/notebooks) folder. 

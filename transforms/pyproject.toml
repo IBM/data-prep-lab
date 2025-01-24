@@ -1,6 +1,6 @@
 [project]
 name = "data_prep_toolkit_transforms"
-version = "1.0.0a2"
+version = "1.0.0a6"
 requires-python = ">=3.10,<3.13"
 keywords = ["transforms", "data preprocessing", "data preparation", "llm", "generative", "ai", "fine-tuning", "llmapps" ]
 description = "Data Preparation Toolkit Transforms using Ray"
@@ -29,11 +29,12 @@ all = { file = [
 "code/code_quality/python/requirements.txt",
 "code/code2parquet/python/requirements.txt",
 
-##### pii_redactor seem to be failing UT
-## "language/pii_redactor/python/requirements.txt",
+"code/code_profiler/requirements.txt",
 
-"universal/profiler/python/requirements.txt",
-"universal/resize/python/requirements.txt",
+"language/pii_redactor/requirements.txt",
+
+"universal/profiler/requirements.txt",
+"universal/resize/requirements.txt",
 
 "language/lang_id/requirements.txt",
 "language/doc_quality/requirements.txt",
@@ -57,8 +58,7 @@ all = { file = [
 ]}
 
 language = { file = [
-##### pii_redactor seem to be failing UT
-## "language/pii_redactor/python/requirements.txt",
+"language/pii_redactor/requirements.txt",
 
 "language/lang_id/requirements.txt",
 "language/doc_quality/requirements.txt",
@@ -78,7 +78,9 @@ language = { file = [
 "universal/fdedup/requirements.txt",
 "universal/hap/requirements.txt",
 "universal/tokenization/requirements.txt",
-"universal/web2parquet/requirements.txt"
+"universal/web2parquet/requirements.txt",
+"universal/profiler/requirements.txt",
+"universal/resize/requirements.txt"
 ]}
 
 # pyproject.toml must be in a parent and cannot be in sibling
@@ -89,12 +91,9 @@ header_cleanser = {file =  ["code/header_cleanser/python/requirements.txt"]}
 license_select = { file = ["code/license_select/python/requirements.txt"]} 
 code_quality = { file = ["code/code_quality/python/requirements.txt"]} 
 code2parquet = {file =  ["code/code2parquet/python/requirements.txt"]}
-code_profiler = { file = ["code/code_profiler/python/requirements.txt"]} 
 
-pii_redactor = { file = ["language/pii_redactor/python/requirements.txt"]} 
-
-profiler = { file = ["universal/profiler/python/requirements.txt"]} 
-resize = { file = ["universal/resize/python/requirements.txt"]} 
+profiler = { file = ["universal/profiler/requirements.txt"]} 
+resize = { file = ["universal/resize/requirements.txt"]} 
 
 ######## Named transforms
 doc_chunk = { file = ["language/doc_chunk/requirements.txt"]}
@@ -103,6 +102,7 @@ html2parquet = { file = ["language/html2parquet/requirements.txt"]}
 lang_id = { file = ["language/lang_id/requirements.txt"]}
 pdf2parquet = { file = ["language/pdf2parquet/requirements.txt"]}
 text_encoder = { file = ["language/text_encoder/requirements.txt"]}
+pii_redactor = { file = ["language/pii_redactor/requirements.txt"]} 
 
 filter = { file = ["universal/filter/requirements.txt"]}
 doc_id = { file = ["universal/doc_id/requirements.txt"]}
@@ -114,6 +114,8 @@ tokenization = { file = ["universal/tokenization/requirements.txt"]}
 web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 
 similarity = { file = ["language/similarity/requirements.txt"]}
+
+code_profiler = { file = ["code/code_profiler/requirements.txt"]} 
 
 # Does not seem to work for our custom layout
 # copy all files to a single src and let automatic discovery find them
@@ -129,6 +131,7 @@ dpk_html2parquet = "language/html2parquet/dpk_html2parquet"
 dpk_lang_id = "language/lang_id/dpk_lang_id"
 dpk_pdf2parquet = "language/pdf2parquet/dpk_pdf2parquet"
 dpk_text_encoder = "language/text_encoder/dpk_text_encoder"
+dpk_pii_redactor = "language/pii_redactor/dpk_pii_redactor"
 dpk_doc_id = "universal/doc_id/dpk_doc_id"
 dpk_hap = "universal/hap/dpk_hap"
 dpk_ededup = "universal/ededup/dpk_ededup"
@@ -136,6 +139,9 @@ dpk_fdedup = "universal/fdedup/dpk_fdedup"
 dpk_tokenization = "universal/tokenization/dpk_tokenization"
 dpk_similarity = "language/similarity/dpk_similarity"
 dpk_filter = "universal/filter/dpk_filter"
+dpk_code_profiler = "code/code_profiler/dpk_code_profiler"
+dpk_profiler = "universal/profiler/dpk_profiler"
+dpk_resize = "universal/resize/dpk_resize"
 
 
 #[tool.setuptools.package-data]

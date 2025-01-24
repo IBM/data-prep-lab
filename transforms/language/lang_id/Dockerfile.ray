@@ -2,6 +2,11 @@ ARG BASE_IMAGE=docker.io/rayproject/ray:2.24.0-py310
 
 FROM ${BASE_IMAGE}
 
+# see https://docs.openshift.com/container-platform/4.17/openshift_images/create-images.html#use-uid_create-images
+USER root
+RUN chown ray:root /home/ray && chmod 775 /home/ray
+USER ray
+
 RUN pip install --upgrade --no-cache-dir pip 
 
 # install pytest
@@ -16,12 +21,12 @@ USER ray
 
 # Copy and install data processing libraries 
 # These are expected to be placed in the docker context before this is run (see the make image).
-COPY --chown=ray:users data-processing-dist data-processing-dist
+COPY --chmod=775 --chown=ray:root data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[ray]
 
 
-COPY --chown=ray:users dpk_lang_id/ dpk_lang_id/
-COPY --chown=ray:users requirements.txt requirements.txt 
+COPY --chmod=775 --chown=ray:root dpk_lang_id/ dpk_lang_id/
+COPY --chmod=775 --chown=ray:root requirements.txt requirements.txt 
 RUN pip install --no-cache-dir -r requirements.txt
 
 # clean up apt
@@ -30,9 +35,6 @@ RUN sudo apt remove gcc g++ -y \
     && sudo apt clean \
     && sudo rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 USER ray
-
-# Grant non-root users the necessary permissions to the ray directory
-RUN chmod 755 /home/ray
 
 # Set environment
 ENV PYTHONPATH /home/ray

@@ -1,49 +1,32 @@
 REPOROOT=../../..
 # Use make help, to see the available rules
-include $(REPOROOT)/.make.defaults
+include $(REPOROOT)/transforms/.make.cicd.targets
 
-setup::
-	@# Help: Recursively make $@ all subdirs 
-	$(MAKE) RULE=$@ .recurse
+#
+# This is intended to be included across the Makefiles provided within
+# a given transform's directory tree,  so must use compatible syntax.
+#
+################################################################################
+# This defines the name of the transform and is used to match against
+# expected files and is used to define the transform's image name. 
+TRANSFORM_NAME=$(shell basename `pwd`)
 
-clean::
-	@# Help: Recursively make $@ all subdirs 
-	$(MAKE) RULE=$@ .recurse
+################################################################################
+export RUNTIME_HOST_ARCH=x86_64
 
-build::
-	@# Help: Recursively make $@ in subdirs 
-	$(MAKE) RULE=$@ .recurse
-venv::
-	@# Help: Recursively make $@ in subdirs 
-	$(MAKE) RULE=$@ .recurse
+run-cli-sample:
+	make venv
+	source venv/bin/activate && \
+	$(PYTHON) -m dpk_$(TRANSFORM_NAME).transform_python \
+             --data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
+			 --language "language" \
+			 --contents "contents"
 
-publish:: 
-	@# Help: Recursively make $@ in all subdirs 
-	@$(MAKE) RULE=$@ .recurse
-
-test-image:
-	@echo "Skipping test-image step as per configuration."
-
-test:: 
-	@# Help: Recursively make $@ in all subdirs 
-	@$(MAKE) RULE=$@ .recurse
-
-test-src::
-	@# Help: Recursively make $@ in all subdirs 
-	$(MAKE) RULE=$@ .recurse
-
-set-versions:
-	@# Help: Recursively $@ in all subdirs
-	$(MAKE) RULE=$@ .recurse
-
-.PHONY: workflow-venv
-workflow-venv:
-
-.PHONY: workflow-test
-workflow-test:
-
-.PHONY: workflow-upload
-workflow-upload:
-
-.PHONY: workflow-build
-workflow-build:
+run-ray-cli-sample:
+	make venv
+	source venv/bin/activate && \
+	$(PYTHON) -m dpk_$(TRANSFORM_NAME).ray.transform \
+		--data_local_config "{ 'input_folder' : 'test-data/input', 'output_folder' : 'output'}"  \
+        --run_locally True \
+		--language "language" \
+		--contents "contents"

@@ -36,9 +36,6 @@ DPK_LIB_KFP_VERSION=$(DPK_VERSION)
 DPK_LIB_KFP_VERSION_v2=$(DPK_VERSION)
 DPK_LIB_KFP_SHARED=$(DPK_VERSION)
 
-KFP_DOCKER_VERSION=0.2.3
-KFP_DOCKER_VERSION_v2=0.2.3
-
 DPK_CONNECTOR_VERSION=0.2.4.dev0
 
 ################## ################## ################## ################## ################## ##################

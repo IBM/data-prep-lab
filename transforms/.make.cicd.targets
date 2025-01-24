@@ -66,6 +66,7 @@ test-image:: .default.build-lib-wheel
 			$(MAKE) DOCKER_FILE=Dockerfile.python \
 					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_PYTHON_SRC) \
 					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-python \
+					DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) \
 					test-image-sequence ; \
 		fi ;\
 	fi
@@ -75,6 +76,7 @@ test-image:: .default.build-lib-wheel
 					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_RAY_SRC) \
 					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-ray \
 					BASE_IMAGE=$(RAY_BASE_IMAGE)  \
+					DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) \
 					test-image-sequence ; \
 		fi ;\
 	fi
@@ -84,6 +86,7 @@ test-image:: .default.build-lib-wheel
 					TRANSFORM_RUNTIME_SRC_FILE=$(TRANSFORM_SPARK_SRC) \
 					DOCKER_IMAGE_NAME=$(TRANSFORM_NAME)-spark \
 					BASE_IMAGE=$(SPARK_BASE_IMAGE)  \
+					DOCKER_REMOTE_IMAGE=$(DOCKER_REGISTRY_ENDPOINT)/$(DOCKER_IMAGE_NAME):$(DOCKER_IMAGE_VERSION) \
 					test-image-sequence ; \
 		fi ;\
 	fi

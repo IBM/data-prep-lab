@@ -6,18 +6,19 @@ RUN pip install --no-cache-dir pytest
 
 WORKDIR ${SPARK_HOME}/work-dir
 ARG DPK_WHEEL_FILE_NAME
+ARG TRANSFORM_NAME
 
 # Copy and install data processing libraries 
 # These are expected to be placed in the docker context before this is run (see the make image).
-COPY --chown=spark:root data-processing-dist data-processing-dist
+COPY --chown=spark:users data-processing-dist data-processing-dist
 RUN  pip install data-processing-dist/${DPK_WHEEL_FILE_NAME}[spark]
 
 
 # Install project source
 
 ## Copy the python version of the tansform
-COPY --chown=spark:root dpk_filter/ dpk_filter/
-COPY --chown=spark:root requirements.txt requirements.txt
+COPY --chown=spark:users dpk_${TRANSFORM_NAME}/ dpk_${TRANSFORM_NAME}/
+COPY --chown=spark:users requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 

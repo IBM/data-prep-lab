@@ -25,7 +25,7 @@ configuration for values are as follows:
 ### Launched Command Line Options 
 The following command line arguments are available in addition to 
 the options provided by 
-the [python launcher options](../../../data-processing-lib/doc/python-launcher-options.md).
+the [launcher](../../../data-processing-lib/doc/launcher-options.md).
 ```
   --lang_id_model_credential LANG_ID_MODEL_CREDENTIAL   the credential you use to get model. This will be huggingface token.
   --lang_id_model_kind LANG_ID_MODEL_KIND   what kind of model you want to use for language identification. Currently, only `fasttext` is available.
@@ -66,7 +66,7 @@ Language Identification configuration and command line options are the same as f
 ### Launched Command Line Options 
 In addition to those available to the transform as defined here,
 the set of 
-[ray launcher options](../../../data-processing-lib/doc/ray-launcher-options.md) are available.
+[launcher options](../../../data-processing-lib/doc/launcher-options.md) are available.
 
 ### Transforming data using the transform image
 

@@ -3,6 +3,7 @@
 <h1 align="center">Data Prep Kit</h1>
 
 <div align="center"> 
+
 <?  [![Status](https://img.shields.io/badge/status-active-success.svg)]() ?>
 <?  [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/IBM/data-prep-kit/issues) ?>
 <?  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/IBM/data-prep-kit/pulls) ?>
@@ -51,75 +52,64 @@ Features of the toolkit:
 Data modalities supported _today_: Code and Natural Language.
 
 ## &#x1F680; Getting Started <a name = "gettingstarted"></a>
-Here we show two ways to run the `pdf2parquet` transform which reads
-PDF and .zip files to create parquet files containing the PDF contents,
-one file per row.
-### Setup the python environment 
 
-```shell
-pip install data-prep-toolkit-transforms[pdf2parquet]==1.0.0a2 # Or later version
-pip install jupyterlab # Needed only if you want to run notebooks.
+### Fastest way to experience Data Prep Kit
+
+With no setup necessary, let's use a Google Colab friendly notebook to try Data Prep Kit. This is a simple transform to extract content from PDF files: [examples/notebooks/Run_your_first_transform_colab.ipynb](examples/notebooks/Run_your_first_transform_colab.ipynb)  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/dev/examples/notebooks/Run_your_first_transform_colab.ipynb). ([Here](doc/google-colab.md) are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)  The same notebook can be downloaded and run on the local machine, without cloning the repo or any other setup. For additional guidance on setting up Jupyter lab, click [here](doc/quick-start/quick-start.md#jupyter). 
+
+### Install data prep kit from PyPi
+
+The latest version of the Data Prep Kit is available on PyPi for Python 3.10, 3.11 or 3.12. It can be installed using: 
+
+```bash
+pip install  'data-prep-toolkit-transforms[ray,all]'
 ```
 
-### Run a transform in a notebook 
+The above installs all available transforms. 
 
-With no setup necessary, we can use a Google Colab-friendly 
-[notebook](run-transform.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/IBM/data-prep-kit/blob/https://github.com/IBM/data-prep-kit/blob/dev/run-transform.ipynb/run-transform.ipynb). 
-to import pdf content into rows of a parquet file.
-([Here](doc/google-colab.md) 
-are some tips for running Data Prep Kit transforms on Google Colab. For this simple example, these tips are either already taken care of, or are not needed.)
-
-### Run a transform at the command line
-Here we run the `pdf2parquet` transform on its input data to 
-import pdf content into rows of a parquet file.
-First, we load some data for the transform to run on.
-```shell
-wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/archive1.zip 
-wget -P input https://raw.githubusercontent.com/IBM/data-prep-kit/dev/transforms/language/pdf2parquet/test-data/input/redp5110-ch1.pdf
+When installing select transforms, users can specify the name of the transform in the pip command, rather than [all]. For example, use the following command to install only the pdf2parquet transform:
+```bash
+pip install 'data-prep-toolkit-transforms[pdf2parquet]'
 ```
-Next we run `pdf2parquet` on the input folder.
-```shell
-# Run the pdf2parquet transform 
-python -m dpk_pdf2parquet.transform_python \
-    --data_local_config "{ 'input_folder': 'input', 'output_folder': 'output'}" \
-    --data_files_to_use "['.pdf', '.zip']" 
-```
-Parquet files are generated in the designated `output` folder:
-```shell
-% ls output
-archive1.parquet        metadata.json           redp5110-ch1.parquet
-```
+For additional guidance on creating the virtual environment for installing the data prep kit, click [here](doc/quick-start/quick-start.md#conda).
 
+### Run your first data prep pipeline
 
+Now that you have run a single transform, the next step is to explore how to put these transforms 
+together to run a data prep pipeline for an end to end use case like fine tuning a model or building 
+a RAG application. 
+This [notebook](examples/notebooks/fine%20tuning/code/sample-notebook.ipynb) gives an example of 
+how to build an end to end data prep pipeline for fine tuning for code LLMs. 
+You can also explore how to build a RAG pipeline [here](examples/notebooks/rag).
 
 ### Current list of transforms 
-The matrix below shows the combination of modules and supported runtimes. All the modules can be accessed [here](transforms) and can be combined to form data processing pipelines, as shown in the [examples](examples) folder. 
+The matrix below shows the the combination of modules and supported runtimes. All the modules can be accessed [here](transforms) and can be combined to form data processing pipelines, as shown in the [examples](examples/notebooks) folder. 
 
 
 | Modules                                                                              |    Python-only     |        Ray         |       Spark        |     KFP on Ray     |
 |:-------------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
 | **Data Ingestion**                                                                   |                    |                    |                    |                    |
-| [Code (from zip) to Parquet](transforms/code/code2parquet/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [PDF to Parquet](transforms/language/pdf2parquet/python/README.md)                   | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [HTML to Parquet](transforms/language/html2parquet/python/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Web to Parquet](transforms/universal/web2parquet/README.md)                         | :white_check_mark: |                    |                    |                    |         
+| [Code (from zip) to Parquet](transforms/code/code2parquet/python/README.md) | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [PDF to Parquet](transforms/language/pdf2parquet/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [HTML to Parquet](transforms/language/html2parquet/README.md)               | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Web to Parquet](transforms/universal/web2parquet/README.md)                | :white_check_mark: |                    |                    |                |         
 | **Universal (Code & Language)**                                                      |                    |                    |                    |                    | 
-| [Exact dedup filter](transforms/universal/ededup/ray/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Fuzzy dedup filter](transforms/universal/fdedup/ray/README.md)                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [Unique ID annotation](transforms/universal/doc_id/ray/README.md)                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [Filter on annotations](transforms/universal/filter/python/README.md)                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [Profiler](transforms/universal/profiler/ray/README.md)                              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [Resize](transforms/universal/resize/python/README.md)                               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [HAP](transforms/universal/hap/python/README.md)                                     | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Tokenizer](transforms/universal/tokenization/python/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Exact dedup filter](transforms/universal/ededup/README.md)                      | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Fuzzy dedup filter](transforms/universal/fdedup/README.md)                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Unique ID annotation](transforms/universal/doc_id/README.md)                    | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Filter on annotations](transforms/universal/filter/README.md)                   | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Profiler](transforms/universal/profiler/python/README.md)                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Resize](transforms/universal/resize/python/README.md)                           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Hate, Abuse, Profanity (HAP)](transforms/universal/hap/README.md)               | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Tokenizer](transforms/universal/tokenization/README.md)                         | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | **Language-only**                                                                    |                    |                    |                    |                    |
-| [Language identification](transforms/language/lang_id/python/README.md)              | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Document quality](transforms/language/doc_quality/python/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Document chunking for RAG](transforms/language/doc_chunk/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [Text encoder](transforms/language/text_encoder/python/README.md)                    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| [PII Annotator/Redactor](transforms/language/pii_redactor/python/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
-| **Code-only**                                                                        |                    |                    |                    |                    |
+| [Language identification](transforms/language/lang_id/README.md)              | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Document quality](transforms/language/doc_quality/README.md)                 | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Document chunking for RAG](transforms/language/doc_chunk/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Text encoder](transforms/language/text_encoder/README.md)                    | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [PII Annotator/Redactor](transforms/language/pii_redactor/README.md)          | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
+| [Similarity](transforms/language/similarity/README.md)                        | :white_check_mark: |                    |                    |                    |
+| **Code-only**                                                                         |                    |                     |             |                    |
 | [Programming language annotation](transforms/code/proglang_select/python/README.md)  | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Code quality annotation](transforms/code/code_quality/python/README.md)             | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Malware annotation](transforms/code/malware/python/README.md)                       | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
@@ -128,22 +118,8 @@ The matrix below shows the combination of modules and supported runtimes. All th
 | [License Select Annotation](transforms/code/license_select/python/README.md)         | :white_check_mark: | :white_check_mark: |                    | :white_check_mark: |
 | [Code profiler](transforms/code/code_profiler/README.md)                             | :white_check_mark: | :white_check_mark: |                    |  |
 
+
 Contributors are welcome to add new modules to expand to other data modalities as well as add runtime support for existing modules!
-### Terminology
-* **transform** - is the fundamental unit of operation that modifies 
-one input data object to create 0 or more new output objects (usually PyArrow tables from a .parquet file).
-Transforms fall into one of the following categories:
-  * _import_ - reads data of one format to convert to another, often a .parquet file.
-  * _filter_ - adds/removes/reorganizes data in an input object. For example, removes rows and/or columns from .parquet file.
-  * _annotator_ - computes and appends additional data to a given input data object.
-For example, adds a column to a .parquet file to indicate if the row contains personally identifiable information (PII).
-* **runtime** - provides scaling of the transform execution and manages the data I/O for most transforms. 
-Three runtimes are currently available:
-  * _pure python_ - runs the transform in a base python environment with support for multi-processing.
-  * _ray_ - runs the transform in a local or remote [Ray](https://docs.ray.io/en/latest/index.html) cluster.
-  * _spark_ - runs the transform in a local or remote [Spark](https://spark.apache.org/) cluster.
-* **launcher** - this is a python component that starts a given runtime.  Each runtime has an associated launcher.
-* **pipeline** - sequence of steps to run a transform in a KFP cluster environment.
 
 ### Add your own transform
 
@@ -196,9 +172,6 @@ When you finish working with the cluster, and want to clean up or destroy it. Se
 ### Run your first transform using command line options
 
 You can run transforms via docker image or using virtual environments. This [document](doc/quick-start/run-transform-venv.md) shows how to run a transform using virtual environment. You can follow this [document](doc/quick-start/run-transform-image.md) to run using docker image. 
-
-
-
 
 ## Citations <a name = "citations"></a>
 

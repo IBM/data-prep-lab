@@ -54,7 +54,8 @@ all = { file = [
 "universal/fdedup/requirements.txt",
 "universal/hap/requirements.txt",
 "universal/tokenization/requirements.txt",
-"universal/web2parquet/requirements.txt"
+"universal/web2parquet/requirements.txt",
+    "universal/rep_removal/requirements.txt"
 ]}
 
 language = { file = [
@@ -115,6 +116,7 @@ similarity = { file = ["language/similarity/requirements.txt"]}
 
 code_profiler = { file = ["code/code_profiler/requirements.txt"]} 
 
+rep_removal = { file = ["universal/rep_removal/requirements.txt"]}
 # Does not seem to work for our custom layout
 # copy all files to a single src and let automatic discovery find them
 
@@ -138,6 +140,7 @@ dpk_tokenization = "universal/tokenization/dpk_tokenization"
 dpk_similarity = "language/similarity/dpk_similarity"
 dpk_filter = "universal/filter/dpk_filter"
 dpk_code_profiler = "code/code_profiler/dpk_code_profiler"
+dpk_rep_removal = "universal/rep_removal/dpk_rep_removal"
 
 
 #[tool.setuptools.package-data]

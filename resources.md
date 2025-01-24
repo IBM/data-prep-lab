@@ -1,7 +1,7 @@
 # New Features & Enhancements
 
-- Support for Docling 2.0 added to DPK in [pdf2parquet](https://github.com/IBM/data-prep-kit/tree/dev/transforms/language/pdf2parquet/python) transform. The new updates allow DPK users to ingest other type of documents, e.g. MS Word, MS Powerpoint, Images, Markdown, Asciidocs, etc.
-- Released [Web2parquet](https://github.com/IBM/data-prep-kit/tree/dev/transforms/universal/web2parquet) transform for crawling the web.
+- We are working hard with your feedback and DPK 1.0.0 alpha has been released with simplified APIs for language transforms. Check out [this page](https://github.com/IBM/data-prep-kit/blob/725fdf65989432280a59fbfc98ad3c7cab85c23a/transforms/transforms-1.0-lang.ipynb) for example implementation of some of these transforms.
+- [HAP](https://github.com/IBM/data-prep-kit/blob/dev/examples/notebooks/hap/generate_hap_score_csv.ipynb) and [PII](https://github.com/IBM/data-prep-kit/blob/dev/examples/notebooks/PII/Run_your_first_PII_redactor_transform.ipynb) recipe notebooks contributed by our partners in GSI team are now merged.
 
 # Data Prep Kit Resources
 
@@ -29,6 +29,10 @@
 13. Open Source [**RAG Pipeline workshop**](https://www.linkedin.com/posts/sujeemaniyam_dataprepkit-workshop-llm-activity-7256176802383986688-2UKc?utm_source=share&utm_medium=member_desktop) with Data Prep Kit at TechEquity's AI Summit in Silicon Valley
 14. **Data Science Dojo Meetup** - [video](https://datasciencedojo.com/tutorial/data-preparation-toolkit/)
 15. [**DPK tutorial and hands on session at IIIT Delhi**](https://www.linkedin.com/posts/cai-iiitd-97a6a4232_datascience-datapipelines-machinelearning-activity-7263121565125349376-FG8E?utm_source=share&utm_medium=member_desktop)
+16. [**Workshop on Preparing Data for LLM Applications Using Data Prep Kit**](https://techequity-ai.org/speaking-session/preparing-data-for-llm-applications-using-data-prep-kit/)
+17. DPK has been added to AI Alliance's [**“Living Guide to Applying AI”**](https://the-ai-alliance.github.io/applying-ai-guide/exploring/data-prep-kit/dpk/)
+18. “Generative AI Model Data Pre-Training on Kubernetes: A Use Case Study” was accepted for KubeCon EU 2025
+19. [**DPK tutorial at CODS-COMAD 2024**](https://www.linkedin.com/posts/saptha-surendran-71a4a0ab_codscomad2024-ibmresearch-llm-activity-7286017571382865920-zW18?utm_source=share&utm_medium=member_desktop)
 
 
 ## Example Code
@@ -36,6 +40,7 @@ Find example code in readme section of each tranform and some sample jupyter not
 
 ## Blogs / Tutorials
 
+- Blog on Ziliz [**"Introducing IBM Data Prep Kit for Streamlined LLM Workflows"**](https://zilliz.com/blog/ibm-data-prep-kit-for-streamlined-llm-workflows) by Yesha Shastri, Freelance Technical Writer in AI/ML
 - [**IBM Developer Blog**](https://developer.ibm.com/blogs/awb-unleash-potential-llms-data-prep-kit/) 
 - [**Introductory Blog on DPK**](https://www.linkedin.com/pulse/unleashing-potential-large-language-models-through-data-aanchal-goyal-fgtff)
 - [**DPK Header Cleanser Module Blog by external contributor**](https://www.linkedin.com/pulse/enhancing-data-quality-developing-header-cleansing-tool-kalathiya-i1ohc/?trackingId=6iAeBkBBRrOLijg3LTzIGA%3D%3D) 

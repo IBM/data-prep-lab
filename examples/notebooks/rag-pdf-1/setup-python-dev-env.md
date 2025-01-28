@@ -39,15 +39,15 @@ should say : 3.11
 **Note**: If you are on a linux system install these too
 
 ```bash
-conda install gcc_linux-64
+conda install -y gcc_linux-64
 
-conda install gxx_linux-64
+conda install -y gxx_linux-64
 ```
 
 ### A-2: Install dependencies
 
 ```bash
-cd examples/notebooks/rag
+cd examples/notebooks/rag-pdf-1
 ```
 
 ```bash

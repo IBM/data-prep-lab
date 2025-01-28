@@ -1,10 +1,5 @@
 ## Data prep kit
-
-data-prep-toolkit-transforms==0.2.1
-data-prep-toolkit-transforms-ray==0.2.1
-
-deepsearch-toolkit
-
+data-prep-toolkit-transforms[ray,all]==1.0.0a4
 
 # Milvus
 pymilvus
@@ -40,7 +35,7 @@ llama-index-vector-stores-milvus
 
 
 # --- Utils
-python-dotenv==1.0.0
+python-dotenv
 humanfriendly
 
 ## --- Jupyter Utils

@@ -42,6 +42,8 @@ all = { file = [
 "language/doc_chunk/requirements.txt",
 "language/text_encoder/requirements.txt",
 "language/similarity/requirements.txt",
+"language/extreme_tokenized/requirements.txt",
+"language/readability/requirements.txt",
 
 ##### Cannot have html2parquet until we solve
 ## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
@@ -66,6 +68,8 @@ language = { file = [
 "language/doc_chunk/requirements.txt",
 "language/text_encoder/requirements.txt",
 "language/similarity/requirements.txt",
+"language/extreme_tokenized/requirements.txt",
+"language/readability/requirements.txt",
 
 ##### Cannot have html2parquet until we solve
 ## docling-ibm-models 1.1.7 depends on lxml<5.0.0 and >=4.9.1
@@ -114,6 +118,8 @@ tokenization = { file = ["universal/tokenization/requirements.txt"]}
 web2parquet = { file = ["universal/web2parquet/requirements.txt"]}
 
 similarity = { file = ["language/similarity/requirements.txt"]}
+extreme_tokenized = { file = ["language/extreme_tokenized/requirements.txt"]}
+readability = { file = ["language/readability/requirements.txt"]}
 
 code_profiler = { file = ["code/code_profiler/requirements.txt"]} 
 
@@ -140,6 +146,8 @@ dpk_tokenization = "universal/tokenization/dpk_tokenization"
 dpk_similarity = "language/similarity/dpk_similarity"
 dpk_filter = "universal/filter/dpk_filter"
 dpk_code_profiler = "code/code_profiler/dpk_code_profiler"
+dpk_extreme_tokenized = "language/extreme_tokenized/dpk_extreme_tokenized"
+dpk_readability = "language/readability/dpk_readability"
 dpk_profiler = "universal/profiler/dpk_profiler"
 dpk_resize = "universal/resize/dpk_resize"
 

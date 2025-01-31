@@ -1,10 +1,5 @@
 ## Data prep kit
-
-data-prep-toolkit-transforms==0.2.1
-data-prep-toolkit-transforms-ray==0.2.1
-
-deepsearch-toolkit
-
+data-prep-toolkit-transforms[ray,all]==1.0.0
 
 # Milvus
 pymilvus
@@ -12,14 +7,6 @@ pymilvus[model]
 
 # datasets
 datasets
-
-## Torch and enbeddings
-torch
-sentence-transformers
-
-## --- Parquet
-pandas
-pyarrow
 
 ## --- Replicate
 replicate
@@ -40,7 +27,7 @@ llama-index-vector-stores-milvus
 
 
 # --- Utils
-python-dotenv==1.0.0
+python-dotenv
 humanfriendly
 
 ## --- Jupyter Utils

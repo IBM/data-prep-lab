@@ -27,6 +27,7 @@ MY_CONFIG.EMBEDDING_LENGTH = 384
 # MY_CONFIG.LLM_MODEL = "meta/meta-llama-3-70b-instruct"
 # MY_CONFIG.LLM_MODEL = "ibm-granite/granite-3.0-2b-instruct"
 MY_CONFIG.LLM_MODEL = "ibm-granite/granite-3.0-8b-instruct"
+MY_CONFIG.MAX_CONTEXT_WINDOW = 4096 #tokens
 
 
 ## RAY CONFIGURATION

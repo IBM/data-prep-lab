@@ -24,40 +24,40 @@ Here is the overall work flow.  For details see [RAG-explained](./RAG-explained.
 
 ![](media/rag-overview-2.png)
 
-## Step-2: Process Input Documents (RAG stage 1, 2 & 3)
+## Step-2: Process Input Documents (RAG stage 1, 2,  3 & 4)
 
 This code uses DPK to 
 
 - Extract text from PDFs (RAG stage-1)
-- Performs de-dupes (RAG stage-1)
-- split the documents into chunks (RAG stage-2)
-- vectorize the chunks (RAG stage-3)
+- Performs de-dupes (RAG stage-2)
+- split the documents into chunks (RAG stage-3)
+- vectorize the chunks (RAG stage-4)
 
 Here is the code: 
 
-- Python version: [rag_1A_dpk_process_python.ipynb](rag_1A_dpk_process_python.ipynb)
+- Python version: [rag_1_dpk_process_python.ipynb](rag_1_dpk_process_python.ipynb)
 - Ray version: [rag_1A_dpk_process_ray.ipynb](rag_1A_dpk_process_ray.ipynb)
 
 
-## Step-3: Load data into vector database  (RAG stage 4)
+## Step-3: Load data into vector database  (RAG stage 5)
 
 Our vector database is [Milvus](https://milvus.io/)
 
-Run the code: [rag_1B_load_data_into_milvus.ipynb](rag_1B_load_data_into_milvus.ipynb)
+Run the code: [rag_2_load_data_into_milvus.ipynb](rag_2_load_data_into_milvus.ipynb)
 
 Be sure to [shutdown the notebook](#tips-close-the-notebook-kernels-to-release-the-dblock) before proceeding to the next step
 
 
-## Step-4: Perform vector search (RAG stage 5 & 6)
+## Step-4: Perform vector search (RAG stage  6, 7 & 8)
 
 Let's do a few searches on our data.
 
-Code: [rag_1C_vector_search.ipynb](rag_1C_vector_search.ipynb)
+Code: [rag_3_vector_search.ipynb](rag_3_vector_search.ipynb)
 
 Be sure to [shutdown the notebook](#tips-close-the-notebook-kernels-to-release-the-dblock) before proceeding to the next step
 
 
-## Step-5: Query the documents using LLM (RAG steps 5, 6, 7, 8 & 9)
+## Step-5: Query the documents using LLM (RAG steps  9 & 10)
 
 We will use **Llama** as our LLM running on [Replicate](https://replicate.com/) service.
 
@@ -76,24 +76,24 @@ REPLICATE_API_TOKEN=your REPLICATE token goes here
 
 ### 5.2 - Run the query code
 
-Code: [rag_1D_query_replicate.ipynb](rag_1D_query_replicate.ipynb)
+Code: [rag_4_query_replicate.ipynb](rag_4_query_replicate.ipynb)
 
 
 
-## Step 6: Illama Index
+## Step 6 (Optional): Illama Index
 
 For comparision, we can use [Llama-index](https://docs.llamaindex.ai/) framework to process PDFs and query
 
 ### Step 6.1 - Process documents and save the index into vector DB
 
-Code: [rag_2A_llamaindex_process.ipynb](rag_2A_llamaindex_process.ipynb)
+Code: [rag_llamaindex_1_process.ipynb](rag_llamaindex_1_process.ipynb)
 
 Be sure to [shutdown the notebook](#tips-close-the-notebook-kernels-to-release-the-dblock) before proceeding to the next step
 
 
 ### Step 6.2 - Query documents with LLM
 
-code: [rag_2B_llamaindex_query.ipynb](rag_2B_llamaindex_query.ipynb)
+code: [rag_llamaindex_2_query.ipynb](rag_llamaindex_2_query.ipynb)
 
 
 ## Tips: Close the notebook kernels, to release the db.lock
